@@ -108,6 +108,7 @@ function M.toggle(claude_code, config, git)
 
     vim.cmd(cmd)
     vim.cmd 'setlocal bufhidden=hide'
+    vim.cmd 'setlocal nobuflisted'
     vim.cmd 'file claude-code'
 
     if config.window.hide_numbers then
