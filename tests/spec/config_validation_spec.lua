@@ -31,6 +31,56 @@ describe('config validation', function()
       local result = config.parse_config(invalid_config, true) -- silent mode
       assert.are.equal(config.default_config.window.hide_numbers, result.window.hide_numbers)
     end)
+
+    it('should validate float configuration when position is float', function()
+      local invalid_config = vim.deepcopy(config.default_config)
+      invalid_config.window.position = 'float'
+      invalid_config.window.float = 'invalid' -- Should be a table
+
+      local result = config.parse_config(invalid_config, true) -- silent mode
+      -- When validation fails, should return default config
+      assert.are.equal(config.default_config.window.position, result.window.position)
+    end)
+
+    it('should validate float.width can be a number or percentage string', function()
+      local invalid_config = vim.deepcopy(config.default_config)
+      invalid_config.window.position = 'float'
+      invalid_config.window.float = {
+        width = true, -- Invalid - boolean
+        height = 20,
+        relative = 'editor'
+      }
+
+      local result = config.parse_config(invalid_config, true) -- silent mode
+      assert.are.equal(config.default_config.window.position, result.window.position)
+    end)
+
+    it('should validate float.relative must be "editor" or "cursor"', function()
+      local invalid_config = vim.deepcopy(config.default_config)
+      invalid_config.window.position = 'float'
+      invalid_config.window.float = {
+        width = 80,
+        height = 20,
+        relative = 'window' -- Invalid option
+      }
+
+      local result = config.parse_config(invalid_config, true) -- silent mode
+      assert.are.equal(config.default_config.window.position, result.window.position)
+    end)
+
+    it('should validate float.border must be a valid border style', function()
+      local invalid_config = vim.deepcopy(config.default_config)
+      invalid_config.window.position = 'float'
+      invalid_config.window.float = {
+        width = 80,
+        height = 20,
+        relative = 'editor',
+        border = 'invalid' -- Invalid border style
+      }
+
+      local result = config.parse_config(invalid_config, true) -- silent mode
+      assert.are.equal(config.default_config.window.position, result.window.position)
+    end)
   end)
 
   describe('refresh validation', function()
