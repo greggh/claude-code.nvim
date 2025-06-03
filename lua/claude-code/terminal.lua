@@ -149,7 +149,8 @@ function M.toggle(claude_code, config, git)
       local git_root = git.get_git_root()
       if git_root then
         -- Use pushd/popd to change directory instead of --cwd
-        cmd = 'terminal pushd ' .. git_root .. ' && ' .. config.command .. ' && popd'
+        local separator = (config.shell and config.shell.separator) or config.shell.separator
+        cmd = 'terminal pushd ' .. git_root .. ' ' .. separator .. ' ' .. config.command .. ' ' .. separator .. ' popd'
       end
     end
 

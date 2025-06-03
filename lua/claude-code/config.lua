@@ -47,11 +47,16 @@ local M = {}
 -- @field verbose string|boolean Enable verbose logging with full turn-by-turn output
 -- Additional options can be added as needed
 
+--- ClaudeCodeShell class for shell configuration
+-- @table ClaudeCodeShell
+-- @field separator string Command separator used in shell commands (e.g., '&&', ';', '|')
+
 --- ClaudeCodeConfig class for main configuration
 -- @table ClaudeCodeConfig
 -- @field window ClaudeCodeWindow Terminal window settings
 -- @field refresh ClaudeCodeRefresh File refresh settings
 -- @field git ClaudeCodeGit Git integration settings
+-- @field shell ClaudeCodeShell Shell-specific configuration
 -- @field command string Command used to launch Claude Code
 -- @field command_variants ClaudeCodeCommandVariants Command variants configuration
 -- @field keymaps ClaudeCodeKeymaps Keymaps configuration
@@ -80,6 +85,10 @@ M.default_config = {
   git = {
     use_git_root = true, -- Set CWD to git root when opening Claude Code (if in git project)
     multi_instance = true, -- Use multiple Claude instances (one per git root)
+  },
+  -- Shell-specific settings
+  shell = {
+    separator = '&&', -- Command separator used in shell commands
   },
   -- Command settings
   command = 'claude', -- Command used to launch Claude Code
@@ -177,6 +186,15 @@ local function validate_config(config)
 
   if type(config.git.multi_instance) ~= 'boolean' then
     return false, 'git.multi_instance must be a boolean'
+  end
+
+  -- Validate shell settings
+  if type(config.shell) ~= 'table' then
+    return false, 'shell config must be a table'
+  end
+
+  if type(config.shell.separator) ~= 'string' then
+    return false, 'shell.separator must be a string'
   end
 
   -- Validate command settings
