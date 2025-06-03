@@ -12,12 +12,17 @@ cd "$PLUGIN_DIR"
 # Print current directory for debugging
 echo "Running tests from: $(pwd)"
 
-# Find nvim 
-NVIM=${NVIM:-$(which nvim)}
-
-if [ -z "$NVIM" ]; then
-  echo "Error: nvim not found in PATH"
-  exit 1
+# Find nvim - ignore NVIM env var if it points to a socket
+if [ -n "$NVIM" ] && [ -x "$NVIM" ] && [ ! -S "$NVIM" ]; then
+  # NVIM is set and is an executable file (not a socket)
+  echo "Using NVIM from environment: $NVIM"
+else
+  # Find nvim in PATH
+  NVIM=$(which nvim)
+  if [ -z "$NVIM" ]; then
+    echo "Error: nvim not found in PATH"
+    exit 1
+  fi
 fi
 
 echo "Running tests with $NVIM"
