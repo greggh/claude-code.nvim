@@ -188,11 +188,13 @@ make test-config
 When running tests from within a Neovim instance (such as when using Claude Code via claude-code.nvim), the test script automatically handles the `$NVIM` environment variable which normally points to a socket file instead of the nvim executable.
 
 The test script will:
+
 - Use the `$NVIM` variable if it points to a valid executable file
 - Fall back to finding `nvim` in `$PATH` if `$NVIM` points to a socket or invalid path
 - Display which nvim binary is being used for transparency
 
 To verify the NVIM detection logic works correctly, you can run:
+
 ```bash
 ./scripts/test_nvim_detection.sh
 ```

@@ -18,8 +18,7 @@ if [ -n "$NVIM" ] && [ -x "$NVIM" ] && [ ! -S "$NVIM" ]; then
   echo "Using NVIM from environment: $NVIM"
 else
   # Find nvim in PATH
-  NVIM=$(which nvim)
-  if [ -z "$NVIM" ]; then
+  if ! NVIM=$(command -v nvim); then
     echo "Error: nvim not found in PATH"
     exit 1
   fi
