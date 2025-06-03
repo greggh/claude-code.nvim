@@ -109,6 +109,12 @@ require("claude-code").setup({
   git = {
     use_git_root = true,     -- Set CWD to git root when opening Claude Code (if in git project)
   },
+  -- Shell-specific settings
+  shell = {
+    separator = '&&',        -- Command separator used in shell commands
+    pushd_cmd = 'pushd',     -- Command to push directory onto stack (e.g., 'pushd' for bash/zsh, 'enter' for nushell)
+    popd_cmd = 'popd',       -- Command to pop directory from stack (e.g., 'popd' for bash/zsh, 'exit' for nushell)
+  },
   -- Command settings
   command = "claude",        -- Command used to launch Claude Code
   -- Command variants

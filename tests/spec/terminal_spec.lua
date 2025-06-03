@@ -85,6 +85,11 @@ describe('terminal module', function()
         use_git_root = true,
         multi_instance = true,
       },
+      shell = {
+        separator = '&&',
+        pushd_cmd = 'pushd',
+        popd_cmd = 'popd',
+      },
     }
 
     claude_code = {
@@ -299,6 +304,30 @@ describe('terminal module', function()
       end
 
       assert.is_true(git_root_cmd_found, 'Terminal command should include git root')
+    end)
+
+    it('should use custom pushd/popd commands when configured', function()
+      -- Set git config to use root
+      config.git.use_git_root = true
+      -- Configure custom directory commands for nushell
+      config.shell.pushd_cmd = 'enter'
+      config.shell.popd_cmd = 'exit'
+      config.shell.separator = ';'
+
+      -- Call toggle
+      terminal.toggle(claude_code, config, git)
+
+      -- Check that custom commands were used in terminal command
+      local custom_cmd_found = false
+
+      for _, cmd in ipairs(vim_cmd_calls) do
+        if cmd:match('terminal enter /test/git/root ; ' .. config.command .. ' ; exit') then
+          custom_cmd_found = true
+          break
+        end
+      end
+
+      assert.is_true(custom_cmd_found, 'Terminal command should use custom directory commands')
     end)
   end)
 

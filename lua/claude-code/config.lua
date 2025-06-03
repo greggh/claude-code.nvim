@@ -50,6 +50,8 @@ local M = {}
 --- ClaudeCodeShell class for shell configuration
 -- @table ClaudeCodeShell
 -- @field separator string Command separator used in shell commands (e.g., '&&', ';', '|')
+-- @field pushd_cmd string Command to push directory onto stack (e.g., 'pushd' for bash/zsh)
+-- @field popd_cmd string Command to pop directory from stack (e.g., 'popd' for bash/zsh)
 
 --- ClaudeCodeConfig class for main configuration
 -- @table ClaudeCodeConfig
@@ -89,6 +91,8 @@ M.default_config = {
   -- Shell-specific settings
   shell = {
     separator = '&&', -- Command separator used in shell commands
+    pushd_cmd = 'pushd', -- Command to push directory onto stack
+    popd_cmd = 'popd', -- Command to pop directory from stack
   },
   -- Command settings
   command = 'claude', -- Command used to launch Claude Code
@@ -195,6 +199,14 @@ local function validate_config(config)
 
   if type(config.shell.separator) ~= 'string' then
     return false, 'shell.separator must be a string'
+  end
+
+  if type(config.shell.pushd_cmd) ~= 'string' then
+    return false, 'shell.pushd_cmd must be a string'
+  end
+
+  if type(config.shell.popd_cmd) ~= 'string' then
+    return false, 'shell.popd_cmd must be a string'
   end
 
   -- Validate command settings
