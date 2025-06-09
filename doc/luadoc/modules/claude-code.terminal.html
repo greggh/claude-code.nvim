@@ -1,0 +1,572 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Claude Code Documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Claude Code</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Local_Functions">Local Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/claude-code.html">claude-code</a></li>
+  <li><a href="../modules/claude-code.commands.html">claude-code.commands</a></li>
+  <li><a href="../modules/claude-code.config.html">claude-code.config</a></li>
+  <li><a href="../modules/claude-code.context.html">claude-code.context</a></li>
+  <li><a href="../modules/claude-code.file_refresh.html">claude-code.file_refresh</a></li>
+  <li><a href="../modules/claude-code.git.html">claude-code.git</a></li>
+  <li><a href="../modules/claude-code.keymaps.html">claude-code.keymaps</a></li>
+  <li><strong>claude-code.terminal</strong></li>
+  <li><a href="../modules/claude-code.tree_helper.html">claude-code.tree_helper</a></li>
+  <li><a href="../modules/claude-code.version.html">claude-code.version</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/README.md.html">README.md</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>claude-code.terminal</code></h1>
+<p>
+
+</p>
+<p>
+
+</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#force_insert_mode">force_insert_mode(claude_code, config)</a></td>
+	<td class="summary">Set up function to force insert mode when entering the Claude Code window</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_process_status">get_process_status(claude_code, instance_id)</a></td>
+	<td class="summary">Get process status for current or specified instance</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#list_instances">list_instances(claude_code)</a></td>
+	<td class="summary">List all Claude Code instances and their states</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#safe_toggle">safe_toggle(claude_code, config, git)</a></td>
+	<td class="summary">Safe toggle that hides/shows window without stopping Claude Code process</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#toggle">toggle(claude_code, config, git)</a></td>
+	<td class="summary">Toggle the Claude Code terminal window</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#toggle_with_context">toggle_with_context(claude_code, config, git, context_type)</a></td>
+	<td class="summary">Toggle the Claude Code terminal with current file/selection context</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#toggle_with_variant">toggle_with_variant(claude_code, config, git, variant_name)</a></td>
+	<td class="summary">Toggle the Claude Code terminal window with a specific command variant</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#ClaudeCodeTerminal">ClaudeCodeTerminal</a></td>
+	<td class="summary">Terminal buffer and window management</td>
+	</tr>
+</table>
+<h2><a href="#Local_Functions">Local Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#cleanup_invalid_instances">cleanup_invalid_instances(claude_code)</a></td>
+	<td class="summary">Clean up invalid buffers and update process states</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#create_split">create_split(position, config, existing_bufnr)</a></td>
+	<td class="summary">Create a split window according to the specified position configuration</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_instance_identifier">get_instance_identifier(git)</a></td>
+	<td class="summary">Get the current git root or a fallback identifier</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_process_state">get_process_state(claude_code, instance_id)</a></td>
+	<td class="summary">Get process state for an instance</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#is_process_running">is_process_running(job_id)</a></td>
+	<td class="summary">Check if a process is still running</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#update_process_state">update_process_state(claude_code, instance_id, status, hidden)</a></td>
+	<td class="summary">Update process state for an instance</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "force_insert_mode"></a>
+    <strong>force_insert_mode(claude_code, config)</strong>
+    </dt>
+    <dd>
+    Set up function to force insert mode when entering the Claude Code window
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">claude_code</span>
+         table The main plugin module
+        </li>
+        <li><span class="parameter">config</span>
+         table The plugin configuration
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_process_status"></a>
+    <strong>get_process_status(claude_code, instance_id)</strong>
+    </dt>
+    <dd>
+    Get process status for current or specified instance
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">claude_code</span>
+         table The main plugin module
+        </li>
+        <li><span class="parameter">instance_id</span>
+         string|nil The instance identifier (uses current if nil)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table Process status information
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "list_instances"></a>
+    <strong>list_instances(claude_code)</strong>
+    </dt>
+    <dd>
+    List all Claude Code instances and their states
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">claude_code</span>
+         table The main plugin module
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table List of all instance states
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "safe_toggle"></a>
+    <strong>safe_toggle(claude_code, config, git)</strong>
+    </dt>
+    <dd>
+    Safe toggle that hides/shows window without stopping Claude Code process
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">claude_code</span>
+         table The main plugin module
+        </li>
+        <li><span class="parameter">config</span>
+         table The plugin configuration
+        </li>
+        <li><span class="parameter">git</span>
+         table The git module
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "toggle"></a>
+    <strong>toggle(claude_code, config, git)</strong>
+    </dt>
+    <dd>
+    Toggle the Claude Code terminal window
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">claude_code</span>
+         table The main plugin module
+        </li>
+        <li><span class="parameter">config</span>
+         table The plugin configuration
+        </li>
+        <li><span class="parameter">git</span>
+         table The git module
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "toggle_with_context"></a>
+    <strong>toggle_with_context(claude_code, config, git, context_type)</strong>
+    </dt>
+    <dd>
+    Toggle the Claude Code terminal with current file/selection context
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">claude_code</span>
+         table The main plugin module
+        </li>
+        <li><span class="parameter">config</span>
+         table The plugin configuration
+        </li>
+        <li><span class="parameter">git</span>
+         table The git module
+        </li>
+        <li><span class="parameter">context_type</span>
+         string|nil The type of context ("file", "selection", "auto", "workspace")
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "toggle_with_variant"></a>
+    <strong>toggle_with_variant(claude_code, config, git, variant_name)</strong>
+    </dt>
+    <dd>
+    Toggle the Claude Code terminal window with a specific command variant
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">claude_code</span>
+         table The main plugin module
+        </li>
+        <li><span class="parameter">config</span>
+         table The plugin configuration
+        </li>
+        <li><span class="parameter">git</span>
+         table The git module
+        </li>
+        <li><span class="parameter">variant_name</span>
+         string The name of the command variant to use
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "ClaudeCodeTerminal"></a>
+    <strong>ClaudeCodeTerminal</strong>
+    </dt>
+    <dd>
+    Terminal buffer and window management
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">instances</span>
+         table Key-value store of git root to buffer number
+        </li>
+        <li><span class="parameter">saved_updatetime</span>
+         number|nil Original updatetime before Claude Code was opened
+        </li>
+        <li><span class="parameter">current_instance</span>
+         string|nil Current git root path for active instance
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Local_Functions"></a>Local Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "cleanup_invalid_instances"></a>
+    <strong>cleanup_invalid_instances(claude_code)</strong>
+    </dt>
+    <dd>
+    Clean up invalid buffers and update process states
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">claude_code</span>
+         table The main plugin module
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "create_split"></a>
+    <strong>create_split(position, config, existing_bufnr)</strong>
+    </dt>
+    <dd>
+    Create a split window according to the specified position configuration
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">position</span>
+         string Window position configuration
+        </li>
+        <li><span class="parameter">config</span>
+         table Plugin configuration containing window settings
+        </li>
+        <li><span class="parameter">existing_bufnr</span>
+         number|nil Buffer number of existing buffer to show in the split (optional)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_instance_identifier"></a>
+    <strong>get_instance_identifier(git)</strong>
+    </dt>
+    <dd>
+    Get the current git root or a fallback identifier
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">git</span>
+         table The git module
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string identifier Git root path or fallback identifier
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_process_state"></a>
+    <strong>get_process_state(claude_code, instance_id)</strong>
+    </dt>
+    <dd>
+    Get process state for an instance
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">claude_code</span>
+         table The main plugin module
+        </li>
+        <li><span class="parameter">instance_id</span>
+         string The instance identifier
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table|nil Process state or nil if not found
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "is_process_running"></a>
+    <strong>is_process_running(job_id)</strong>
+    </dt>
+    <dd>
+    Check if a process is still running
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">job_id</span>
+         number The job ID to check
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        boolean True if process is still running
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "update_process_state"></a>
+    <strong>update_process_state(claude_code, instance_id, status, hidden)</strong>
+    </dt>
+    <dd>
+    Update process state for an instance
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">claude_code</span>
+         table The main plugin module
+        </li>
+        <li><span class="parameter">instance_id</span>
+         string The instance identifier
+        </li>
+        <li><span class="parameter">status</span>
+         string The process status ("running", "finished", "unknown")
+        </li>
+        <li><span class="parameter">hidden</span>
+         boolean Whether the window is hidden
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/LDoc">LDoc 1.5.0</a></i>
+<i style="float:right;">Last updated 2025-05-30 21:14:20 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

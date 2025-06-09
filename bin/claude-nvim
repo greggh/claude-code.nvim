@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+
+# Claude-Nvim: Seamless wrapper for Claude Code with Neovim MCP integration
+# Uses the official mcp-neovim-server from npm
+
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/claude-code"
+MCP_CONFIG="$CONFIG_DIR/neovim-mcp.json"
+
+# Colors for output
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+# Ensure config directory exists
+mkdir -p "$CONFIG_DIR"
+
+# Find Neovim socket
+NVIM_SOCKET=""
+
+# Check if NVIM environment variable is already set
+if [ -n "$NVIM" ]; then
+    NVIM_SOCKET="$NVIM"
+elif [ -n "$NVIM_LISTEN_ADDRESS" ]; then
+    NVIM_SOCKET="$NVIM_LISTEN_ADDRESS"
+else
+    # Try to find the most recent Neovim socket
+    for socket in ~/.cache/nvim/claude-code-*.sock ~/.cache/nvim/*.sock /tmp/nvim*.sock /tmp/nvim /tmp/nvimsocket*; do
+        if [ -e "$socket" ]; then
+            NVIM_SOCKET="$socket"
+            break
+        fi
+    done
+fi
+
+# Check if we found a socket
+if [ -z "$NVIM_SOCKET" ]; then
+    echo -e "${RED}No Neovim instance found!${NC}"
+    echo "Please ensure Neovim is running. The plugin will auto-start a server socket."
+    echo ""
+    echo "Or manually start Neovim with:"
+    echo "  nvim --listen /tmp/nvim"
+    exit 1
+fi
+
+# Check if mcp-neovim-server is installed
+if ! command -v mcp-neovim-server &> /dev/null; then
+    echo -e "${YELLOW}Installing mcp-neovim-server...${NC}"
+    npm install -g mcp-neovim-server
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}Failed to install mcp-neovim-server${NC}"
+        echo "Please install it manually: npm install -g mcp-neovim-server"
+        exit 1
+    fi
+fi
+
+# Generate MCP config for the official server
+cat > "$MCP_CONFIG" << EOF
+{
+  "mcpServers": {
+    "neovim": {
+      "command": "mcp-neovim-server",
+      "env": {
+        "NVIM_SOCKET_PATH": "$NVIM_SOCKET"
+      }
+    }
+  }
+}
+EOF
+
+# Show connection info
+echo -e "${GREEN}Using mcp-neovim-server${NC}"
+echo -e "${GREEN}Connected to Neovim at: $NVIM_SOCKET${NC}"
+
+# Run Claude with MCP configuration
+exec claude --mcp-config "$MCP_CONFIG" "$@"

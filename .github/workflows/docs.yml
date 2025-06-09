@@ -5,19 +5,13 @@ on:
     branches: [ main ]
     paths:
       - 'docs/**'
-      - 'README.md'
-      - 'CONTRIBUTING.md'
-      - 'DEVELOPMENT.md'
-      - 'CHANGELOG.md'
+      - '*.md'
       - '.github/workflows/docs.yml'
   pull_request:
     branches: [ main ]
     paths:
       - 'docs/**'
-      - 'README.md'
-      - 'CONTRIBUTING.md'
-      - 'DEVELOPMENT.md'
-      - 'CHANGELOG.md'
+      - '*.md'
       - '.github/workflows/docs.yml'
   workflow_dispatch:
 
@@ -25,110 +19,56 @@ jobs:
   markdown-lint:
     name: Markdown Lint
     runs-on: ubuntu-latest
+    container: jdkato/vale:latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Install markdownlint-cli
-        run: npm install -g markdownlint-cli@0.37.0
-      
-      - name: Run markdownlint
-        run: markdownlint '**/*.md' --config .markdownlint.json || true
-        
+
+      - name: Run Vale
+        run: vale --glob='*.md' .
+
   check-links:
     name: Check Links
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Link Checker
         uses: lycheeverse/lychee-action@v1.8.0
         with:
           args: --verbose --no-progress '**/*.md'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-  validate-lua-examples:
-    name: Validate Lua Examples
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Lua
-        uses: leafo/gh-actions-lua@v10
-        with:
-          luaVersion: "5.1"
-      
-      - name: Check Lua code blocks in markdown
-        run: |
-          find . -type f -name "*.md" -exec grep -l '```lua' {} \; | while read -r file; do
-            echo "Checking Lua snippets in $file"
-            
-            # Create a temporary directory for the snippets
-            TEMP_DIR=$(mktemp -d)
-            
-            # Extract Lua code blocks
-            grep -n '^```lua$' "$file" | while read -r line_start; do
-              # Get the line number where the lua block starts
-              line_num=$(echo "$line_start" | cut -d: -f1)
-              
-              # Find the line number where the next ``` appears
-              line_end=$(tail -n +$((line_num+1)) "$file" | grep -n '^```$' | head -1 | cut -d: -f1)
-              if [ -n "$line_end" ]; then
-                line_end=$((line_num + line_end))
-                
-                # Extract the lua snippet
-                snippet_file="${TEMP_DIR}/snippet_${line_num}.lua"
-                sed -n "$((line_num+1)),$((line_end-1))p" "$file" > "$snippet_file"
-                
-                # Check syntax if file is not empty
-                if [ -s "$snippet_file" ]; then
-                  echo "  Checking snippet starting at line $line_num in $file"
-                  luac -p "$snippet_file" || echo "Syntax error in $file at line $line_num"
-                fi
-              fi
-            done
-            
-            # Clean up
-            rm -rf "$TEMP_DIR"
-          done
+
 
   generate-api-docs:
     name: Generate API Documentation
     runs-on: ubuntu-latest
+    container: nickblah/lua:5.1-luarocks-alpine
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Install Lua
-        uses: leafo/gh-actions-lua@v10
-        with:
-          luaVersion: "5.1"
-      
-      - name: Install LuaRocks
-        uses: leafo/gh-actions-luarocks@v4
-      
+
       - name: Install dependencies for ldoc
         run: |
-          # Install dependencies required by ldoc
-          sudo apt-get update
-          sudo apt-get install -y lua-discount
-          
+          # Install dependencies required by ldoc on Alpine
+          apk add --no-cache build-base lua-discount git
+
       - name: Install ldoc
         run: luarocks install ldoc
-      
+
       - name: Verify ldoc installation
         run: |
           which ldoc || echo "ldoc not found in PATH"
           ldoc --version || echo "ldoc command failed"
-          
+
       - name: Generate API documentation
         run: |
           mkdir -p doc/luadoc
           if [ -f .ldoc.cfg ]; then
-            # Run LDoc with warnings but don't fail on warnings
-            ldoc -v lua/ -d doc/luadoc -c .ldoc.cfg || echo "ldoc generation failed, but continuing"
+            # Run LDoc
+            ldoc -v lua/ -d doc/luadoc -c .ldoc.cfg
           else
-            echo "No .ldoc.cfg found, skipping documentation generation"
+            echo "Warning: No .ldoc.cfg found, skipping documentation generation"
           fi
-          
+
       - name: List generated documentation
         run: ls -la doc/luadoc || echo "No documentation generated"

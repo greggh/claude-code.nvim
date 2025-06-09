@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
+
       - name: Get version from tag or input
         id: get_version
         run: |
@@ -62,17 +62,17 @@ jobs:
           if [[ "${{ github.event_name }}" == "push" && "${{ github.ref_type }}" == "tag" ]]; then
             # For tag pushes, extract from CHANGELOG.md if it exists
             VERSION="${{ steps.get_version.outputs.VERSION }}"
-            
+
             echo "Checking for changelog entry: ## [${VERSION}]"
             grep -n "## \[${VERSION}\]" CHANGELOG.md || echo "No exact match found"
-            
+
             if grep -q "## \[${VERSION}\]" CHANGELOG.md; then
               echo "Extracting changelog for v${VERSION} from CHANGELOG.md"
-              
+
               # Use sed to extract the changelog section
               SECTION_START=$(grep -n "## \[${VERSION}\]" CHANGELOG.md | cut -d: -f1)
               NEXT_SECTION=$(tail -n +$((SECTION_START+1)) CHANGELOG.md | grep -n "## \[" | head -1 | cut -d: -f1)
-              
+
               if [ -n "$NEXT_SECTION" ]; then
                 # Calculate end line
                 END_LINE=$((SECTION_START + NEXT_SECTION - 1))
@@ -82,7 +82,7 @@ jobs:
                 # Extract from start to end of file if no next section
                 CHANGELOG_CONTENT=$(tail -n +$((SECTION_START+1)) CHANGELOG.md)
               fi
-              
+
               echo "Extracted changelog content:"
               echo "$CHANGELOG_CONTENT"
             else
@@ -95,7 +95,7 @@ jobs:
             echo "Generating changelog from git log"
             CHANGELOG_CONTENT=$(git log --pretty=format:"* %s (%an)" $(git describe --tags --abbrev=0 2>/dev/null || echo HEAD~50)..HEAD)
           fi
-          
+
           # Format for GitHub Actions output
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
           echo "$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT

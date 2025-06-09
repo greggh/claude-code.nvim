@@ -1,12 +1,13 @@
-# Contributing to Claude-Code.nvim
+
+# Contributing to claude-Code.nvim
 
 Thank you for your interest in contributing to Claude-Code.nvim! This document provides guidelines and instructions to help you contribute effectively.
 
-## Code of Conduct
+## Code of conduct
 
 By participating in this project, you agree to maintain a respectful and inclusive environment for everyone.
 
-## Ways to Contribute
+## Ways to contribute
 
 There are several ways you can contribute to Claude-Code.nvim:
 
@@ -16,7 +17,7 @@ There are several ways you can contribute to Claude-Code.nvim:
 - Improving documentation
 - Sharing your experience using the plugin
 
-## Reporting Issues
+## Reporting issues
 
 Before submitting an issue, please:
 
@@ -24,13 +25,13 @@ Before submitting an issue, please:
 2. Use the issue template if available
 3. Include as much relevant information as possible:
    - Neovim version
-   - Claude Code CLI version
+   - Claude Code command-line tool version
    - Operating system
    - Steps to reproduce the issue
    - Expected vs. actual behavior
    - Any error messages or logs
 
-## Pull Request Process
+## Pull request process
 
 1. Fork the repository
 2. Create a new branch for your changes
@@ -40,7 +41,7 @@ Before submitting an issue, please:
 
 For significant changes, please open an issue first to discuss your proposed changes.
 
-## Development Setup
+## Development setup
 
 For detailed instructions on setting up a development environment, required tools, and testing procedures, please refer to the [DEVELOPMENT.md](DEVELOPMENT.md) file. This comprehensive guide includes:
 
@@ -60,7 +61,7 @@ To set up a development environment:
 
 3. Link the repository to your Neovim plugins directory or use your plugin manager's development mode
 
-4. Make sure you have the Claude Code CLI tool installed and properly configured
+4. Make sure you have the Claude Code command-line tool installed and properly configured
 
 5. Set up the Git hooks for automatic code formatting:
 
@@ -70,7 +71,7 @@ To set up a development environment:
 
 This will set up pre-commit hooks to automatically format Lua code using StyLua before each commit.
 
-### Development Dependencies
+### Development dependencies
 
 The [DEVELOPMENT.md](DEVELOPMENT.md) file contains detailed information about:
 
@@ -79,7 +80,7 @@ The [DEVELOPMENT.md](DEVELOPMENT.md) file contains detailed information about:
 - [LDoc](https://github.com/lunarmodules/LDoc) - For documentation generation (optional)
 - Other tools and their installation instructions for different platforms
 
-## Coding Standards
+## Coding standards
 
 - Follow the existing code style and structure
 - Use meaningful variable and function names
@@ -87,7 +88,7 @@ The [DEVELOPMENT.md](DEVELOPMENT.md) file contains detailed information about:
 - Keep functions focused and modular
 - Add appropriate documentation for new features
 
-## Lua Style Guide
+## Lua style guide
 
 We use [StyLua](https://github.com/JohnnyMorganz/StyLua) to enforce consistent formatting of the codebase. The formatting is done automatically via pre-commit hooks if you've set them up using the script provided.
 
@@ -108,11 +109,12 @@ Files are linted using [LuaCheck](https://github.com/mpeterv/luacheck) according
 
 Before submitting your changes, please test them thoroughly:
 
-### Running Tests
+### Running tests
 
 You can run the test suite using the Makefile:
 
 ```bash
+
 # Run all tests
 make test
 
@@ -120,15 +122,16 @@ make test
 make test-basic    # Run basic functionality tests
 make test-config   # Run configuration tests
 make test-plenary  # Run plenary tests
-```
+
+```text
 
 See `test/README.md` and `tests/README.md` for more details on the different test types.
 
-### Manual Testing
+### Manual testing
 
 - Test in different environments (Linux, macOS, Windows if possible)
 - Test with different configurations
-- Test the integration with the Claude Code CLI
+- Test the integration with the Claude Code command-line tool
 - Use the minimal test configuration (`tests/minimal-init.lua`) to verify your changes in isolation
 
 ## Documentation
@@ -148,3 +151,4 @@ By contributing to Claude-Code.nvim, you agree that your contributions will be l
 If you have any questions about contributing, please open an issue with your question.
 
 Thank you for contributing to Claude-Code.nvim!
+

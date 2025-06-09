@@ -1,0 +1,35 @@
+-- LuaCov configuration file for claude-code.nvim
+
+-- Patterns for files to include
+include = {
+  "lua/claude%-code/.*%.lua$",
+}
+
+-- Patterns for files to exclude
+exclude = {
+  -- Exclude test files
+  "tests/",
+  "spec/",
+  -- Exclude vendor/external files
+  "vendor/",
+  "deps/",
+  -- Exclude generated files
+  "build/",
+  -- Exclude experimental files
+  "%.experimental%.lua$",
+}
+
+-- Coverage reporter settings
+reporter = "default"
+
+-- Output directory for coverage reports
+reportfile = "luacov.report.out"
+
+-- Statistics file
+statsfile = "luacov.stats.out"
+
+-- Set runreport to true to generate report immediately
+runreport = true
+
+-- Custom reporter options
+codefromstrings = false

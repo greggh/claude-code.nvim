@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Claude Code MCP Server - Wrapper for official mcp-neovim-server
+# This script wraps the official mcp-neovim-server for backward compatibility
+
+# Simply pass through to the official server
+exec mcp-neovim-server "$@"

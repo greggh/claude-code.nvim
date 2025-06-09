@@ -1,0 +1,422 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Claude Code Documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Claude Code</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Local_Functions">Local Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/claude-code.html">claude-code</a></li>
+  <li><a href="../modules/claude-code.commands.html">claude-code.commands</a></li>
+  <li><a href="../modules/claude-code.config.html">claude-code.config</a></li>
+  <li><a href="../modules/claude-code.context.html">claude-code.context</a></li>
+  <li><a href="../modules/claude-code.file_refresh.html">claude-code.file_refresh</a></li>
+  <li><a href="../modules/claude-code.git.html">claude-code.git</a></li>
+  <li><a href="../modules/claude-code.keymaps.html">claude-code.keymaps</a></li>
+  <li><a href="../modules/claude-code.terminal.html">claude-code.terminal</a></li>
+  <li><strong>claude-code.tree_helper</strong></li>
+  <li><a href="../modules/claude-code.version.html">claude-code.version</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/README.md.html">README.md</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>claude-code.tree_helper</code></h1>
+<p>
+
+</p>
+<p>
+
+</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#add_ignore_pattern">add_ignore_pattern(pattern)</a></td>
+	<td class="summary">Add ignore pattern to default list</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#create_tree_file">create_tree_file(options)</a></td>
+	<td class="summary">Create a temporary file with project tree content</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#generate_tree">generate_tree(root_dir, options)</a></td>
+	<td class="summary">Generate a file tree representation of a directory</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_default_ignore_patterns">get_default_ignore_patterns()</a></td>
+	<td class="summary">Get default ignore patterns</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_project_tree_context">get_project_tree_context(options)</a></td>
+	<td class="summary">Get project tree context as formatted markdown</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#DEFAULT_IGNORE_PATTERNS">DEFAULT_IGNORE_PATTERNS</a></td>
+	<td class="summary">Default ignore patterns for file tree generation</td>
+	</tr>
+</table>
+<h2><a href="#Local_Functions">Local Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#format_file_size">format_file_size(size)</a></td>
+	<td class="summary">Format file size in human readable format</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#generate_tree_recursive">generate_tree_recursive(dir, options, depth, file_count)</a></td>
+	<td class="summary">Generate tree structure recursively</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#should_ignore">should_ignore(path, ignore_patterns)</a></td>
+	<td class="summary">Check if a path matches any of the ignore patterns</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "add_ignore_pattern"></a>
+    <strong>add_ignore_pattern(pattern)</strong>
+    </dt>
+    <dd>
+    Add ignore pattern to default list
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">pattern</span>
+         string Pattern to add
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "create_tree_file"></a>
+    <strong>create_tree_file(options)</strong>
+    </dt>
+    <dd>
+    Create a temporary file with project tree content
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">options</span>
+        ? table Options for tree generation
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string Path to temporary file
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "generate_tree"></a>
+    <strong>generate_tree(root_dir, options)</strong>
+    </dt>
+    <dd>
+    Generate a file tree representation of a directory
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">root_dir</span>
+         string Root directory to scan
+        </li>
+        <li><span class="parameter">options</span>
+        ? table Options for tree generation
+   - max<em>depth: number Maximum depth to scan (default: 3)
+   - max</em>files: number Maximum number of files to include (default: 100)
+   - ignore<em>patterns: table Patterns to ignore (default: common ignore patterns)
+   - show</em>size: boolean Include file sizes (default: false)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string Tree representation
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_default_ignore_patterns"></a>
+    <strong>get_default_ignore_patterns()</strong>
+    </dt>
+    <dd>
+    Get default ignore patterns
+
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table Default ignore patterns
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_project_tree_context"></a>
+    <strong>get_project_tree_context(options)</strong>
+    </dt>
+    <dd>
+    Get project tree context as formatted markdown
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">options</span>
+        ? table Options for tree generation
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string Markdown formatted project tree
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "DEFAULT_IGNORE_PATTERNS"></a>
+    <strong>DEFAULT_IGNORE_PATTERNS</strong>
+    </dt>
+    <dd>
+    Default ignore patterns for file tree generation
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">node_modules</span>
+
+
+
+        </li>
+        <li><span class="parameter">target</span>
+
+
+
+        </li>
+        <li><span class="parameter">build</span>
+
+
+
+        </li>
+        <li><span class="parameter">dist</span>
+
+
+
+        </li>
+        <li><span class="parameter">__pycache__</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Local_Functions"></a>Local Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "format_file_size"></a>
+    <strong>format_file_size(size)</strong>
+    </dt>
+    <dd>
+    Format file size in human readable format
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">size</span>
+         number File size in bytes
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string Formatted size (e.g., "1.5KB", "2.3MB")
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "generate_tree_recursive"></a>
+    <strong>generate_tree_recursive(dir, options, depth, file_count)</strong>
+    </dt>
+    <dd>
+    Generate tree structure recursively
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dir</span>
+         string Directory path
+        </li>
+        <li><span class="parameter">options</span>
+         table Options for tree generation
+        </li>
+        <li><span class="parameter">depth</span>
+         number Current depth (internal)
+        </li>
+        <li><span class="parameter">file_count</span>
+         table File count tracker (internal)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table Lines of tree output
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "should_ignore"></a>
+    <strong>should_ignore(path, ignore_patterns)</strong>
+    </dt>
+    <dd>
+    Check if a path matches any of the ignore patterns
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">path</span>
+         string Path to check
+        </li>
+        <li><span class="parameter">ignore_patterns</span>
+         table List of patterns to ignore
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        boolean True if path should be ignored
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/LDoc">LDoc 1.5.0</a></i>
+<i style="float:right;">Last updated 2025-05-30 21:14:20 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Claude Code Documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Claude Code</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Local_Functions">Local Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><strong>claude-code</strong></li>
+  <li><a href="../modules/claude-code.commands.html">claude-code.commands</a></li>
+  <li><a href="../modules/claude-code.config.html">claude-code.config</a></li>
+  <li><a href="../modules/claude-code.context.html">claude-code.context</a></li>
+  <li><a href="../modules/claude-code.file_refresh.html">claude-code.file_refresh</a></li>
+  <li><a href="../modules/claude-code.git.html">claude-code.git</a></li>
+  <li><a href="../modules/claude-code.keymaps.html">claude-code.keymaps</a></li>
+  <li><a href="../modules/claude-code.terminal.html">claude-code.terminal</a></li>
+  <li><a href="../modules/claude-code.tree_helper.html">claude-code.tree_helper</a></li>
+  <li><a href="../modules/claude-code.version.html">claude-code.version</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/README.md.html">README.md</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>claude-code</code></h1>
+<p>
+
+</p>
+<p>
+
+</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#force_insert_mode">force_insert_mode()</a></td>
+	<td class="summary">Force insert mode when entering the Claude Code window
+ This is a public function used in keymaps</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_config">get_config()</a></td>
+	<td class="summary">Get the current plugin configuration</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_process_status">get_process_status(instance_id)</a></td>
+	<td class="summary">Get process status for current or specified Claude Code instance</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_prompt_input">get_prompt_input()</a></td>
+	<td class="summary">Get the current prompt input buffer content, or an empty string if not available</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_version">get_version()</a></td>
+	<td class="summary">Get the current plugin version</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#list_instances">list_instances()</a></td>
+	<td class="summary">List all Claude Code instances and their states</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#safe_toggle">safe_toggle()</a></td>
+	<td class="summary">Safe toggle that hides/shows Claude Code window without stopping execution</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#setup">setup(user_config)</a></td>
+	<td class="summary">Setup function for the plugin</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#toggle">toggle()</a></td>
+	<td class="summary">Toggle the Claude Code terminal window
+ This is a public function used by commands</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#toggle_with_context">toggle_with_context(context_type)</a></td>
+	<td class="summary">Toggle the Claude Code terminal window with context awareness</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#toggle_with_variant">toggle_with_variant(variant_name)</a></td>
+	<td class="summary">Toggle the Claude Code terminal window with a specific command variant</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#version">version()</a></td>
+	<td class="summary">Get the current plugin version (alias for compatibility)</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#config">config</a></td>
+	<td class="summary">Plugin configuration (merged from defaults and user input)</td>
+	</tr>
+</table>
+<h2><a href="#Local_Functions">Local Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#get_current_buffer_number">get_current_buffer_number()</a></td>
+	<td class="summary">Check if a buffer is a valid Claude Code terminal buffer</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "force_insert_mode"></a>
+    <strong>force_insert_mode()</strong>
+    </dt>
+    <dd>
+    Force insert mode when entering the Claude Code window
+ This is a public function used in keymaps
+
+    </ul>
+    </ul>
+    </ul>
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_config"></a>
+    <strong>get_config()</strong>
+    </dt>
+    <dd>
+    Get the current plugin configuration
+
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table The current configuration
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_process_status"></a>
+    <strong>get_process_status(instance_id)</strong>
+    </dt>
+    <dd>
+    Get process status for current or specified Claude Code instance
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">instance_id</span>
+         string|nil The instance identifier (uses current if nil)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table Process status information
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_prompt_input"></a>
+    <strong>get_prompt_input()</strong>
+    </dt>
+    <dd>
+    Get the current prompt input buffer content, or an empty string if not available
+
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string The current prompt input buffer content
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_version"></a>
+    <strong>get_version()</strong>
+    </dt>
+    <dd>
+    Get the current plugin version
+
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string The version string
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "list_instances"></a>
+    <strong>list_instances()</strong>
+    </dt>
+    <dd>
+    List all Claude Code instances and their states
+
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table List of all instance states
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "safe_toggle"></a>
+    <strong>safe_toggle()</strong>
+    </dt>
+    <dd>
+    Safe toggle that hides/shows Claude Code window without stopping execution
+
+    </ul>
+    </ul>
+    </ul>
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "setup"></a>
+    <strong>setup(user_config)</strong>
+    </dt>
+    <dd>
+    Setup function for the plugin
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">user_config</span>
+         table|nil Optional user configuration
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "toggle"></a>
+    <strong>toggle()</strong>
+    </dt>
+    <dd>
+    Toggle the Claude Code terminal window
+ This is a public function used by commands
+
+    </ul>
+    </ul>
+    </ul>
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "toggle_with_context"></a>
+    <strong>toggle_with_context(context_type)</strong>
+    </dt>
+    <dd>
+    Toggle the Claude Code terminal window with context awareness
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">context_type</span>
+         string|nil The context type ("file", "selection", "auto")
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "toggle_with_variant"></a>
+    <strong>toggle_with_variant(variant_name)</strong>
+    </dt>
+    <dd>
+    Toggle the Claude Code terminal window with a specific command variant
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">variant_name</span>
+         string The name of the command variant to use
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "version"></a>
+    <strong>version()</strong>
+    </dt>
+    <dd>
+    Get the current plugin version (alias for compatibility)
+
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string The version string
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "config"></a>
+    <strong>config</strong>
+    </dt>
+    <dd>
+    Plugin configuration (merged from defaults and user input)
+
+    </ul>
+    </ul>
+    </ul>
+
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Local_Functions"></a>Local Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "get_current_buffer_number"></a>
+    <strong>get_current_buffer_number()</strong>
+    </dt>
+    <dd>
+    Check if a buffer is a valid Claude Code terminal buffer
+
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        number|nil buffer number if valid, nil otherwise
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/LDoc">LDoc 1.5.0</a></i>
+<i style="float:right;">Last updated 2025-05-30 21:14:20 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

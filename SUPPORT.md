@@ -1,8 +1,9 @@
+
 # Support
 
 This document outlines the various ways you can get help with Claude Code.
 
-## GitHub Discussions
+## Github discussions
 
 For general questions, ideas, or community discussions, please use [GitHub Discussions](https://github.com/greggh/claude-code/discussions).
 
@@ -13,7 +14,7 @@ Categories:
 - **Show and Tell**: For sharing your customizations or use cases
 - **General**: For general conversation about AI integration with Neovim
 
-## Issue Tracker
+## Issue tracker
 
 For reporting bugs or requesting features, please use the [GitHub issue tracker](https://github.com/greggh/claude-code/issues).
 
@@ -31,11 +32,11 @@ For help with using Claude Code:
 - Check the [DEVELOPMENT.md](DEVELOPMENT.md) for development information
 - See the [doc/claude-code.txt](doc/claude-code.txt) for Neovim help documentation
 
-## Claude Code File
+## Claude code file
 
 See the [CLAUDE.md](CLAUDE.md) file for additional configuration options and tips for using Claude Code effectively.
 
-## Community Channels
+## Community channels
 
 - GitHub Discussions is the primary community channel for this project
 
@@ -43,6 +44,7 @@ See the [CLAUDE.md](CLAUDE.md) file for additional configuration options and tip
 
 If you're interested in contributing to the project, please read our [CONTRIBUTING.md](CONTRIBUTING.md) guide.
 
-## Security Issues
+## Security issues
 
 For security-related issues, please refer to our [SECURITY.md](SECURITY.md) document for proper disclosure procedures.
+

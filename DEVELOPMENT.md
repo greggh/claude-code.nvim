@@ -1,31 +1,33 @@
-# Development Guide for Neovim Projects
+
+# Development guide for neovim projects
 
 This document outlines the development workflow, testing setup, and requirements for working with Neovim Lua projects such as this configuration, Laravel Helper plugin, and Claude Code plugin.
 
 ## Requirements
 
-### Core Dependencies
+### Core dependencies
 
 - **Neovim**: Version 0.10.0 or higher
   - Required for `vim.system()`, splitkeep, and modern LSP features
 - **Git**: For version control
 - **Make**: For running development commands
 
-### Development Tools
+### Development tools
 
 - **stylua**: Lua code formatter
 - **luacheck**: Lua linter
 - **ripgrep**: Used for searching (optional but recommended)
 - **fd**: Used for finding files (optional but recommended)
 
-## Installation Instructions
+## Installation instructions
 
 ### Linux
 
-#### Ubuntu/Debian
+#### Ubuntu/debian
 
 ```bash
-# Install Neovim (from PPA for latest version)
+
+# Install neovim (from ppa for latest version)
 sudo add-apt-repository ppa:neovim-ppa/unstable
 sudo apt-get update
 sudo apt-get install neovim
@@ -41,24 +43,28 @@ curl -L -o stylua.zip $(curl -s https://api.github.com/repos/JohnnyMorganz/StyLu
 unzip stylua.zip
 chmod +x stylua
 sudo mv stylua /usr/local/bin/
-```
 
-#### Arch Linux
+```text
+
+#### Arch linux
 
 ```bash
+
 # Install dependencies
 sudo pacman -S neovim luarocks ripgrep fd git make
 
 # Install luacheck
 sudo luarocks install luacheck
 
-# Install stylua (from AUR)
+# Install stylua (from aur)
 yay -S stylua
-```
+
+```text
 
 #### Fedora
 
 ```bash
+
 # Install dependencies
 sudo dnf install neovim luarocks ripgrep fd-find git make
 
@@ -70,12 +76,14 @@ curl -L -o stylua.zip $(curl -s https://api.github.com/repos/JohnnyMorganz/StyLu
 unzip stylua.zip
 chmod +x stylua
 sudo mv stylua /usr/local/bin/
-```
+
+```text
 
 ### macOS
 
 ```bash
-# Install Homebrew if not already installed
+
+# Install homebrew if not already installed
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Install dependencies
@@ -86,13 +94,15 @@ luarocks install luacheck
 
 # Install stylua
 brew install stylua
-```
+
+```text
 
 ### Windows
 
 #### Using scoop
 
 ```powershell
+
 # Install scoop if not already installed
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
@@ -108,11 +118,13 @@ luarocks install luacheck
 
 # Install stylua
 scoop install stylua
-```
+
+```text
 
 #### Using chocolatey
 
 ```powershell
+
 # Install chocolatey if not already installed
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
@@ -125,13 +137,15 @@ choco install luarocks
 # Install luacheck
 luarocks install luacheck
 
-# Install stylua (download from GitHub)
-# Visit https://github.com/JohnnyMorganz/StyLua/releases
-```
+# Install stylua (download from github)
 
-## Development Workflow
+# Visit https://github.com/johnnymorganz/stylua/releases
 
-### Setting Up the Environment
+```text
+
+## Development workflow
+
+### Setting up the environment
 
 1. Clone the repository:
 
@@ -146,14 +160,14 @@ luarocks install luacheck
    ./scripts/setup-hooks.sh
    ```
 
-### Common Development Tasks
+### Common development tasks
 
 - **Run tests**: `make test`
 - **Run linting**: `make lint`
 - **Format code**: `make format`
 - **View available commands**: `make help`
 
-### Pre-commit Hooks
+### Pre-commit hooks
 
 The pre-commit hook automatically runs:
 
@@ -165,13 +179,15 @@ If you need to bypass these checks, use:
 
 ```bash
 git commit --no-verify
-```
+
+```text
 
 ## Testing
 
-### Running Tests
+### Running tests
 
 ```bash
+
 # Run all tests
 make test
 
@@ -181,9 +197,10 @@ make test-verbose
 # Run specific test suites
 make test-basic
 make test-config
-```
 
-### Writing Tests
+```text
+
+### Writing tests
 
 Tests are written in Lua using a simple BDD-style API:
 
@@ -196,9 +213,10 @@ test.describe("Feature name", function()
     test.expect(result).to_be(expected)
   end)
 end)
-```
 
-## Continuous Integration
+```text
+
+## Continuous integration
 
 This project uses GitHub Actions for CI:
 
@@ -206,7 +224,7 @@ This project uses GitHub Actions for CI:
 - **Jobs**: Install dependencies, Run linting, Run tests
 - **Platforms**: Ubuntu Linux (primary)
 
-## Tools and Their Purposes
+## Tools and their purposes
 
 Understanding why we use each tool helps in appreciating their role in the development process:
 
@@ -219,7 +237,7 @@ Neovim is the primary development platform and runtime environment. We use versi
 - Enhanced LSP integration
 - Support for modern Lua features via LuaJIT
 
-### StyLua
+### Stylua
 
 StyLua is a Lua formatter specifically designed for Neovim configurations. It:
 
@@ -230,7 +248,7 @@ StyLua is a Lua formatter specifically designed for Neovim configurations. It:
 
 Our configuration uses 2-space indentation and 100-character line length limits.
 
-### LuaCheck
+### Luacheck
 
 LuaCheck is a static analyzer that helps catch issues before they cause problems:
 
@@ -242,24 +260,25 @@ LuaCheck is a static analyzer that helps catch issues before they cause problems
 
 We configure LuaCheck with `.luacheckrc` files that define project-specific globals and rules.
 
-### Ripgrep & FD
+### Ripgrep & fd
 
 These tools improve development efficiency:
 
 - **Ripgrep**: Extremely fast code searching to find patterns and references
 - **FD**: Fast alternative to `find` for locating files in complex directory structures
 
-### Git & Make
+### Git & make
 
 - **Git**: Version control with support for feature branches and collaborative development
 - **Make**: Common interface for development tasks that work across different platforms
 
-## Project Structure
+## Project structure
 
 All our Neovim projects follow a similar structure:
 
 ```plaintext
-```
+
+```text
 
 .
 ├── .github/            # GitHub-specific files and workflows
@@ -271,7 +290,8 @@ All our Neovim projects follow a similar structure:
 ├── .luacheckrc         # LuaCheck configuration
 
 ```plaintext
-```
+
+```text
 
 ├── .stylua.toml        # StyLua configuration
 ├── Makefile            # Common commands
@@ -279,11 +299,12 @@ All our Neovim projects follow a similar structure:
 └── README.md           # Project overview
 
 ```plaintext
-```
+
+```text
 
 ## Troubleshooting
 
-### Common Issues
+### Common issues
 
 - **stylua not found**: Make sure it's installed and in your PATH
 - **luacheck errors**: Run `make lint` to see specific issues
@@ -291,7 +312,7 @@ All our Neovim projects follow a similar structure:
 - **Module not found errors**: Check that you're using the correct module name and path
 - **Plugin functionality not loading**: Verify your Neovim version is 0.10.0 or higher
 
-### Getting Help
+### Getting help
 
 If you encounter issues:
 
@@ -300,3 +321,4 @@ If you encounter issues:
 3. Check that your Neovim version is 0.10.0 or higher
 4. Review the project's issues on GitHub for similar problems
 5. Open a new issue with detailed reproduction steps if needed
+

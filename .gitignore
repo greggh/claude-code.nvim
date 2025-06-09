@@ -13,13 +13,7 @@ $RECYCLE.BIN/
 *.swp
 *.swo
 *.tmp
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+.vscode/
 
 # IDE - JetBrains
 .idea/
@@ -124,3 +118,9 @@ luac.out
 *.src.rock
 *.zip
 *.tar.gz
+.claude
+!.vale/styles/config/
+
+# Coverage files
+luacov.stats.out
+luacov.report.out

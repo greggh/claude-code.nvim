@@ -1,0 +1,496 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Claude Code Documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Claude Code</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Class_ClaudeCodeConfig">Class ClaudeCodeConfig </a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/claude-code.html">claude-code</a></li>
+  <li><a href="../modules/claude-code.commands.html">claude-code.commands</a></li>
+  <li><strong>claude-code.config</strong></li>
+  <li><a href="../modules/claude-code.context.html">claude-code.context</a></li>
+  <li><a href="../modules/claude-code.file_refresh.html">claude-code.file_refresh</a></li>
+  <li><a href="../modules/claude-code.git.html">claude-code.git</a></li>
+  <li><a href="../modules/claude-code.keymaps.html">claude-code.keymaps</a></li>
+  <li><a href="../modules/claude-code.terminal.html">claude-code.terminal</a></li>
+  <li><a href="../modules/claude-code.tree_helper.html">claude-code.tree_helper</a></li>
+  <li><a href="../modules/claude-code.version.html">claude-code.version</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/README.md.html">README.md</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>claude-code.config</code></h1>
+<p>
+
+</p>
+<p>
+
+</p>
+
+
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#ClaudeCodeCommandVariants">ClaudeCodeCommandVariants</a></td>
+	<td class="summary">ClaudeCodeCommandVariants class for command variant configuration</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ClaudeCodeConfig">ClaudeCodeConfig</a></td>
+	<td class="summary">ClaudeCodeConfig class for main configuration</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ClaudeCodeGit">ClaudeCodeGit</a></td>
+	<td class="summary">ClaudeCodeGit class for git integration configuration</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ClaudeCodeKeymaps">ClaudeCodeKeymaps</a></td>
+	<td class="summary">ClaudeCodeKeymaps class for keymap configuration</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ClaudeCodeKeymapsToggle">ClaudeCodeKeymapsToggle</a></td>
+	<td class="summary">ClaudeCodeKeymapsToggle class for toggle keymap configuration</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ClaudeCodeMCP">ClaudeCodeMCP</a></td>
+	<td class="summary">ClaudeCodeMCP class for MCP server configuration</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ClaudeCodeRefresh">ClaudeCodeRefresh</a></td>
+	<td class="summary">ClaudeCodeRefresh class for file refresh configuration</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ClaudeCodeWindow">ClaudeCodeWindow</a></td>
+	<td class="summary">ClaudeCodeWindow class for window configuration</td>
+	</tr>
+</table>
+<h2><a href="#Class_ClaudeCodeConfig">Class ClaudeCodeConfig </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#claudecodeconfig.detect_claude_cli">claudecodeconfig.detect_claude_cli</a></td>
+	<td class="summary">Detect Claude Code CLI installation</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#claudecodeconfig.validate_config">claudecodeconfig.validate_config</a></td>
+	<td class="summary">Validate the configuration</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#claudecodeconfig:parse_config">claudecodeconfig:parse_config(user_config, silent)</a></td>
+	<td class="summary">Parse user configuration and merge with defaults</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "ClaudeCodeCommandVariants"></a>
+    <strong>ClaudeCodeCommandVariants</strong>
+    </dt>
+    <dd>
+    ClaudeCodeCommandVariants class for command variant configuration
+ Conversation management:
+ Additional options can be added as needed
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">continue</span>
+         string|boolean Resume the most recent conversation
+        </li>
+        <li><span class="parameter">resume</span>
+         string|boolean Display an interactive conversation picker
+ Output options:
+        </li>
+        <li><span class="parameter">verbose</span>
+         string|boolean Enable verbose logging with full turn-by-turn output
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ClaudeCodeConfig"></a>
+    <strong>ClaudeCodeConfig</strong>
+    </dt>
+    <dd>
+    ClaudeCodeConfig class for main configuration
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">window</span>
+         ClaudeCodeWindow Terminal window settings
+        </li>
+        <li><span class="parameter">refresh</span>
+         ClaudeCodeRefresh File refresh settings
+        </li>
+        <li><span class="parameter">git</span>
+         ClaudeCodeGit Git integration settings
+        </li>
+        <li><span class="parameter">command</span>
+         string Command used to launch Claude Code
+        </li>
+        <li><span class="parameter">command_variants</span>
+         ClaudeCodeCommandVariants Command variants configuration
+        </li>
+        <li><span class="parameter">keymaps</span>
+         ClaudeCodeKeymaps Keymaps configuration
+        </li>
+        <li><span class="parameter">mcp</span>
+         ClaudeCodeMCP MCP server configuration
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ClaudeCodeGit"></a>
+    <strong>ClaudeCodeGit</strong>
+    </dt>
+    <dd>
+    ClaudeCodeGit class for git integration configuration
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">use_git_root</span>
+         boolean Set CWD to git root when opening Claude Code (if in git project)
+        </li>
+        <li><span class="parameter">multi_instance</span>
+         boolean Use multiple Claude instances (one per git root)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ClaudeCodeKeymaps"></a>
+    <strong>ClaudeCodeKeymaps</strong>
+    </dt>
+    <dd>
+    ClaudeCodeKeymaps class for keymap configuration
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">toggle</span>
+         ClaudeCodeKeymapsToggle Keymaps for toggling Claude Code
+        </li>
+        <li><span class="parameter">window_navigation</span>
+         boolean Enable window navigation keymaps
+        </li>
+        <li><span class="parameter">scrolling</span>
+         boolean Enable scrolling keymaps
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ClaudeCodeKeymapsToggle"></a>
+    <strong>ClaudeCodeKeymapsToggle</strong>
+    </dt>
+    <dd>
+    ClaudeCodeKeymapsToggle class for toggle keymap configuration
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">normal</span>
+         string|boolean Normal mode keymap for toggling Claude Code, false to disable
+        </li>
+        <li><span class="parameter">terminal</span>
+         string|boolean Terminal mode keymap for toggling Claude Code, false to disable
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ClaudeCodeMCP"></a>
+    <strong>ClaudeCodeMCP</strong>
+    </dt>
+    <dd>
+    ClaudeCodeMCP class for MCP server configuration
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">enabled</span>
+         boolean Enable MCP server
+        </li>
+        <li><span class="parameter">http_server</span> table HTTP server configuration
+        <ul>
+        <li><span class="parameter">host</span>
+         string Host to bind HTTP server to (default: "127.0.0.1")
+        </li>
+        <li><span class="parameter">port</span>
+         number Port for HTTP server (default: 27123)
+        </li>
+        </li></ul>
+        <li><span class="parameter">session_timeout_minutes</span>
+         number Session timeout in minutes (default: 30)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ClaudeCodeRefresh"></a>
+    <strong>ClaudeCodeRefresh</strong>
+    </dt>
+    <dd>
+    ClaudeCodeRefresh class for file refresh configuration
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">enable</span>
+         boolean Enable file change detection
+        </li>
+        <li><span class="parameter">updatetime</span>
+         number updatetime when Claude Code is active (milliseconds)
+        </li>
+        <li><span class="parameter">timer_interval</span>
+         number How often to check for file changes (milliseconds)
+        </li>
+        <li><span class="parameter">show_notifications</span>
+         boolean Show notification when files are reloaded
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ClaudeCodeWindow"></a>
+    <strong>ClaudeCodeWindow</strong>
+    </dt>
+    <dd>
+    ClaudeCodeWindow class for window configuration
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">split_ratio</span>
+         number Percentage of screen for the terminal window (height for horizontal, width for vertical splits)
+        </li>
+        <li><span class="parameter">position</span>
+         string Position of the window: "botright", "topleft", "vertical", etc.
+        </li>
+        <li><span class="parameter">enter_insert</span>
+         boolean Whether to enter insert mode when opening Claude Code
+        </li>
+        <li><span class="parameter">start_in_normal_mode</span>
+         boolean Whether to start in normal mode instead of insert mode when opening Claude Code
+        </li>
+        <li><span class="parameter">hide_numbers</span>
+         boolean Hide line numbers in the terminal window
+        </li>
+        <li><span class="parameter">hide_signcolumn</span>
+         boolean Hide the sign column in the terminal window
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_ClaudeCodeConfig"></a>Class ClaudeCodeConfig </h2>
+
+          <div class="section-description">
+          Default configuration options
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "claudecodeconfig.detect_claude_cli"></a>
+    <strong>claudecodeconfig.detect_claude_cli</strong>
+    </dt>
+    <dd>
+    Detect Claude Code CLI installation
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">custom_path</span>
+        ? string Optional custom CLI path to check first
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string|nil The path to Claude Code executable, or nil if not found
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "claudecodeconfig.validate_config"></a>
+    <strong>claudecodeconfig.validate_config</strong>
+    </dt>
+    <dd>
+    Validate the configuration
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">config</span>
+         ClaudeCodeConfig
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        boolean valid</li>
+        <li>
+        string? error_message</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "claudecodeconfig:parse_config"></a>
+    <strong>claudecodeconfig:parse_config(user_config, silent)</strong>
+    </dt>
+    <dd>
+    Parse user configuration and merge with defaults
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">user_config</span>
+        ? table
+        </li>
+        <li><span class="parameter">silent</span>
+        ? boolean Set to true to suppress error notifications (for tests)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        ClaudeCodeConfig
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/LDoc">LDoc 1.5.0</a></i>
+<i style="float:right;">Last updated 2025-05-30 21:14:20 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

@@ -5,7 +5,7 @@ on:
     # Run weekly on Monday at 00:00 UTC
     - cron: '0 0 * * 1'
   workflow_dispatch:
-    # Allow manual triggering
+  # Allow manual triggering
 
 # Add explicit permissions needed for creating issues
 permissions:
@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Check GitHub Actions for updates manually
         id: actions-check
         run: |
@@ -41,7 +41,7 @@ jobs:
           echo "```" >> actions_updates.md
           echo "" >> actions_updates.md
           echo "To check for updates, visit the GitHub repositories for these actions." >> actions_updates.md
-          
+
       - name: Upload Actions Report
         uses: actions/upload-artifact@v4
         with:
@@ -52,35 +52,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Check latest Neovim version
         id: neovim-version
         run: |
           LATEST_RELEASE=$(curl -s https://api.github.com/repos/neovim/neovim/releases/latest | jq -r .tag_name)
           LATEST_VERSION=${LATEST_RELEASE#v}
           echo "latest=$LATEST_VERSION" >> $GITHUB_OUTPUT
-          
+
           # Get current required version from README
           CURRENT_VERSION=$(grep -o "Neovim [0-9]\+\.[0-9]\+" README.md | head -1 | sed 's/Neovim //')
           echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          
+
           # Compare versions
           if [ "$CURRENT_VERSION" \!= "$LATEST_VERSION" ]; then
             echo "update_available=true" >> $GITHUB_OUTPUT
           else
             echo "update_available=false" >> $GITHUB_OUTPUT
           fi
-          
+
           # Generate report
           echo "# Neovim Version Check" > neovim_version.md
           echo "" >> neovim_version.md
           echo "Current minimum required version: **$CURRENT_VERSION**" >> neovim_version.md
           echo "Latest Neovim version: **$LATEST_VERSION**" >> neovim_version.md
           echo "" >> neovim_version.md
-          
+
           if [ "$CURRENT_VERSION" \!= "$LATEST_VERSION" ]; then
             echo "⚠️ **Update Available**: Consider updating to support the latest Neovim features." >> neovim_version.md
-            
+
             # Get the changelog for the new version
             echo "" >> neovim_version.md
             echo "## Notable Changes in Neovim $LATEST_VERSION" >> neovim_version.md
@@ -89,7 +89,7 @@ jobs:
           else
             echo "✅ **Up to Date**: Your plugin supports the latest Neovim version." >> neovim_version.md
           fi
-          
+
       - name: Upload Neovim Version Report
         uses: actions/upload-artifact@v4
         with:
@@ -107,20 +107,20 @@ jobs:
           echo "" >> claude_updates.md
           echo "## Latest Claude CLI Changes" >> claude_updates.md
           echo "" >> claude_updates.md
-          
+
           LATEST_ANTHROPIC_DOCS=$(curl -s "https://docs.anthropic.com/claude/changelog" | grep -oP '<h2 id="[^"]+">.*?<\/h2>' | head -1 | sed 's/<h2 id="[^"]*">//g' | sed 's/<\/h2>//g')
-          
+
           if [ -n "$LATEST_ANTHROPIC_DOCS" ]; then
             echo "Latest Claude documentation update: $LATEST_ANTHROPIC_DOCS" >> claude_updates.md
           else
             echo "Could not detect latest Claude documentation update" >> claude_updates.md
           fi
-          
+
           echo "" >> claude_updates.md
           echo "Check the [Claude CLI Documentation](https://docs.anthropic.com/claude/docs/claude-cli) for the latest Claude CLI features." >> claude_updates.md
           echo "" >> claude_updates.md
           echo "Periodically check for changes to the Claude CLI that may affect this plugin's functionality." >> claude_updates.md
-          
+
       - name: Upload Claude Updates Report
         uses: actions/upload-artifact@v4
         with:
@@ -129,41 +129,41 @@ jobs:
 
   create-update-issue:
     needs: [check-github-actions, check-neovim-version, check-claude-changes]
-    if: github.event_name == 'schedule' # Only create issues on scheduled runs
+    if: github.event_name == 'schedule'  # Only create issues on scheduled runs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Download Neovim version report
         uses: actions/download-artifact@v4
         with:
           name: neovim-version
-          
+
       - name: Download Actions report
         uses: actions/download-artifact@v4
         with:
           name: actions-updates
-          
+
       - name: Download Claude updates report
         uses: actions/download-artifact@v4
         with:
           name: claude-updates
-      
+
       - name: Combine reports
         run: |
           echo "# Weekly Dependency Update Report" > combined_report.md
           echo "" >> combined_report.md
           echo "This automated report checks for updates to dependencies used in Claude Code." >> combined_report.md
           echo "" >> combined_report.md
-          
+
           # Add Neovim version info
           cat neovim_version.md >> combined_report.md
           echo "" >> combined_report.md
-          
+
           # Add GitHub Actions info
           cat actions_updates.md >> combined_report.md
           echo "" >> combined_report.md
-          
+
           # Add Claude updates info
           cat claude_updates.md >> combined_report.md
 

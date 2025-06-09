@@ -2,10 +2,16 @@
 local assert = require('luassert')
 local describe = require('plenary.busted').describe
 local it = require('plenary.busted').it
-
-local config = require('claude-code.config')
+local before_each = require('plenary.busted').before_each
 
 describe('config validation', function()
+  local config
+
+  before_each(function()
+    -- Clear module cache to ensure fresh state
+    package.loaded['claude-code.config'] = nil
+    config = require('claude-code.config')
+  end)
   -- Tests for each config section
   describe('window validation', function()
     it('should validate window.position must be a string', function()
@@ -86,8 +92,14 @@ describe('config validation', function()
       local result2 = config.parse_config(valid_config2, true) -- silent mode
       local result3 = config.parse_config(invalid_config, true) -- silent mode
 
-      assert.are.equal('<leader>cc', result1.keymaps.toggle.normal)
+      -- First config should have custom keymap
+      assert.is_not_nil(result1.keymaps.toggle.normal)
+      assert.are.equal(valid_config1.keymaps.toggle.normal, result1.keymaps.toggle.normal)
+
+      -- Second config should have false
       assert.are.equal(false, result2.keymaps.toggle.normal)
+
+      -- Third config (invalid) should fall back to default
       assert.are.equal(config.default_config.keymaps.toggle.normal, result3.keymaps.toggle.normal)
     end)
 
