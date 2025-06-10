@@ -29,7 +29,7 @@ This plugin was built entirely with Claude Code in a Neovim terminal, and then i
 - 🧠 Support for command-line arguments like `--continue` and custom variants
 - 🔄 Automatically detect and reload files modified by Claude Code
 - ⚡ Real-time buffer updates when files are changed externally
-- 📱 Customizable window position and size
+- 📱 Customizable window position and size (including floating windows)
 - 🤖 Integration with which-key (if available)
 - 📂 Automatically uses git project root as working directory (when available)
 - 🧩 Modular and maintainable code structure
@@ -93,10 +93,20 @@ require("claude-code").setup({
   -- Terminal window settings
   window = {
     split_ratio = 0.3,      -- Percentage of screen for the terminal window (height for horizontal, width for vertical splits)
-    position = "botright",  -- Position of the window: "botright", "topleft", "vertical", "rightbelow vsplit", etc.
+    position = "botright",  -- Position of the window: "botright", "topleft", "vertical", "float", etc.
     enter_insert = true,    -- Whether to enter insert mode when opening Claude Code
     hide_numbers = true,    -- Hide line numbers in the terminal window
     hide_signcolumn = true, -- Hide the sign column in the terminal window
+    
+    -- Floating window configuration (only applies when position = "float")
+    float = {
+      width = "80%",        -- Width: number of columns or percentage string
+      height = "80%",       -- Height: number of rows or percentage string
+      row = "center",       -- Row position: number, "center", or percentage string
+      col = "center",       -- Column position: number, "center", or percentage string
+      relative = "editor",  -- Relative to: "editor" or "cursor"
+      border = "rounded",   -- Border style: "none", "single", "double", "rounded", "solid", "shadow"
+    },
   },
   -- File refresh settings
   refresh = {
@@ -194,6 +204,26 @@ Additionally, when in the Claude Code terminal:
 Note: After scrolling with `<C-f>` or `<C-b>`, you'll need to press the `i` key to re-enter insert mode so you can continue typing to Claude Code.
 
 When Claude Code modifies files that are open in Neovim, they'll be automatically reloaded.
+
+### Floating Window Example
+
+To use Claude Code in a floating window:
+
+```lua
+require("claude-code").setup({
+  window = {
+    position = "float",
+    float = {
+      width = "90%",      -- Take up 90% of the editor width
+      height = "90%",     -- Take up 90% of the editor height
+      row = "center",     -- Center vertically
+      col = "center",     -- Center horizontally
+      relative = "editor",
+      border = "double",  -- Use double border style
+    },
+  },
+})
+```
 
 ## How it Works
 

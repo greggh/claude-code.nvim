@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - New `split_ratio` config option to replace `height_ratio` for better handling of both horizontal and vertical splits
+- Support for floating windows with `position = "float"` configuration
+- Comprehensive floating window configuration options including dimensions, position, and border styles
 
 ### Fixed
 

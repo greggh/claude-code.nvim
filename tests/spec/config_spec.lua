@@ -53,5 +53,85 @@ describe('config', function()
       -- split_ratio should be set to the height_ratio value
       assert.are.equal(0.7, result.window.split_ratio)
     end)
+
+    it('should accept float configuration when position is float', function()
+      local float_config = {
+        window = {
+          position = 'float',
+          float = {
+            width = 80,
+            height = 20,
+            relative = 'editor',
+            border = 'rounded',
+          },
+        },
+      }
+
+      local result = config.parse_config(float_config, true) -- silent mode
+      
+      assert.are.equal('float', result.window.position)
+      assert.are.equal(80, result.window.float.width)
+      assert.are.equal(20, result.window.float.height)
+      assert.are.equal('editor', result.window.float.relative)
+      assert.are.equal('rounded', result.window.float.border)
+    end)
+
+    it('should accept float with percentage dimensions', function()
+      local float_config = {
+        window = {
+          position = 'float',
+          float = {
+            width = '80%',
+            height = '50%',
+            relative = 'editor',
+          },
+        },
+      }
+
+      local result = config.parse_config(float_config, true) -- silent mode
+      
+      assert.are.equal('80%', result.window.float.width)
+      assert.are.equal('50%', result.window.float.height)
+    end)
+
+    it('should accept float with center positioning', function()
+      local float_config = {
+        window = {
+          position = 'float',
+          float = {
+            width = 60,
+            height = 20,
+            row = 'center',
+            col = 'center',
+            relative = 'editor',
+          },
+        },
+      }
+
+      local result = config.parse_config(float_config, true) -- silent mode
+      
+      assert.are.equal('center', result.window.float.row)
+      assert.are.equal('center', result.window.float.col)
+    end)
+
+    it('should provide default float configuration', function()
+      local float_config = {
+        window = {
+          position = 'float',
+          -- No float config provided
+        },
+      }
+
+      local result = config.parse_config(float_config, true) -- silent mode
+      
+      -- Should have default float configuration
+      assert.is_not_nil(result.window.float)
+      assert.are.equal('80%', result.window.float.width)
+      assert.are.equal('80%', result.window.float.height)
+      assert.are.equal('center', result.window.float.row)
+      assert.are.equal('center', result.window.float.col)
+      assert.are.equal('editor', result.window.float.relative)
+      assert.are.equal('rounded', result.window.float.border)
+    end)
   end)
 end)

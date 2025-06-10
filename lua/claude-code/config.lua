@@ -9,11 +9,18 @@ local M = {}
 --- ClaudeCodeWindow class for window configuration
 -- @table ClaudeCodeWindow
 -- @field split_ratio number Percentage of screen for the terminal window (height for horizontal, width for vertical splits)
--- @field position string Position of the window: "botright", "topleft", "vertical", etc.
+-- @field position string Position of the window: "botright", "topleft", "vertical", "float" etc.
 -- @field enter_insert boolean Whether to enter insert mode when opening Claude Code
 -- @field start_in_normal_mode boolean Whether to start in normal mode instead of insert mode when opening Claude Code
 -- @field hide_numbers boolean Hide line numbers in the terminal window
 -- @field hide_signcolumn boolean Hide the sign column in the terminal window
+-- @field float table|nil Floating window configuration (only used when position is "float")
+-- @field float.width number|string Width of floating window (number: columns, string: percentage like "80%")
+-- @field float.height number|string Height of floating window (number: rows, string: percentage like "80%")
+-- @field float.row number|string|nil Row position (number: absolute, string: "center" or percentage)
+-- @field float.col number|string|nil Column position (number: absolute, string: "center" or percentage)
+-- @field float.border string Border style: "none", "single", "double", "rounded", "solid", "shadow", or array
+-- @field float.relative string Relative positioning: "editor" or "cursor"
 
 --- ClaudeCodeRefresh class for file refresh configuration
 -- @table ClaudeCodeRefresh
@@ -63,11 +70,20 @@ M.default_config = {
   window = {
     split_ratio = 0.3, -- Percentage of screen for the terminal window (height or width)
     height_ratio = 0.3, -- DEPRECATED: Use split_ratio instead
-    position = 'botright', -- Position of the window: "botright", "topleft", "vertical", etc.
+    position = 'botright', -- Position of the window: "botright", "topleft", "vertical", "float", etc.
     enter_insert = true, -- Whether to enter insert mode when opening Claude Code
     start_in_normal_mode = false, -- Whether to start in normal mode instead of insert mode
     hide_numbers = true, -- Hide line numbers in the terminal window
     hide_signcolumn = true, -- Hide the sign column in the terminal window
+    -- Default floating window configuration
+    float = {
+      width = '80%', -- Width as percentage of editor
+      height = '80%', -- Height as percentage of editor
+      row = 'center', -- Center vertically
+      col = 'center', -- Center horizontally
+      relative = 'editor', -- Position relative to editor
+      border = 'rounded', -- Border style
+    },
   },
   -- File refresh settings
   refresh = {
@@ -143,6 +159,71 @@ local function validate_config(config)
 
   if type(config.window.hide_signcolumn) ~= 'boolean' then
     return false, 'window.hide_signcolumn must be a boolean'
+  end
+
+  -- Validate float configuration if position is "float"
+  if config.window.position == 'float' then
+    if type(config.window.float) ~= 'table' then
+      return false, 'window.float must be a table when position is "float"'
+    end
+
+    -- Validate width (can be number or percentage string)
+    if type(config.window.float.width) == 'string' then
+      if not config.window.float.width:match('^%d+%%$') then
+        return false, 'window.float.width must be a number or percentage (e.g., "80%")'
+      end
+    elseif type(config.window.float.width) ~= 'number' or config.window.float.width <= 0 then
+      return false, 'window.float.width must be a positive number or percentage string'
+    end
+
+    -- Validate height (can be number or percentage string)
+    if type(config.window.float.height) == 'string' then
+      if not config.window.float.height:match('^%d+%%$') then
+        return false, 'window.float.height must be a number or percentage (e.g., "80%")'
+      end
+    elseif type(config.window.float.height) ~= 'number' or config.window.float.height <= 0 then
+      return false, 'window.float.height must be a positive number or percentage string'
+    end
+
+    -- Validate relative (must be "editor" or "cursor")
+    if config.window.float.relative ~= 'editor' and config.window.float.relative ~= 'cursor' then
+      return false, 'window.float.relative must be "editor" or "cursor"'
+    end
+
+    -- Validate border (must be valid border style)
+    local valid_borders = { 'none', 'single', 'double', 'rounded', 'solid', 'shadow' }
+    local is_valid_border = false
+    for _, border in ipairs(valid_borders) do
+      if config.window.float.border == border then
+        is_valid_border = true
+        break
+      end
+    end
+    -- Also allow array borders
+    if not is_valid_border and type(config.window.float.border) ~= 'table' then
+      return false, 'window.float.border must be one of: none, single, double, rounded, solid, shadow, or an array'
+    end
+
+    -- Validate row and col if they exist
+    if config.window.float.row ~= nil then
+      if type(config.window.float.row) == 'string' and config.window.float.row ~= 'center' then
+        if not config.window.float.row:match('^%d+%%$') then
+          return false, 'window.float.row must be a number, "center", or percentage string'
+        end
+      elseif type(config.window.float.row) ~= 'number' and config.window.float.row ~= 'center' then
+        return false, 'window.float.row must be a number, "center", or percentage string'
+      end
+    end
+
+    if config.window.float.col ~= nil then
+      if type(config.window.float.col) == 'string' and config.window.float.col ~= 'center' then
+        if not config.window.float.col:match('^%d+%%$') then
+          return false, 'window.float.col must be a number, "center", or percentage string'
+        end
+      elseif type(config.window.float.col) ~= 'number' and config.window.float.col ~= 'center' then
+        return false, 'window.float.col must be a number, "center", or percentage string'
+      end
+    end
   end
 
   -- Validate refresh settings
@@ -263,6 +344,11 @@ function M.parse_config(user_config, silent)
   end
 
   local config = vim.tbl_deep_extend('force', {}, M.default_config, user_config or {})
+
+  -- If position is float and no float config provided, use default float config
+  if config.window.position == 'float' and not (user_config and user_config.window and user_config.window.float) then
+    config.window.float = vim.deepcopy(M.default_config.window.float)
+  end
 
   local valid, err = validate_config(config)
   if not valid then
