@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - New `split_ratio` config option to replace `height_ratio` for better handling of both horizontal and vertical splits
+- Buffer is now unlisted by default (doesn't appear in `:ls` output)
 
 ### Fixed
 

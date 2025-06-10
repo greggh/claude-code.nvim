@@ -434,4 +434,25 @@ describe('terminal module', function()
       assert.is_true(success, 'Force insert mode function should run without error')
     end)
   end)
+
+  describe('buffer listing', function()
+    it('should set buffer as nobuflisted when creating terminal', function()
+      -- Claude Code is not running (bufnr is nil)
+      claude_code.claude_code.bufnr = nil
+
+      -- Call toggle
+      terminal.toggle(claude_code, config, git)
+
+      -- Check that nobuflisted command was called
+      local nobuflisted_found = false
+      for _, cmd in ipairs(vim_cmd_calls) do
+        if cmd == 'setlocal nobuflisted' then
+          nobuflisted_found = true
+          break
+        end
+      end
+
+      assert.is_true(nobuflisted_found, 'setlocal nobuflisted should be called')
+    end)
+  end)
 end)
