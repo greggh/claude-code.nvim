@@ -22,6 +22,7 @@ function M.register_keymaps(claude_code, config)
     )
   end
 
+
   if config.keymaps.toggle.terminal then
     -- Terminal mode toggle keymap
     -- In terminal mode, special keys like Ctrl need different handling

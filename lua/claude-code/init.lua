@@ -22,6 +22,7 @@ local commands = require('claude-code.commands')
 local keymaps = require('claude-code.keymaps')
 local file_refresh = require('claude-code.file_refresh')
 local terminal = require('claude-code.terminal')
+local floating = require('claude-code.floating')
 local git = require('claude-code.git')
 local version = require('claude-code.version')
 
@@ -37,6 +38,10 @@ M.config = {}
 -- Terminal buffer and window management
 --- @type table
 M.claude_code = terminal.terminal
+
+-- Floating window management
+--- @type table
+M.floating = floating.floating
 
 --- Force insert mode when entering the Claude Code window
 --- This is a public function used in keymaps
@@ -93,6 +98,7 @@ function M.toggle_with_variant(variant_name)
   -- Restore the original command
   M.config.command = original_command
 end
+
 
 --- Get the current version of the plugin
 --- @return string version Current version string
