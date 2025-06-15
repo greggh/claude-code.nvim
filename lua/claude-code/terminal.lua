@@ -100,6 +100,12 @@ end
 --- @param config table The plugin configuration
 --- @param git table The git module
 function M.toggle(claude_code, config, git)
+  -- If position is floating, delegate to floating window system
+  if config.window.position == 'floating' then
+    local floating = require('claude-code.floating')
+    return floating.toggle(claude_code, config, git)
+  end
+
   -- Determine instance ID based on config
   local instance_id
   if config.git.multi_instance then

@@ -9,11 +9,18 @@ local M = {}
 --- ClaudeCodeWindow class for window configuration
 -- @table ClaudeCodeWindow
 -- @field split_ratio number Percentage of screen for the terminal window (height for horizontal, width for vertical splits)
--- @field position string Position of the window: "botright", "topleft", "vertical", etc.
+-- @field position string Position of the window: "botright", "topleft", "vertical", "floating", etc.
 -- @field enter_insert boolean Whether to enter insert mode when opening Claude Code
 -- @field start_in_normal_mode boolean Whether to start in normal mode instead of insert mode when opening Claude Code
 -- @field hide_numbers boolean Hide line numbers in the terminal window
 -- @field hide_signcolumn boolean Hide the sign column in the terminal window
+-- @field floating ClaudeCodeFloating Floating window configuration (used when position = "floating")
+
+--- ClaudeCodeFloating class for floating window configuration
+-- @table ClaudeCodeFloating
+-- @field width number Percentage of screen width for the floating window (0.0 to 1.0)
+-- @field height number Percentage of screen height for the floating window (0.0 to 1.0)
+-- @field border string|table Border style for the floating window
 
 --- ClaudeCodeRefresh class for file refresh configuration
 -- @table ClaudeCodeRefresh
@@ -70,11 +77,17 @@ M.default_config = {
   window = {
     split_ratio = 0.3, -- Percentage of screen for the terminal window (height or width)
     height_ratio = 0.3, -- DEPRECATED: Use split_ratio instead
-    position = 'botright', -- Position of the window: "botright", "topleft", "vertical", etc.
+    position = 'botright', -- Position of the window: "botright", "topleft", "vertical", "floating", etc.
     enter_insert = true, -- Whether to enter insert mode when opening Claude Code
     start_in_normal_mode = false, -- Whether to start in normal mode instead of insert mode
     hide_numbers = true, -- Hide line numbers in the terminal window
     hide_signcolumn = true, -- Hide the sign column in the terminal window
+    -- Floating window configuration (used when position = "floating")
+    floating = {
+      width = 0.8, -- Percentage of screen width for the floating window
+      height = 0.8, -- Percentage of screen height for the floating window
+      border = 'rounded', -- Border style: 'none', 'single', 'double', 'rounded', 'solid', 'shadow'
+    },
   },
   -- File refresh settings
   refresh = {
@@ -156,6 +169,38 @@ local function validate_config(config)
 
   if type(config.window.hide_signcolumn) ~= 'boolean' then
     return false, 'window.hide_signcolumn must be a boolean'
+  end
+
+  -- Validate floating window settings if they exist
+  if config.window.floating then
+    if type(config.window.floating) ~= 'table' then
+      return false, 'window.floating config must be a table'
+    end
+
+    if
+      type(config.window.floating.width) ~= 'number'
+      or config.window.floating.width <= 0
+      or config.window.floating.width > 1
+    then
+      return false, 'window.floating.width must be a number between 0 and 1'
+    end
+
+    if
+      type(config.window.floating.height) ~= 'number'
+      or config.window.floating.height <= 0
+      or config.window.floating.height > 1
+    then
+      return false, 'window.floating.height must be a number between 0 and 1'
+    end
+
+    if
+      not (
+        type(config.window.floating.border) == 'string'
+        or type(config.window.floating.border) == 'table'
+      )
+    then
+      return false, 'window.floating.border must be a string or table'
+    end
   end
 
   -- Validate refresh settings
@@ -289,6 +334,27 @@ function M.parse_config(user_config, silent)
     if user_config.window.height_ratio and not user_config.window.split_ratio then
       -- Copy height_ratio to split_ratio for backward compatibility
       user_config.window.split_ratio = user_config.window.height_ratio
+    end
+  end
+
+  -- Handle floating config migration
+  if user_config and user_config.floating then
+    -- Migrate old floating config to window.floating
+    if not user_config.window then
+      user_config.window = {}
+    end
+    if not user_config.window.floating then
+      user_config.window.floating = user_config.floating
+    end
+    -- Remove the old floating config to avoid conflicts
+    user_config.floating = nil
+
+    -- Show deprecation warning
+    if not silent then
+      vim.notify(
+        'Claude Code: The floating config has been moved to window.floating. Please update your configuration.',
+        vim.log.levels.WARN
+      )
     end
   end
 

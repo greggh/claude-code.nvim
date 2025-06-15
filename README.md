@@ -9,7 +9,7 @@
 [![Version](https://img.shields.io/badge/Version-0.4.2-blue?style=flat-square)](https://github.com/greggh/claude-code.nvim/releases/tag/v0.4.2)
 [![Discussions](https://img.shields.io/github/discussions/greggh/claude-code.nvim?style=flat-square&logo=github)](https://github.com/greggh/claude-code.nvim/discussions)
 
-*A seamless integration between [Claude Code](https://github.com/anthropics/claude-code) AI assistant and Neovim*
+_A seamless integration between [Claude Code](https://github.com/anthropics/claude-code) AI assistant and Neovim_
 
 [Features](#features) •
 [Requirements](#requirements) •
@@ -93,10 +93,16 @@ require("claude-code").setup({
   -- Terminal window settings
   window = {
     split_ratio = 0.3,      -- Percentage of screen for the terminal window (height for horizontal, width for vertical splits)
-    position = "botright",  -- Position of the window: "botright", "topleft", "vertical", "rightbelow vsplit", etc.
+    position = "botright",  -- Position of the window: "botright", "topleft", "vertical", "rightbelow vsplit", "floating" etc.
     enter_insert = true,    -- Whether to enter insert mode when opening Claude Code
     hide_numbers = true,    -- Hide line numbers in the terminal window
     hide_signcolumn = true, -- Hide the sign column in the terminal window
+    -- Floating window configuration (used when position = "floating")
+    floating = {
+      width = 0.8,          -- Percentage of screen width for the floating window
+      height = 0.8,         -- Percentage of screen height for the floating window
+      border = "rounded",   -- Border style: "none", "single", "double", "rounded", "solid", "shadow"
+    },
   },
   -- File refresh settings
   refresh = {
