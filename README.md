@@ -302,6 +302,10 @@ require("claude-code").setup({
   -- Command settings
   command = "claude",        -- Command used to launch Claude Code
   cli_path = nil,            -- Optional custom path to Claude command-line tool executable (e.g., "/custom/path/to/claude")
+  -- CLI detection notification settings
+  cli_notification = {
+    enabled = false,         -- Show CLI detection notifications on startup (disabled by default)
+  },
   -- Command variants
   command_variants = {
     -- Conversation management

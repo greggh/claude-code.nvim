@@ -182,6 +182,10 @@ M.default_config = {
     message = 'Claude Code plugin loaded', -- Custom startup message
     level = vim.log.levels.INFO, -- Log level for startup notification
   },
+  -- CLI detection notification settings
+  cli_notification = {
+    enabled = false, -- Show CLI detection notifications (disabled by default)
+  },
 }
 
 --- Validate window configuration
@@ -559,8 +563,8 @@ function M.parse_config(user_config, silent)
     local detected_cli = detect_claude_cli(custom_path)
     config.command = detected_cli or 'claude'
 
-    -- Notify user about the CLI selection
-    if not silent then
+    -- Notify user about the CLI selection (only if cli_notification is enabled)
+    if not silent and config.cli_notification.enabled then
       if custom_path then
         if detected_cli == custom_path then
           vim.notify('Claude Code: Using custom CLI at ' .. custom_path, vim.log.levels.INFO)
