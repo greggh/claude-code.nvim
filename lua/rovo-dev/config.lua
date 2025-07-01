@@ -111,7 +111,7 @@ M.default_config = {
     popd_cmd = 'popd', -- Command to pop directory from stack
   },
   -- Command settings
-  command = 'rovo', -- Command used to launch Rovo Dev
+  command = 'acli rovodev run', -- Command used to launch Rovo Dev
   -- Command variants
   command_variants = {
     -- Conversation management
