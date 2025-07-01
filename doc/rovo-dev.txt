@@ -33,7 +33,7 @@ Install using your favorite plugin manager:
 Using lazy.nvim:
 >lua
   return {
-    "greggh/rovo-dev.nvim",
+    "hjetmundsen/rovo-dev.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim", -- Required for git operations
     },
@@ -46,7 +46,7 @@ Using lazy.nvim:
 Using vim-plug:
 >vim
   Plug 'nvim-lua/plenary.nvim'
-  Plug 'greggh/rovo-dev.nvim'
+  Plug 'hjetmundsen/rovo-dev.nvim'
   " After installing, add this to your init.vim:
   " lua require('rovo-dev').setup()
 <
@@ -54,7 +54,7 @@ Using vim-plug:
 Using packer.nvim:
 >lua
   use {
-    'greggh/rovo-dev.nvim',
+    'hjetmundsen/rovo-dev.nvim',
     requires = {
       'nvim-lua/plenary.nvim', -- Required for git operations
     },
@@ -194,7 +194,7 @@ You can customize these mappings in the configuration.
 
 Contributions to Rovo Dev are welcome! If you would like to contribute,
 please check the CONTRIBUTING.md file in the repository for guidelines:
-https://github.com/greggh/rovo-dev.nvim/blob/main/CONTRIBUTING.md
+https://github.com/hjetmundsen/rovo-dev.nvim/blob/main/CONTRIBUTING.md
 
 ==============================================================================
 8. LICENSE                                                  *rovo-dev-license*

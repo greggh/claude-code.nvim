@@ -6,11 +6,11 @@ Rovo Dev Plugin provides seamless integration between the Rovo Dev AI assistant 
 
 ## Essential Commands
 
-- Run Tests: `env -C /home/gregg/Projects/neovim/plugins/rovo-dev lua tests/run_tests.lua`
-- Check Formatting: `env -C /home/gregg/Projects/neovim/plugins/rovo-dev stylua lua/ -c`
-- Format Code: `env -C /home/gregg/Projects/neovim/plugins/rovo-dev stylua lua/`
-- Run Linter: `env -C /home/gregg/Projects/neovim/plugins/rovo-dev luacheck lua/`
-- Build Documentation: `env -C /home/gregg/Projects/neovim/plugins/rovo-dev mkdocs build`
+- Run Tests: `env -C /home/hjetmundsen/Projects/neovim/plugins/rovo-dev lua tests/run_tests.lua`
+- Check Formatting: `env -C /home/hjetmundsen/Projects/neovim/plugins/rovo-dev stylua lua/ -c`
+- Format Code: `env -C /home/hjetmundsen/Projects/neovim/plugins/rovo-dev stylua lua/`
+- Run Linter: `env -C /home/hjetmundsen/Projects/neovim/plugins/rovo-dev luacheck lua/`
+- Build Documentation: `env -C /home/hjetmundsen/Projects/neovim/plugins/rovo-dev mkdocs build`
 
 ## Project Structure
 
@@ -53,5 +53,5 @@ require('rovo-dev').setup({
 
 ## Documentation Links
 
-- Tasks: `/home/gregg/Projects/docs-projects/neovim-ecosystem-docs/tasks/rovo-dev-tasks.md`
-- Project Status: `/home/gregg/Projects/docs-projects/neovim-ecosystem-docs/project-status.md`
+- Tasks: `/home/hjetmundsen/Projects/docs-projects/neovim-ecosystem-docs/tasks/rovo-dev-tasks.md`
+- Project Status: `/home/hjetmundsen/Projects/docs-projects/neovim-ecosystem-docs/project-status.md`

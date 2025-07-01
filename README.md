@@ -1,13 +1,13 @@
 # Rovo Dev Neovim Plugin
 
-[![GitHub License](https://img.shields.io/github/license/greggh/rovo-dev.nvim?style=flat-square)](https://github.com/greggh/rovo-dev.nvim/blob/main/LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/greggh/rovo-dev.nvim?style=flat-square)](https://github.com/greggh/rovo-dev.nvim/stargazers)
-[![GitHub Issues](https://img.shields.io/github/issues/greggh/rovo-dev.nvim?style=flat-square)](https://github.com/greggh/rovo-dev.nvim/issues)
-[![CI](https://img.shields.io/github/actions/workflow/status/greggh/rovo-dev.nvim/ci.yml?branch=main&style=flat-square&logo=github)](https://github.com/greggh/rovo-dev.nvim/actions/workflows/ci.yml)
+[![GitHub License](https://img.shields.io/github/license/hjetmundsen/rovo-dev.nvim?style=flat-square)](https://github.com/hjetmundsen/rovo-dev.nvim/blob/main/LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/hjetmundsen/rovo-dev.nvim?style=flat-square)](https://github.com/hjetmundsen/rovo-dev.nvim/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/hjetmundsen/rovo-dev.nvim?style=flat-square)](https://github.com/hjetmundsen/rovo-dev.nvim/issues)
+[![CI](https://img.shields.io/github/actions/workflow/status/hjetmundsen/rovo-dev.nvim/ci.yml?branch=main&style=flat-square&logo=github)](https://github.com/hjetmundsen/rovo-dev.nvim/actions/workflows/ci.yml)
 [![Neovim Version](https://img.shields.io/badge/Neovim-0.7%2B-blueviolet?style=flat-square&logo=neovim)](https://github.com/neovim/neovim)
-[![Tests](https://img.shields.io/badge/Tests-44%20passing-success?style=flat-square&logo=github-actions)](https://github.com/greggh/rovo-dev.nvim/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/Version-0.4.2-blue?style=flat-square)](https://github.com/greggh/rovo-dev.nvim/releases/tag/v0.4.2)
-[![Discussions](https://img.shields.io/github/discussions/greggh/rovo-dev.nvim?style=flat-square&logo=github)](https://github.com/greggh/rovo-dev.nvim/discussions)
+[![Tests](https://img.shields.io/badge/Tests-44%20passing-success?style=flat-square&logo=github-actions)](https://github.com/hjetmundsen/rovo-dev.nvim/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/badge/Version-0.4.2-blue?style=flat-square)](https://github.com/hjetmundsen/rovo-dev.nvim/releases/tag/v0.4.2)
+[![Discussions](https://img.shields.io/github/discussions/hjetmundsen/rovo-dev.nvim?style=flat-square&logo=github)](https://github.com/hjetmundsen/rovo-dev.nvim/discussions)
 
 *A seamless integration between [Rovo Dev](https://github.com/anthropics/rovo-dev) AI assistant and Neovim*
 
@@ -17,9 +17,9 @@
 [Configuration](#configuration) •
 [Usage](#usage) •
 [Contributing](#contributing) •
-[Discussions](https://github.com/greggh/rovo-dev.nvim/discussions)
+[Discussions](https://github.com/hjetmundsen/rovo-dev.nvim/discussions)
 
-![Rovo Dev in Neovim](https://github.com/greggh/rovo-dev.nvim/blob/main/assets/rovo-dev.png?raw=true)
+![Rovo Dev in Neovim](https://github.com/hjetmundsen/rovo-dev.nvim/blob/main/assets/rovo-dev.png?raw=true)
 
 This plugin was built entirely with Rovo Dev in a Neovim terminal, and then inside itself using Rovo Dev for everything!
 
@@ -51,7 +51,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 
 ```lua
 return {
-  "greggh/rovo-dev.nvim",
+  "hjetmundsen/rovo-dev.nvim",
   dependencies = {
     "nvim-lua/plenary.nvim", -- Required for git operations
   },
@@ -65,7 +65,7 @@ return {
 
 ```lua
 use {
-  'greggh/rovo-dev.nvim',
+  'hjetmundsen/rovo-dev.nvim',
   requires = {
     'nvim-lua/plenary.nvim', -- Required for git operations
   },
@@ -79,7 +79,7 @@ use {
 
 ```vim
 Plug 'nvim-lua/plenary.nvim'
-Plug 'greggh/rovo-dev.nvim'
+Plug 'hjetmundsen/rovo-dev.nvim'
 " After installing, add this to your init.vim:
 " lua require('rovo-dev').setup()
 ```
@@ -279,9 +279,9 @@ make format
 
 ## Community
 
-- [GitHub Discussions](https://github.com/greggh/rovo-dev.nvim/discussions) - Get help, share ideas, and connect with other users
-- [GitHub Issues](https://github.com/greggh/rovo-dev.nvim/issues) - Report bugs or suggest features
-- [GitHub Pull Requests](https://github.com/greggh/rovo-dev.nvim/pulls) - Contribute to the project
+- [GitHub Discussions](https://github.com/hjetmundsen/rovo-dev.nvim/discussions) - Get help, share ideas, and connect with other users
+- [GitHub Issues](https://github.com/hjetmundsen/rovo-dev.nvim/issues) - Report bugs or suggest features
+- [GitHub Pull Requests](https://github.com/hjetmundsen/rovo-dev.nvim/pulls) - Contribute to the project
 
 ## Acknowledgements
 
@@ -296,4 +296,4 @@ make format
 
 ---
 
-Made with ❤️ by [Gregg Housh](https://github.com/greggh)
+Made with ❤️ by [Henry Jetmundsen](https://github.com/hjetmundsen)

@@ -136,7 +136,7 @@ luarocks install luacheck
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/greggh/rovo-dev.nvim.git
+   git clone https://github.com/hjetmundsen/rovo-dev.nvim.git
    ```
 
 2. Install Git hooks:

@@ -20,7 +20,7 @@ There are several ways you can contribute to Rovo-Dev.nvim:
 
 Before submitting an issue, please:
 
-1. Check if the issue already exists in the [issues section](https://github.com/greggh/rovo-dev.nvim/issues)
+1. Check if the issue already exists in the [issues section](https://github.com/hjetmundsen/rovo-dev.nvim/issues)
 2. Use the issue template if available
 3. Include as much relevant information as possible:
    - Neovim version
@@ -55,7 +55,7 @@ To set up a development environment:
 2. Clone your fork of the repository
 
    ```bash
-   git clone https://github.com/greggh/rovo-dev.nvim.git
+   git clone https://github.com/hjetmundsen/rovo-dev.nvim.git
    ```
 
 3. Link the repository to your Neovim plugins directory or use your plugin manager's development mode

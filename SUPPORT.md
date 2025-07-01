@@ -4,7 +4,7 @@ This document outlines the various ways you can get help with Rovo Dev.
 
 ## GitHub Discussions
 
-For general questions, ideas, or community discussions, please use [GitHub Discussions](https://github.com/greggh/rovo-dev/discussions).
+For general questions, ideas, or community discussions, please use [GitHub Discussions](https://github.com/hjetmundsen/rovo-dev/discussions).
 
 Categories:
 
@@ -15,7 +15,7 @@ Categories:
 
 ## Issue Tracker
 
-For reporting bugs or requesting features, please use the [GitHub issue tracker](https://github.com/greggh/rovo-dev/issues).
+For reporting bugs or requesting features, please use the [GitHub issue tracker](https://github.com/hjetmundsen/rovo-dev/issues).
 
 Before creating a new issue:
 
