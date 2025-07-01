@@ -3,7 +3,7 @@ local assert = require('luassert')
 local describe = require('plenary.busted').describe
 local it = require('plenary.busted').it
 
-local version = require('claude-code.version')
+local version = require('rovo-dev.version')
 
 describe('version', function()
   describe('string', function()
@@ -49,7 +49,7 @@ describe('version', function()
 
       -- Check if vim.notify was called with correct parameters
       assert.is_true(was_called, 'vim.notify should have been called')
-      assert.are.equal('Claude Code version: ' .. version.string(), message_received)
+      assert.are.equal('Rovo Dev version: ' .. version.string(), message_received)
       assert.are.equal(vim.log.levels.INFO, level_received)
     end)
   end)

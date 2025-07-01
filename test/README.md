@@ -1,6 +1,6 @@
-# Claude Code Automated Tests
+# Rovo Dev Automated Tests
 
-This directory contains the automated test setup for Claude Code plugin.
+This directory contains the automated test setup for Rovo Dev plugin.
 
 ## Test Structure
 

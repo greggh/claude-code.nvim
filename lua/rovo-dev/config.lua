@@ -1,17 +1,17 @@
----@mod claude-code.config Configuration management for claude-code.nvim
+---@mod rovo-dev.config Configuration management for rovo-dev.nvim
 ---@brief [[
---- This module handles configuration management and validation for claude-code.nvim.
+--- This module handles configuration management and validation for rovo-dev.nvim.
 --- It provides the default configuration, validation, and merging of user config.
 ---@brief ]]
 
 local M = {}
 
---- ClaudeCodeWindow class for window configuration
--- @table ClaudeCodeWindow
--- @field split_ratio number Percentage of screen for the terminal window (height for horizontal, width for vertical)
+--- RovoDevWindow class for window configuration
+-- @table RovoDevWindow
+-- @field split_ratio number Percentage of screen for the terminal window (height for horizontal, width for vertical splits)
 -- @field position string Position of the window: "botright", "topleft", "vertical", "float" etc.
--- @field enter_insert boolean Whether to enter insert mode when opening Claude Code
--- @field start_in_normal_mode boolean Whether to start in normal mode instead of insert mode when opening Claude Code
+-- @field enter_insert boolean Whether to enter insert mode when opening Rovo Dev
+-- @field start_in_normal_mode boolean Whether to start in normal mode instead of insert mode when opening Rovo Dev
 -- @field hide_numbers boolean Hide line numbers in the terminal window
 -- @field hide_signcolumn boolean Hide the sign column in the terminal window
 -- @field float table|nil Floating window configuration (only used when position is "float")
@@ -22,31 +22,31 @@ local M = {}
 -- @field float.border string Border style: "none", "single", "double", "rounded", "solid", "shadow", or array
 -- @field float.relative string Relative positioning: "editor" or "cursor"
 
---- ClaudeCodeRefresh class for file refresh configuration
--- @table ClaudeCodeRefresh
+--- RovoDevRefresh class for file refresh configuration
+-- @table RovoDevRefresh
 -- @field enable boolean Enable file change detection
--- @field updatetime number updatetime when Claude Code is active (milliseconds)
+-- @field updatetime number updatetime when Rovo Dev is active (milliseconds)
 -- @field timer_interval number How often to check for file changes (milliseconds)
 -- @field show_notifications boolean Show notification when files are reloaded
 
---- ClaudeCodeGit class for git integration configuration
--- @table ClaudeCodeGit
--- @field use_git_root boolean Set CWD to git root when opening Claude Code (if in git project)
--- @field multi_instance boolean Use multiple Claude instances (one per git root)
+--- RovoDevGit class for git integration configuration
+-- @table RovoDevGit
+-- @field use_git_root boolean Set CWD to git root when opening Rovo Dev (if in git project)
+-- @field multi_instance boolean Use multiple Rovo instances (one per git root)
 
---- ClaudeCodeKeymapsToggle class for toggle keymap configuration
--- @table ClaudeCodeKeymapsToggle
--- @field normal string|boolean Normal mode keymap for toggling Claude Code, false to disable
--- @field terminal string|boolean Terminal mode keymap for toggling Claude Code, false to disable
+--- RovoDevKeymapsToggle class for toggle keymap configuration
+-- @table RovoDevKeymapsToggle
+-- @field normal string|boolean Normal mode keymap for toggling Rovo Dev, false to disable
+-- @field terminal string|boolean Terminal mode keymap for toggling Rovo Dev, false to disable
 
---- ClaudeCodeKeymaps class for keymap configuration
--- @table ClaudeCodeKeymaps
--- @field toggle ClaudeCodeKeymapsToggle Keymaps for toggling Claude Code
+--- RovoDevKeymaps class for keymap configuration
+-- @table RovoDevKeymaps
+-- @field toggle RovoDevKeymapsToggle Keymaps for toggling Rovo Dev
 -- @field window_navigation boolean Enable window navigation keymaps
 -- @field scrolling boolean Enable scrolling keymaps
 
---- ClaudeCodeCommandVariants class for command variant configuration
--- @table ClaudeCodeCommandVariants
+--- RovoDevCommandVariants class for command variant configuration
+-- @table RovoDevCommandVariants
 -- Conversation management:
 -- @field continue string|boolean Resume the most recent conversation
 -- @field resume string|boolean Display an interactive conversation picker
@@ -54,31 +54,31 @@ local M = {}
 -- @field verbose string|boolean Enable verbose logging with full turn-by-turn output
 -- Additional options can be added as needed
 
---- ClaudeCodeShell class for shell configuration
--- @table ClaudeCodeShell
+--- RovoDevShell class for shell configuration
+-- @table RovoDevShell
 -- @field separator string Command separator used in shell commands (e.g., '&&', ';', '|')
 -- @field pushd_cmd string Command to push directory onto stack (e.g., 'pushd' for bash/zsh)
 -- @field popd_cmd string Command to pop directory from stack (e.g., 'popd' for bash/zsh)
 
---- ClaudeCodeConfig class for main configuration
--- @table ClaudeCodeConfig
--- @field window ClaudeCodeWindow Terminal window settings
--- @field refresh ClaudeCodeRefresh File refresh settings
--- @field git ClaudeCodeGit Git integration settings
--- @field shell ClaudeCodeShell Shell-specific configuration
--- @field command string Command used to launch Claude Code
--- @field command_variants ClaudeCodeCommandVariants Command variants configuration
--- @field keymaps ClaudeCodeKeymaps Keymaps configuration
+--- RovoDevConfig class for main configuration
+-- @table RovoDevConfig
+-- @field window RovoDevWindow Terminal window settings
+-- @field refresh RovoDevRefresh File refresh settings
+-- @field git RovoDevGit Git integration settings
+-- @field shell RovoDevShell Shell-specific configuration
+-- @field command string Command used to launch Rovo Dev
+-- @field command_variants RovoDevCommandVariants Command variants configuration
+-- @field keymaps RovoDevKeymaps Keymaps configuration
 
 --- Default configuration options
---- @type ClaudeCodeConfig
+--- @type RovoDevConfig
 M.default_config = {
   -- Terminal window settings
   window = {
     split_ratio = 0.3, -- Percentage of screen for the terminal window (height or width)
     height_ratio = 0.3, -- DEPRECATED: Use split_ratio instead
     position = 'botright', -- Position of the window: "botright", "topleft", "vertical", "float", etc.
-    enter_insert = true, -- Whether to enter insert mode when opening Claude Code
+    enter_insert = true, -- Whether to enter insert mode when opening Rovo Dev
     start_in_normal_mode = false, -- Whether to start in normal mode instead of insert mode
     hide_numbers = true, -- Hide line numbers in the terminal window
     hide_signcolumn = true, -- Hide the sign column in the terminal window
@@ -95,14 +95,14 @@ M.default_config = {
   -- File refresh settings
   refresh = {
     enable = true, -- Enable file change detection
-    updatetime = 100, -- updatetime to use when Claude Code is active (milliseconds)
+    updatetime = 100, -- updatetime to use when Rovo Dev is active (milliseconds)
     timer_interval = 1000, -- How often to check for file changes (milliseconds)
     show_notifications = true, -- Show notification when files are reloaded
   },
   -- Git integration settings
   git = {
-    use_git_root = true, -- Set CWD to git root when opening Claude Code (if in git project)
-    multi_instance = true, -- Use multiple Claude instances (one per git root)
+    use_git_root = true, -- Set CWD to git root when opening Rovo Dev (if in git project)
+    multi_instance = true, -- Use multiple Rovo instances (one per git root)
   },
   -- Shell-specific settings
   shell = {
@@ -111,7 +111,7 @@ M.default_config = {
     popd_cmd = 'popd', -- Command to pop directory from stack
   },
   -- Command settings
-  command = 'claude', -- Command used to launch Claude Code
+  command = 'rovo', -- Command used to launch Rovo Dev
   -- Command variants
   command_variants = {
     -- Conversation management
@@ -124,11 +124,11 @@ M.default_config = {
   -- Keymaps
   keymaps = {
     toggle = {
-      normal = '<C-,>', -- Normal mode keymap for toggling Claude Code
-      terminal = '<C-,>', -- Terminal mode keymap for toggling Claude Code
+      normal = '<C-,>', -- Normal mode keymap for toggling Rovo Dev
+      terminal = '<C-,>', -- Terminal mode keymap for toggling Rovo Dev
       variants = {
-        continue = '<leader>cC', -- Normal mode keymap for Claude Code with continue flag
-        verbose = '<leader>cV', -- Normal mode keymap for Claude Code with verbose flag
+        continue = '<leader>cC', -- Normal mode keymap for Rovo Dev with continue flag
+        verbose = '<leader>cV', -- Normal mode keymap for Rovo Dev with verbose flag
       },
     },
     window_navigation = true, -- Enable window navigation keymaps (<C-h/j/k/l>)
@@ -452,7 +452,7 @@ end
 --- Parse user configuration and merge with defaults
 --- @param user_config? table
 --- @param silent? boolean Set to true to suppress error notifications (for tests)
---- @return ClaudeCodeConfig
+--- @return RovoDevConfig
 function M.parse_config(user_config, silent)
   -- Handle backward compatibility first
   if user_config and user_config.window then
@@ -476,7 +476,7 @@ function M.parse_config(user_config, silent)
   if not valid then
     -- Only notify if not in silent mode
     if not silent then
-      vim.notify('Claude Code: ' .. err, vim.log.levels.ERROR)
+      vim.notify('Rovo Dev: ' .. err, vim.log.levels.ERROR)
     end
     -- Fall back to default config in case of error
     return vim.deepcopy(M.default_config)

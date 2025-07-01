@@ -1,15 +1,15 @@
----@mod claude-code.terminal Terminal management for claude-code.nvim
+---@mod rovo-dev.terminal Terminal management for rovo-dev.nvim
 ---@brief [[
---- This module provides terminal buffer management for claude-code.nvim.
+--- This module provides terminal buffer management for rovo-dev.nvim.
 --- It handles creating, toggling, and managing the terminal window.
 ---@brief ]]
 
 local M = {}
 
 --- Terminal buffer and window management
--- @table ClaudeCodeTerminal
+-- @table RovoDevTerminal
 -- @field instances table Key-value store of git root to buffer number
--- @field saved_updatetime number|nil Original updatetime before Claude Code was opened
+-- @field saved_updatetime number|nil Original updatetime before Rovo Dev was opened
 -- @field current_instance string|nil Current git root path for active instance
 M.terminal = {
   instances = {},
@@ -212,22 +212,22 @@ local function create_split(position, config, existing_bufnr)
   end
 end
 
---- Set up function to force insert mode when entering the Claude Code window
---- @param claude_code table The main plugin module
+--- Set up function to force insert mode when entering the Rovo Dev window
+--- @param rovo_dev table The main plugin module
 --- @param config table The plugin configuration
-function M.force_insert_mode(claude_code, config)
+function M.force_insert_mode(rovo_dev, config)
   local current_bufnr = vim.fn.bufnr('%')
 
-  -- Check if current buffer is any of our Claude instances
-  local is_claude_instance = false
-  for _, bufnr in pairs(claude_code.claude_code.instances) do
+  -- Check if current buffer is any of our Rovo instances
+  local is_rovo_instance = false
+  for _, bufnr in pairs(rovo_dev.rovo_dev.instances) do
     if bufnr and bufnr == current_bufnr and vim.api.nvim_buf_is_valid(bufnr) then
-      is_claude_instance = true
+      is_rovo_instance = true
       break
     end
   end
 
-  if is_claude_instance then
+  if is_rovo_instance then
     -- Only enter insert mode if we're in the terminal buffer and not already in insert mode
     -- and not configured to stay in normal mode
     if config.window.start_in_normal_mode then
@@ -275,7 +275,7 @@ local function is_valid_terminal_buffer(bufnr)
   pcall(function()
     buftype = vim.api.nvim_get_option_value('buftype', {buf = bufnr})
   end)
-  
+
   local terminal_job_id = nil
   pcall(function()
     terminal_job_id = vim.b[bufnr].terminal_job_id
@@ -371,7 +371,7 @@ local function create_new_instance(claude_code, config, git, instance_id)
     configure_window_options(current_win, config)
 
     -- Store buffer number for this instance
-    claude_code.claude_code.instances[instance_id] = vim.fn.bufnr('%')
+    rovo_dev.rovo_dev.instances[instance_id] = vim.fn.bufnr('%')
 
     -- Automatically enter insert mode in terminal unless configured to start in normal mode
     if config.window.enter_insert and not config.window.start_in_normal_mode then

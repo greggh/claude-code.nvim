@@ -8,7 +8,7 @@ local config = {
   version_files = {
     -- Main source of truth
     {
-      path = 'lua/claude-code/version.lua',
+      path = 'lua/rovo-dev/version.lua',
       pattern = 'M%.major%s*=%s*(%d+).-M%.minor%s*=%s*(%d+).-M%.patch%s*=%s*(%d+)',
       required = true,
     },

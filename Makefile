@@ -63,7 +63,7 @@ clean:
 all: lint format test docs
 
 help:
-	@echo "Claude Code development commands:"
+	@echo "Rovo Dev development commands:"
 	@echo "  make test         - Run all tests (using Plenary test framework)"
 	@echo "  make test-debug   - Run all tests with debug output"
 	@echo "  make test-legacy  - Run legacy tests (VimL-based)"

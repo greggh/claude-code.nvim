@@ -1,15 +1,15 @@
-# Claude Code Neovim Plugin
+# Rovo Dev Neovim Plugin
 
-[![GitHub License](https://img.shields.io/github/license/greggh/claude-code.nvim?style=flat-square)](https://github.com/greggh/claude-code.nvim/blob/main/LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/greggh/claude-code.nvim?style=flat-square)](https://github.com/greggh/claude-code.nvim/stargazers)
-[![GitHub Issues](https://img.shields.io/github/issues/greggh/claude-code.nvim?style=flat-square)](https://github.com/greggh/claude-code.nvim/issues)
-[![CI](https://img.shields.io/github/actions/workflow/status/greggh/claude-code.nvim/ci.yml?branch=main&style=flat-square&logo=github)](https://github.com/greggh/claude-code.nvim/actions/workflows/ci.yml)
+[![GitHub License](https://img.shields.io/github/license/greggh/rovo-dev.nvim?style=flat-square)](https://github.com/greggh/rovo-dev.nvim/blob/main/LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/greggh/rovo-dev.nvim?style=flat-square)](https://github.com/greggh/rovo-dev.nvim/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/greggh/rovo-dev.nvim?style=flat-square)](https://github.com/greggh/rovo-dev.nvim/issues)
+[![CI](https://img.shields.io/github/actions/workflow/status/greggh/rovo-dev.nvim/ci.yml?branch=main&style=flat-square&logo=github)](https://github.com/greggh/rovo-dev.nvim/actions/workflows/ci.yml)
 [![Neovim Version](https://img.shields.io/badge/Neovim-0.7%2B-blueviolet?style=flat-square&logo=neovim)](https://github.com/neovim/neovim)
-[![Tests](https://img.shields.io/badge/Tests-44%20passing-success?style=flat-square&logo=github-actions)](https://github.com/greggh/claude-code.nvim/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/Version-0.4.2-blue?style=flat-square)](https://github.com/greggh/claude-code.nvim/releases/tag/v0.4.2)
-[![Discussions](https://img.shields.io/github/discussions/greggh/claude-code.nvim?style=flat-square&logo=github)](https://github.com/greggh/claude-code.nvim/discussions)
+[![Tests](https://img.shields.io/badge/Tests-44%20passing-success?style=flat-square&logo=github-actions)](https://github.com/greggh/rovo-dev.nvim/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/badge/Version-0.4.2-blue?style=flat-square)](https://github.com/greggh/rovo-dev.nvim/releases/tag/v0.4.2)
+[![Discussions](https://img.shields.io/github/discussions/greggh/rovo-dev.nvim?style=flat-square&logo=github)](https://github.com/greggh/rovo-dev.nvim/discussions)
 
-*A seamless integration between [Claude Code](https://github.com/anthropics/claude-code) AI assistant and Neovim*
+*A seamless integration between [Rovo Dev](https://github.com/anthropics/rovo-dev) AI assistant and Neovim*
 
 [Features](#features) •
 [Requirements](#requirements) •
@@ -17,17 +17,17 @@
 [Configuration](#configuration) •
 [Usage](#usage) •
 [Contributing](#contributing) •
-[Discussions](https://github.com/greggh/claude-code.nvim/discussions)
+[Discussions](https://github.com/greggh/rovo-dev.nvim/discussions)
 
-![Claude Code in Neovim](https://github.com/greggh/claude-code.nvim/blob/main/assets/claude-code.png?raw=true)
+![Rovo Dev in Neovim](https://github.com/greggh/rovo-dev.nvim/blob/main/assets/rovo-dev.png?raw=true)
 
-This plugin was built entirely with Claude Code in a Neovim terminal, and then inside itself using Claude Code for everything!
+This plugin was built entirely with Rovo Dev in a Neovim terminal, and then inside itself using Rovo Dev for everything!
 
 ## Features
 
-- 🚀 Toggle Claude Code in a terminal window with a single key press
+- 🚀 Toggle Rovo Dev in a terminal window with a single key press
 - 🧠 Support for command-line arguments like `--continue` and custom variants
-- 🔄 Automatically detect and reload files modified by Claude Code
+- 🔄 Automatically detect and reload files modified by Rovo Dev
 - ⚡ Real-time buffer updates when files are changed externally
 - 📱 Customizable window position and size (including floating windows)
 - 🤖 Integration with which-key (if available)
@@ -40,7 +40,7 @@ This plugin was built entirely with Claude Code in a Neovim terminal, and then i
 ## Requirements
 
 - Neovim 0.7.0 or later
-- [Claude Code CLI](https://github.com/anthropics/claude-code) tool installed and available in your PATH
+- [Rovo Dev CLI](https://github.com/anthropics/rovo-dev) tool installed and available in your PATH
 - [plenary.nvim](https://github.com/nvim-lua/plenary.nvim) (dependency for git operations)
 
 See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
@@ -51,12 +51,12 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 
 ```lua
 return {
-  "greggh/claude-code.nvim",
+  "greggh/rovo-dev.nvim",
   dependencies = {
     "nvim-lua/plenary.nvim", -- Required for git operations
   },
   config = function()
-    require("claude-code").setup()
+    require("rovo-dev").setup()
   end
 }
 ```
@@ -65,12 +65,12 @@ return {
 
 ```lua
 use {
-  'greggh/claude-code.nvim',
+  'greggh/rovo-dev.nvim',
   requires = {
     'nvim-lua/plenary.nvim', -- Required for git operations
   },
   config = function()
-    require('claude-code').setup()
+    require('rovo-dev').setup()
   end
 }
 ```
@@ -79,9 +79,9 @@ use {
 
 ```vim
 Plug 'nvim-lua/plenary.nvim'
-Plug 'greggh/claude-code.nvim'
+Plug 'greggh/rovo-dev.nvim'
 " After installing, add this to your init.vim:
-" lua require('claude-code').setup()
+" lua require('rovo-dev').setup()
 ```
 
 ## Configuration
@@ -89,15 +89,15 @@ Plug 'greggh/claude-code.nvim'
 The plugin can be configured by passing a table to the `setup` function. Here's the default configuration:
 
 ```lua
-require("claude-code").setup({
+require("rovo-dev").setup({
   -- Terminal window settings
   window = {
     split_ratio = 0.3,      -- Percentage of screen for the terminal window (height for horizontal, width for vertical splits)
     position = "botright",  -- Position of the window: "botright", "topleft", "vertical", "float", etc.
-    enter_insert = true,    -- Whether to enter insert mode when opening Claude Code
+    enter_insert = true,    -- Whether to enter insert mode when opening Rovo Dev
     hide_numbers = true,    -- Hide line numbers in the terminal window
     hide_signcolumn = true, -- Hide the sign column in the terminal window
-    
+
     -- Floating window configuration (only applies when position = "float")
     float = {
       width = "80%",        -- Width: number of columns or percentage string
@@ -111,13 +111,13 @@ require("claude-code").setup({
   -- File refresh settings
   refresh = {
     enable = true,           -- Enable file change detection
-    updatetime = 100,        -- updatetime when Claude Code is active (milliseconds)
+    updatetime = 100,        -- updatetime when Rovo Dev is active (milliseconds)
     timer_interval = 1000,   -- How often to check for file changes (milliseconds)
     show_notifications = true, -- Show notification when files are reloaded
   },
   -- Git project settings
   git = {
-    use_git_root = true,     -- Set CWD to git root when opening Claude Code (if in git project)
+    use_git_root = true,     -- Set CWD to git root when opening Rovo Dev (if in git project)
   },
   -- Shell-specific settings
   shell = {
@@ -126,7 +126,7 @@ require("claude-code").setup({
     popd_cmd = 'popd',       -- Command to pop directory from stack (e.g., 'popd' for bash/zsh, 'exit' for nushell)
   },
   -- Command settings
-  command = "claude",        -- Command used to launch Claude Code
+  command = "rovo",        -- Command used to launch Rovo Dev
   -- Command variants
   command_variants = {
     -- Conversation management
@@ -139,11 +139,11 @@ require("claude-code").setup({
   -- Keymaps
   keymaps = {
     toggle = {
-      normal = "<C-,>",       -- Normal mode keymap for toggling Claude Code, false to disable
-      terminal = "<C-,>",     -- Terminal mode keymap for toggling Claude Code, false to disable
+      normal = "<C-,>",       -- Normal mode keymap for toggling Rovo Dev, false to disable
+      terminal = "<C-,>",     -- Terminal mode keymap for toggling Rovo Dev, false to disable
       variants = {
-        continue = "<leader>cC", -- Normal mode keymap for Claude Code with continue flag
-        verbose = "<leader>cV",  -- Normal mode keymap for Claude Code with verbose flag
+        continue = "<leader>cC", -- Normal mode keymap for Rovo Dev with continue flag
+        verbose = "<leader>cV",  -- Normal mode keymap for Rovo Dev with verbose flag
       },
     },
     window_navigation = true, -- Enable window navigation keymaps (<C-h/j/k/l>)
@@ -158,31 +158,31 @@ require("claude-code").setup({
 
 ```vim
 " In your Vim/Neovim commands or init file:
-:ClaudeCode
+:RovoDev
 ```
 
 ```lua
 -- Or from Lua:
-vim.cmd[[ClaudeCode]]
+vim.cmd[[RovoDev]]
 
 -- Or map to a key:
-vim.keymap.set('n', '<leader>cc', '<cmd>ClaudeCode<CR>', { desc = 'Toggle Claude Code' })
+vim.keymap.set('n', '<leader>cc', '<cmd>RovoDev<CR>', { desc = 'Toggle Rovo Dev' })
 ```
 
 ### Commands
 
 Basic command:
 
-- `:ClaudeCode` - Toggle the Claude Code terminal window
+- `:RovoDev` - Toggle the Rovo Dev terminal window
 
 Conversation management commands:
 
-- `:ClaudeCodeContinue` - Resume the most recent conversation
-- `:ClaudeCodeResume` - Display an interactive conversation picker
+- `:RovoDevContinue` - Resume the most recent conversation
+- `:RovoDevResume` - Display an interactive conversation picker
 
 Output options command:
 
-- `:ClaudeCodeVerbose` - Enable verbose logging with full turn-by-turn output
+- `:RovoDevVerbose` - Enable verbose logging with full turn-by-turn output
 
 Note: Commands are automatically generated for each entry in your `command_variants` configuration.
 
@@ -190,15 +190,15 @@ Note: Commands are automatically generated for each entry in your `command_varia
 
 Default key mappings:
 
-- `<leader>ac` - Toggle Claude Code terminal window (normal mode)
-- `<C-,>` - Toggle Claude Code terminal window (both normal and terminal modes)
+- `<leader>ac` - Toggle Rovo Dev terminal window (normal mode)
+- `<C-,>` - Toggle Rovo Dev terminal window (both normal and terminal modes)
 
 Variant mode mappings (if configured):
 
-- `<leader>cC` - Toggle Claude Code with --continue flag
-- `<leader>cV` - Toggle Claude Code with --verbose flag
+- `<leader>cC` - Toggle Rovo Dev with --continue flag
+- `<leader>cV` - Toggle Rovo Dev with --verbose flag
 
-Additionally, when in the Claude Code terminal:
+Additionally, when in the Rovo Dev terminal:
 
 - `<C-h>` - Move to the window on the left
 - `<C-j>` - Move to the window below
@@ -207,9 +207,9 @@ Additionally, when in the Claude Code terminal:
 - `<C-f>` - Scroll full-page down
 - `<C-b>` - Scroll full-page up
 
-Note: After scrolling with `<C-f>` or `<C-b>`, you'll need to press the `i` key to re-enter insert mode so you can continue typing to Claude Code.
+Note: After scrolling with `<C-f>` or `<C-b>`, you'll need to press the `i` key to re-enter insert mode so you can continue typing to Rovo Dev.
 
-When Claude Code modifies files that are open in Neovim, they'll be automatically reloaded.
+When Rovo Dev modifies files that are open in Neovim, they'll be automatically reloaded.
 
 ### Floating Window Example
 
@@ -235,9 +235,9 @@ require("claude-code").setup({
 
 This plugin:
 
-1. Creates a terminal buffer running the Claude Code CLI
+1. Creates a terminal buffer running the Rovo Dev CLI
 2. Sets up autocommands to detect file changes on disk
-3. Automatically reloads files when they're modified by Claude Code
+3. Automatically reloads files when they're modified by Rovo Dev
 4. Provides convenient keymaps and commands for toggling the terminal
 5. Automatically detects git repositories and sets working directory to the git root
 
@@ -261,7 +261,7 @@ The project includes comprehensive setup for development:
 - Pre-commit hooks for code quality
 - Testing framework with 44 comprehensive tests
 - Linting and formatting tools
-- Weekly dependency updates workflow for Claude CLI and actions
+- Weekly dependency updates workflow for Rovo CLI and actions
 
 ```bash
 # Run tests
@@ -279,13 +279,13 @@ make format
 
 ## Community
 
-- [GitHub Discussions](https://github.com/greggh/claude-code.nvim/discussions) - Get help, share ideas, and connect with other users
-- [GitHub Issues](https://github.com/greggh/claude-code.nvim/issues) - Report bugs or suggest features
-- [GitHub Pull Requests](https://github.com/greggh/claude-code.nvim/pulls) - Contribute to the project
+- [GitHub Discussions](https://github.com/greggh/rovo-dev.nvim/discussions) - Get help, share ideas, and connect with other users
+- [GitHub Issues](https://github.com/greggh/rovo-dev.nvim/issues) - Report bugs or suggest features
+- [GitHub Pull Requests](https://github.com/greggh/rovo-dev.nvim/pulls) - Contribute to the project
 
 ## Acknowledgements
 
-- [Claude Code](https://github.com/anthropics/claude-code) by Anthropic - This plugin was entirely built using Claude Code. Development cost: $5.42 with 17m 12.9s of API time
+- [Rovo Dev](https://github.com/anthropics/rovo-dev) by Anthropic - This plugin was entirely built using Rovo Dev. Development cost: $5.42 with 17m 12.9s of API time
 - [Plenary.nvim](https://github.com/nvim-lua/plenary.nvim) - Core dependency for testing framework and Git operations
 - [Semantic Versioning](https://semver.org/) - Versioning standard used in this project
 - [Contributor Covenant](https://www.contributor-covenant.org/) - Code of Conduct standard

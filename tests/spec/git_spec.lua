@@ -3,7 +3,7 @@ local assert = require('luassert')
 local describe = require('plenary.busted').describe
 local it = require('plenary.busted').it
 
-local git = require('claude-code.git')
+local git = require('rovo-dev.git')
 
 -- Debug helper
 local function debug_value(value)
@@ -27,7 +27,7 @@ end
 
 describe('git', function()
   -- Keep track of the original environment
-  local original_env_test_mode = vim.env.CLAUDE_CODE_TEST_MODE
+  local original_env_test_mode = vim.env.ROVO_DEV_TEST_MODE
 
   describe('get_git_root', function()
     it('should handle io.popen errors gracefully', function()
@@ -35,7 +35,7 @@ describe('git', function()
       local original_popen = io.popen
 
       -- Ensure test mode is disabled
-      vim.env.CLAUDE_CODE_TEST_MODE = nil
+      vim.env.ROVO_DEV_TEST_MODE = nil
 
       -- Replace io.popen with a mock that returns nil
       io.popen = function()
@@ -55,7 +55,7 @@ describe('git', function()
       local original_popen = io.popen
 
       -- Ensure test mode is disabled
-      vim.env.CLAUDE_CODE_TEST_MODE = nil
+      vim.env.ROVO_DEV_TEST_MODE = nil
 
       -- Mock io.popen to simulate a non-git directory
       local mock_called = 0
@@ -85,7 +85,7 @@ describe('git', function()
       local original_popen = io.popen
 
       -- Set test mode environment variable
-      vim.env.CLAUDE_CODE_TEST_MODE = 'true'
+      vim.env.ROVO_DEV_TEST_MODE = 'true'
 
       -- We'll still track calls, but the function won't use io.popen in test mode
       local mock_called = 0
@@ -107,10 +107,10 @@ describe('git', function()
 
       -- Restore the original io.popen and clear test flag
       io.popen = original_popen
-      vim.env.CLAUDE_CODE_TEST_MODE = nil
+      vim.env.ROVO_DEV_TEST_MODE = nil
     end)
   end)
 
   -- Restore the original environment
-  vim.env.CLAUDE_CODE_TEST_MODE = original_env_test_mode
+  vim.env.ROVO_DEV_TEST_MODE = original_env_test_mode
 end)

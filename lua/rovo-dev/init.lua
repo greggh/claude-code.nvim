@@ -1,29 +1,29 @@
----@mod claude-code Claude Code Neovim Integration
+---@mod rovo-dev Rovo Dev Neovim Integration
 ---@brief [[
---- A plugin for seamless integration between Claude Code AI assistant and Neovim.
---- This plugin provides a terminal-based interface to Claude Code within Neovim.
+--- A plugin for seamless integration between Rovo Dev AI assistant and Neovim.
+--- This plugin provides a terminal-based interface to Rovo Dev within Neovim.
 ---
 --- Requirements:
 --- - Neovim 0.7.0 or later
---- - Claude Code CLI tool installed and available in PATH
+--- - Rovo Dev CLI tool installed and available in PATH
 --- - plenary.nvim (dependency for git operations)
 ---
 --- Usage:
 --- ```lua
---- require('claude-code').setup({
+--- require('rovo-dev').setup({
 ---   -- Configuration options (optional)
 --- })
 --- ```
 ---@brief ]]
 
 -- Import modules
-local config = require('claude-code.config')
-local commands = require('claude-code.commands')
-local keymaps = require('claude-code.keymaps')
-local file_refresh = require('claude-code.file_refresh')
-local terminal = require('claude-code.terminal')
-local git = require('claude-code.git')
-local version = require('claude-code.version')
+local config = require('rovo-dev.config')
+local commands = require('rovo-dev.commands')
+local keymaps = require('rovo-dev.keymaps')
+local file_refresh = require('rovo-dev.file_refresh')
+local terminal = require('rovo-dev.terminal')
+local git = require('rovo-dev.git')
+local version = require('rovo-dev.version')
 
 local M = {}
 
@@ -36,26 +36,26 @@ M.config = {}
 
 -- Terminal buffer and window management
 --- @type table
-M.claude_code = terminal.terminal
+M.rovo_dev = terminal.terminal
 
---- Force insert mode when entering the Claude Code window
+--- Force insert mode when entering the Rovo Dev window
 --- This is a public function used in keymaps
 function M.force_insert_mode()
   terminal.force_insert_mode(M, M.config)
 end
 
 --- Get the current active buffer number
---- @return number|nil bufnr Current Claude instance buffer number or nil
+--- @return number|nil bufnr Current Rovo instance buffer number or nil
 local function get_current_buffer_number()
   -- Get current instance from the instances table
-  local current_instance = M.claude_code.current_instance
-  if current_instance and type(M.claude_code.instances) == 'table' then
-    return M.claude_code.instances[current_instance]
+  local current_instance = M.rovo_dev.current_instance
+  if current_instance and type(M.rovo_dev.instances) == 'table' then
+    return M.rovo_dev.instances[current_instance]
   end
   return nil
 end
 
---- Toggle the Claude Code terminal window
+--- Toggle the Rovo Dev terminal window
 --- This is a public function used by commands
 function M.toggle()
   terminal.toggle(M, M.config, git)
@@ -67,7 +67,7 @@ function M.toggle()
   end
 end
 
---- Toggle the Claude Code terminal window with a specific command variant
+--- Toggle the Rovo Dev terminal window with a specific command variant
 --- @param variant_name string The name of the command variant to use
 function M.toggle_with_variant(variant_name)
   if not variant_name or not M.config.command_variants[variant_name] then

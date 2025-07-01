@@ -1,21 +1,21 @@
 # Support
 
-This document outlines the various ways you can get help with Claude Code.
+This document outlines the various ways you can get help with Rovo Dev.
 
 ## GitHub Discussions
 
-For general questions, ideas, or community discussions, please use [GitHub Discussions](https://github.com/greggh/claude-code/discussions).
+For general questions, ideas, or community discussions, please use [GitHub Discussions](https://github.com/greggh/rovo-dev/discussions).
 
 Categories:
 
-- **Q&A**: For specific questions about using Claude Code
+- **Q&A**: For specific questions about using Rovo Dev
 - **Ideas**: For suggesting new features
 - **Show and Tell**: For sharing your customizations or use cases
 - **General**: For general conversation about AI integration with Neovim
 
 ## Issue Tracker
 
-For reporting bugs or requesting features, please use the [GitHub issue tracker](https://github.com/greggh/claude-code/issues).
+For reporting bugs or requesting features, please use the [GitHub issue tracker](https://github.com/greggh/rovo-dev/issues).
 
 Before creating a new issue:
 
@@ -25,15 +25,15 @@ Before creating a new issue:
 
 ## Documentation
 
-For help with using Claude Code:
+For help with using Rovo Dev:
 
 - Read the [README.md](README.md) for basic usage and installation
 - Check the [DEVELOPMENT.md](DEVELOPMENT.md) for development information
-- See the [doc/claude-code.txt](doc/claude-code.txt) for Neovim help documentation
+- See the [doc/rovo-dev.txt](doc/rovo-dev.txt) for Neovim help documentation
 
-## Claude Code File
+## Rovo Dev File
 
-See the [CLAUDE.md](CLAUDE.md) file for additional configuration options and tips for using Claude Code effectively.
+See the [ROVO.md](ROVO.md) file for additional configuration options and tips for using Rovo Dev effectively.
 
 ## Community Channels
 

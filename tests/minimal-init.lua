@@ -1,4 +1,4 @@
--- Minimal configuration for testing the Claude Code plugin
+-- Minimal configuration for testing the Rovo Dev plugin
 -- Used for bug reproduction and testing
 
 -- Detect the plugin directory (works whether run from plugin root or a different directory)
@@ -52,12 +52,12 @@ pcall(require, 'plenary.busted')
 print('Runtime path: ' .. vim.o.runtimepath)
 
 -- Load the plugin
-local status_ok, claude_code = pcall(require, 'claude-code')
+local status_ok, rovo_dev = pcall(require, 'rovo-dev')
 if status_ok then
-  print('✓ Successfully loaded Claude Code plugin')
+  print('✓ Successfully loaded Rovo Dev plugin')
 
   -- First create a validated config (in silent mode)
-  local config_module = require('claude-code.config')
+  local config_module = require('rovo-dev.config')
   local test_config = config_module.parse_config({
     window = {
       height_ratio = 0.3,
@@ -89,15 +89,15 @@ if status_ok then
 
   -- Print available commands for user reference
   print('\nAvailable Commands:')
-  print('  :ClaudeCode             - Start a new Claude Code session')
-  print('  :ClaudeCodeToggle       - Toggle the Claude Code terminal')
-  print('  :ClaudeCodeRestart      - Restart the Claude Code session')
-  print('  :ClaudeCodeSuspend      - Suspend the current Claude Code session')
-  print('  :ClaudeCodeResume       - Resume the suspended Claude Code session')
-  print('  :ClaudeCodeQuit         - Quit the current Claude Code session')
-  print('  :ClaudeCodeRefreshFiles - Refresh the current working directory information')
+  print('  :RovoDev             - Start a new Rovo Dev session')
+  print('  :RovoDevToggle       - Toggle the Rovo Dev terminal')
+  print('  :RovoDevRestart      - Restart the Rovo Dev session')
+  print('  :RovoDevSuspend      - Suspend the current Rovo Dev session')
+  print('  :RovoDevResume       - Resume the suspended Rovo Dev session')
+  print('  :RovoDevQuit         - Quit the current Rovo Dev session')
+  print('  :RovoDevRefreshFiles - Refresh the current working directory information')
 else
-  print('✗ Failed to load Claude Code plugin: ' .. tostring(claude_code))
+  print('✗ Failed to load Rovo Dev plugin: ' .. tostring(rovo_dev))
 end
 
 -- Set up minimal UI elements
@@ -105,6 +105,6 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.signcolumn = 'yes'
 
-print('\nClaude Code minimal test environment loaded.')
+print('\nRovo Dev minimal test environment loaded.')
 print('- Type :messages to see any error messages')
-print("- Try ':ClaudeCode' to start a new session")
+print("- Try ':RovoDev' to start a new session")

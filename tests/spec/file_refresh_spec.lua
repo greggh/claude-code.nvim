@@ -1,9 +1,9 @@
--- Tests for file refresh functionality in Claude Code
+-- Tests for file refresh functionality in Rovo Dev
 local assert = require('luassert')
 local describe = require('plenary.busted').describe
 local it = require('plenary.busted').it
 
-local file_refresh = require('claude-code.file_refresh')
+local file_refresh = require('rovo-dev.file_refresh')
 
 describe('file refresh', function()
   local registered_augroups = {}
@@ -12,7 +12,7 @@ describe('file refresh', function()
   local timer_closed = false
   local timer_interval = nil
   local timer_callback = nil
-  local claude_code
+  local rovo_dev
   local config
   
   before_each(function()
@@ -80,8 +80,8 @@ describe('file refresh', function()
     _G.vim.fn.win_findbuf = function() return {1} end
     
     -- Setup test objects
-    claude_code = {
-      claude_code = {
+    rovo_dev = {
+      rovo_dev = {
         bufnr = 42,
         saved_updatetime = nil
       }
@@ -99,14 +99,14 @@ describe('file refresh', function()
   
   describe('setup', function()
     it('should create an augroup for file refresh', function()
-      file_refresh.setup(claude_code, config)
+      file_refresh.setup(rovo_dev, config)
       
-      assert.is_not_nil(registered_augroups['ClaudeCodeFileRefresh'], "File refresh augroup should be created")
-      assert.is_true(registered_augroups['ClaudeCodeFileRefresh'].clear, "Augroup should be cleared on creation")
+      assert.is_not_nil(registered_augroups['RovoDevFileRefresh'], "File refresh augroup should be created")
+      assert.is_true(registered_augroups['RovoDevFileRefresh'].clear, "Augroup should be cleared on creation")
     end)
     
     it('should register autocmds for file change detection', function()
-      file_refresh.setup(claude_code, config)
+      file_refresh.setup(rovo_dev, config)
       
       local has_checktime_autocmd = false
       for _, autocmd in ipairs(registered_autocmds) do
@@ -132,7 +132,7 @@ describe('file refresh', function()
     end)
     
     it('should create a timer for periodic file checks', function()
-      file_refresh.setup(claude_code, config)
+      file_refresh.setup(rovo_dev, config)
       
       assert.is_true(timer_started, "Timer should be started")
       assert.are.equal(config.refresh.timer_interval, timer_interval, "Timer interval should match config")
@@ -143,26 +143,26 @@ describe('file refresh', function()
       -- Initial updatetime
       _G.vim.o.updatetime = 4000
       
-      file_refresh.setup(claude_code, config)
+      file_refresh.setup(rovo_dev, config)
       
-      assert.are.equal(4000, claude_code.claude_code.saved_updatetime, "Should save the current updatetime")
+      assert.are.equal(4000, rovo_dev.rovo_dev.saved_updatetime, "Should save the current updatetime")
     end)
     
     it('should not setup refresh when disabled in config', function()
       -- Disable refresh in config
       config.refresh.enable = false
       
-      file_refresh.setup(claude_code, config)
+      file_refresh.setup(rovo_dev, config)
       
       assert.is_false(timer_started, "Timer should not be started when refresh is disabled")
-      assert.is_nil(registered_augroups['ClaudeCodeFileRefresh'], "Augroup should not be created when refresh is disabled")
+      assert.is_nil(registered_augroups['RovoDevFileRefresh'], "Augroup should not be created when refresh is disabled")
     end)
   end)
   
   describe('cleanup', function()
     it('should stop and close the timer', function()
       -- First setup to create the timer
-      file_refresh.setup(claude_code, config)
+      file_refresh.setup(rovo_dev, config)
       
       -- Then clean up
       file_refresh.cleanup()

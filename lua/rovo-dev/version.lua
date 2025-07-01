@@ -1,10 +1,10 @@
----@mod claude-code.version Version information for claude-code.nvim
+---@mod rovo-dev.version Version information for rovo-dev.nvim
 ---@brief [[
---- This module provides version information for claude-code.nvim.
+--- This module provides version information for rovo-dev.nvim.
 ---@brief ]]
 
 --- @table M
---- Version information for Claude Code
+--- Version information for Rovo Dev
 --- @field major number Major version (breaking changes)
 --- @field minor number Minor version (new features)
 --- @field patch number Patch version (bug fixes)
@@ -28,7 +28,7 @@ end
 
 --- Prints the current version of the plugin
 function M.print_version()
-  vim.notify('Claude Code version: ' .. M.string(), vim.log.levels.INFO)
+  vim.notify('Rovo Dev version: ' .. M.string(), vim.log.levels.INFO)
 end
 
 return M

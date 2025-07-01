@@ -1,6 +1,6 @@
-# Contributing to Claude-Code.nvim
+# Contributing to Rovo-Dev.nvim
 
-Thank you for your interest in contributing to Claude-Code.nvim! This document provides guidelines and instructions to help you contribute effectively.
+Thank you for your interest in contributing to Rovo-Dev.nvim! This document provides guidelines and instructions to help you contribute effectively.
 
 ## Code of Conduct
 
@@ -8,7 +8,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ## Ways to Contribute
 
-There are several ways you can contribute to Claude-Code.nvim:
+There are several ways you can contribute to Rovo-Dev.nvim:
 
 - Reporting bugs
 - Suggesting enhancements
@@ -20,11 +20,11 @@ There are several ways you can contribute to Claude-Code.nvim:
 
 Before submitting an issue, please:
 
-1. Check if the issue already exists in the [issues section](https://github.com/greggh/claude-code.nvim/issues)
+1. Check if the issue already exists in the [issues section](https://github.com/greggh/rovo-dev.nvim/issues)
 2. Use the issue template if available
 3. Include as much relevant information as possible:
    - Neovim version
-   - Claude Code CLI version
+   - Rovo Dev CLI version
    - Operating system
    - Steps to reproduce the issue
    - Expected vs. actual behavior
@@ -55,12 +55,12 @@ To set up a development environment:
 2. Clone your fork of the repository
 
    ```bash
-   git clone https://github.com/greggh/claude-code.nvim.git
+   git clone https://github.com/greggh/rovo-dev.nvim.git
    ```
 
 3. Link the repository to your Neovim plugins directory or use your plugin manager's development mode
 
-4. Make sure you have the Claude Code CLI tool installed and properly configured
+4. Make sure you have the Rovo Dev CLI tool installed and properly configured
 
 5. Set up the Git hooks for automatic code formatting:
 
@@ -128,7 +128,7 @@ See `test/README.md` and `tests/README.md` for more details on the different tes
 
 - Test in different environments (Linux, macOS, Windows if possible)
 - Test with different configurations
-- Test the integration with the Claude Code CLI
+- Test the integration with the Rovo Dev CLI
 - Use the minimal test configuration (`tests/minimal-init.lua`) to verify your changes in isolation
 
 ## Documentation
@@ -136,15 +136,15 @@ See `test/README.md` and `tests/README.md` for more details on the different tes
 When adding new features, please update the documentation:
 
 - Update README.md with any new features, configurations, or dependencies
-- Update the Neovim help documentation in doc/claude-code.txt
+- Update the Neovim help documentation in doc/rovo-dev.txt
 - Include examples of how to use the new features
 
 ## License
 
-By contributing to Claude-Code.nvim, you agree that your contributions will be licensed under the project's MIT license.
+By contributing to Rovo-Dev.nvim, you agree that your contributions will be licensed under the project's MIT license.
 
 ## Questions?
 
 If you have any questions about contributing, please open an issue with your question.
 
-Thank you for contributing to Claude-Code.nvim!
+Thank you for contributing to Rovo-Dev.nvim!

@@ -1,13 +1,13 @@
--- Tests for terminal integration in Claude Code
+-- Tests for terminal integration in Rovo Dev
 local assert = require('luassert')
 local describe = require('plenary.busted').describe
 local it = require('plenary.busted').it
 
-local terminal = require('claude-code.terminal')
+local terminal = require('rovo-dev.terminal')
 
 describe('terminal module', function()
   local config
-  local claude_code
+  local rovo_dev
   local git
   local vim_cmd_calls = {}
   local win_ids = {}
@@ -48,7 +48,7 @@ describe('terminal module', function()
     _G.vim.api.nvim_buf_is_valid = function(bufnr)
       return bufnr ~= nil and bufnr > 0
     end
-    
+
     -- Mock vim.api.nvim_buf_get_option (deprecated)
     _G.vim.api.nvim_buf_get_option = function(bufnr, option)
       if option == 'buftype' then
@@ -56,7 +56,7 @@ describe('terminal module', function()
       end
       return ''
     end
-    
+
     -- Mock vim.api.nvim_get_option_value (new API)
     _G.vim.api.nvim_get_option_value = function(option, opts)
       if option == 'buftype' then
@@ -64,7 +64,7 @@ describe('terminal module', function()
       end
       return ''
     end
-    
+
     -- Mock vim.api.nvim_buf_get_var
     _G.vim.api.nvim_buf_get_var = function(bufnr, varname)
       if varname == 'terminal_job_id' then
@@ -72,7 +72,7 @@ describe('terminal module', function()
       end
       error('Invalid buffer variable: ' .. varname)
     end
-    
+
     -- Mock vim.b for buffer variables (new API)
     _G.vim.b = setmetatable({}, {
       __index = function(t, bufnr)
@@ -84,13 +84,13 @@ describe('terminal module', function()
         return rawget(t, bufnr)
       end
     })
-    
+
     -- Mock vim.api.nvim_set_option_value (new API for both buffer and window options)
     _G.vim.api.nvim_set_option_value = function(option, value, opts)
       -- Just mock this to do nothing for tests
       return true
     end
-    
+
     -- Mock vim.fn.jobwait
     _G.vim.fn.jobwait = function(job_ids, timeout)
       return {-1}  -- -1 means job is still running
@@ -138,7 +138,7 @@ describe('terminal module', function()
 
     -- Setup test objects
     config = {
-      command = 'claude',
+      command = 'rovo',
       window = {
         position = 'botright',
         split_ratio = 0.5,
@@ -158,8 +158,8 @@ describe('terminal module', function()
       },
     }
 
-    claude_code = {
-      claude_code = {
+    rovo_dev = {
+      rovo_dev = {
         instances = {},
         current_instance = nil,
         saved_updatetime = nil,
@@ -176,11 +176,11 @@ describe('terminal module', function()
   describe('toggle with multi-instance enabled', function()
     it('should create new instance when none exists', function()
       -- No instances exist
-      claude_code.claude_code.instances = {}
-      claude_code.claude_code.current_instance = nil
+      rovo_dev.rovo_dev.instances = {}
+      rovo_dev.rovo_dev.current_instance = nil
 
       -- Call toggle
-      terminal.toggle(claude_code, config, git)
+      terminal.toggle(rovo_dev, config, git)
 
       -- Check that commands were called to create window
       local botright_cmd_found = false
@@ -202,11 +202,11 @@ describe('terminal module', function()
       assert.is_true(terminal_cmd_found, 'Terminal command should be called')
 
       -- Current instance should be set
-      assert.is_not_nil(claude_code.claude_code.current_instance, 'Current instance should be set')
+      assert.is_not_nil(rovo_dev.rovo_dev.current_instance, 'Current instance should be set')
 
       -- Instance should be created in instances table
-      local current_instance = claude_code.claude_code.current_instance
-      assert.is_not_nil(claude_code.claude_code.instances[current_instance], 'Instance buffer should be set')
+      local current_instance = rovo_dev.rovo_dev.current_instance
+      assert.is_not_nil(rovo_dev.rovo_dev.instances[current_instance], 'Instance buffer should be set')
     end)
 
     it('should use git root as instance identifier when use_git_root is true', function()
@@ -215,11 +215,11 @@ describe('terminal module', function()
       config.git.multi_instance = true
 
       -- Call toggle
-      terminal.toggle(claude_code, config, git)
+      terminal.toggle(rovo_dev, config, git)
 
       -- Current instance should be git root
       assert.are.equal('/test/git/root', claude_code.claude_code.current_instance)
-      
+
       -- Check that git root was used in terminal command
       local git_root_cmd_found = false
 
@@ -240,17 +240,17 @@ describe('terminal module', function()
       config.git.multi_instance = true
 
       -- Call toggle
-      terminal.toggle(claude_code, config, git)
+      terminal.toggle(rovo_dev, config, git)
 
       -- Current instance should be current directory
-      assert.are.equal('/test/current/dir', claude_code.claude_code.current_instance)
+      assert.are.equal('/test/current/dir', rovo_dev.rovo_dev.current_instance)
     end)
 
     it('should close window when instance is visible', function()
       -- Setup existing instance
       local instance_id = '/test/git/root'
-      claude_code.claude_code.instances[instance_id] = 42
-      claude_code.claude_code.current_instance = instance_id
+      rovo_dev.rovo_dev.instances[instance_id] = 42
+      rovo_dev.rovo_dev.current_instance = instance_id
       win_ids = { 100, 101 } -- Windows displaying the buffer
 
       -- Ensure buffer 42 is always treated as valid for this test
@@ -264,11 +264,11 @@ describe('terminal module', function()
         end
         return ''
       end
-      
-      
+
+
       -- Track how many times nvim_win_close is called
       local close_count = 0
-      
+
       -- Create a function to clear the win_ids array
       _G.vim.api.nvim_win_close = function(win_id, force)
         close_count = close_count + 1
@@ -283,7 +283,7 @@ describe('terminal module', function()
       end
 
       -- Call toggle
-      terminal.toggle(claude_code, config, git)
+      terminal.toggle(rovo_dev, config, git)
 
       -- Check that the windows were closed
       if #win_ids ~= 0 then
@@ -295,12 +295,12 @@ describe('terminal module', function()
     it('should reopen window when instance exists but is hidden', function()
       -- Setup existing instance that's not visible
       local instance_id = '/test/git/root'
-      claude_code.claude_code.instances[instance_id] = 42
-      claude_code.claude_code.current_instance = instance_id
+      rovo_dev.rovo_dev.instances[instance_id] = 42
+      rovo_dev.rovo_dev.current_instance = instance_id
       win_ids = {} -- No windows displaying the buffer
 
       -- Call toggle
-      terminal.toggle(claude_code, config, git)
+      terminal.toggle(rovo_dev, config, git)
 
       -- Check that commands were called to reopen window
       local botright_cmd_found = false
@@ -322,10 +322,10 @@ describe('terminal module', function()
 
       assert.is_true(botright_cmd_found, 'Botright split command should be called')
       assert.is_true(resize_cmd_found, 'Resize command should be called')
-      
+
       -- Either buffer reuse or new terminal creation is acceptable
       -- The key is that the window reopens
-      assert.is_true(buffer_cmd_found or terminal_cmd_found, 
+      assert.is_true(buffer_cmd_found or terminal_cmd_found,
         'Either buffer reuse or new terminal command should be called')
     end)
 
@@ -340,12 +340,12 @@ describe('terminal module', function()
       end
 
       -- Call toggle
-      terminal.toggle(claude_code, config, git)
+      terminal.toggle(rovo_dev, config, git)
 
       -- Check that file command was called with sanitized name
       local file_cmd_found = false
       for _, cmd in ipairs(vim_cmd_calls) do
-        if cmd:match('file claude%-code%-.*') then
+        if cmd:match('file rovo%-dev%-.*') then
           file_cmd_found = true
           -- Extract buffer name from the file command and check it doesn't have invalid chars
           local buffer_name = cmd:match('file (.+)')
@@ -363,7 +363,7 @@ describe('terminal module', function()
     it('should clean up invalid buffers from instances table', function()
       -- Setup invalid buffer in instances
       local instance_id = '/test/git/root'
-      claude_code.claude_code.instances[instance_id] = 999 -- Invalid buffer number
+      rovo_dev.rovo_dev.instances[instance_id] = 999 -- Invalid buffer number
 
       -- Mock nvim_buf_is_valid to return false for the specific invalid buffer
       local original_is_valid = _G.vim.api.nvim_buf_is_valid
@@ -375,12 +375,12 @@ describe('terminal module', function()
       end
 
       -- Call toggle
-      terminal.toggle(claude_code, config, git)
+      terminal.toggle(rovo_dev, config, git)
 
       -- Invalid buffer should be cleaned up and replaced with a new valid one
       assert.is_not_nil(claude_code.claude_code.instances[instance_id], 'Should have new valid buffer')
       assert.are_not.equal(999, claude_code.claude_code.instances[instance_id], 'Invalid buffer should be cleaned up')
-      
+
       -- Restore original mock
       _G.vim.api.nvim_buf_is_valid = original_is_valid
     end)
@@ -393,18 +393,18 @@ describe('terminal module', function()
 
     it('should use global instance when multi-instance is disabled', function()
       -- Call toggle
-      terminal.toggle(claude_code, config, git)
+      terminal.toggle(rovo_dev, config, git)
 
       -- Current instance should be "global"
-      assert.are.equal('global', claude_code.claude_code.current_instance)
+      assert.are.equal('global', rovo_dev.rovo_dev.current_instance)
     end)
 
     it('should create single global instance', function()
       -- Call toggle
-      terminal.toggle(claude_code, config, git)
+      terminal.toggle(rovo_dev, config, git)
 
       -- Check that global instance is created
-      assert.is_not_nil(claude_code.claude_code.instances['global'], 'Global instance should be created')
+      assert.is_not_nil(rovo_dev.rovo_dev.instances['global'], 'Global instance should be created')
     end)
   end)
 
@@ -414,7 +414,7 @@ describe('terminal module', function()
       config.git.use_git_root = true
 
       -- Call toggle
-      terminal.toggle(claude_code, config, git)
+      terminal.toggle(rovo_dev, config, git)
 
       -- Check that git root was used in terminal command
       local git_root_cmd_found = false
@@ -439,7 +439,7 @@ describe('terminal module', function()
       config.shell.separator = ';'
 
       -- Call toggle
-      terminal.toggle(claude_code, config, git)
+      terminal.toggle(rovo_dev, config, git)
 
       -- Check that custom commands were used in terminal command
       local custom_cmd_found = false
@@ -462,7 +462,7 @@ describe('terminal module', function()
       config.window.start_in_normal_mode = true
 
       -- Call toggle
-      terminal.toggle(claude_code, config, git)
+      terminal.toggle(rovo_dev, config, git)
 
       -- Check if startinsert was NOT called
       local startinsert_found = false
@@ -484,7 +484,7 @@ describe('terminal module', function()
       config.window.start_in_normal_mode = false
 
       -- Call toggle
-      terminal.toggle(claude_code, config, git)
+      terminal.toggle(rovo_dev, config, git)
 
       -- Check if startinsert was called
       local startinsert_found = false
@@ -505,8 +505,8 @@ describe('terminal module', function()
   describe('force_insert_mode', function()
     it('should check insert mode conditions in terminal buffer', function()
       -- Setup mock with instances table
-      local mock_claude_code = {
-        claude_code = {
+      local mock_rovo_dev = {
+        rovo_dev = {
           instances = {
             ['/test/instance'] = 1,
           },
@@ -521,7 +521,7 @@ describe('terminal module', function()
 
       -- For this test, we'll just verify that the function can be called without error
       local success, _ = pcall(function()
-        terminal.force_insert_mode(mock_claude_code, mock_config)
+        terminal.force_insert_mode(mock_rovo_dev, mock_config)
       end)
 
       assert.is_true(success, 'Force insert mode function should run without error')
@@ -529,8 +529,8 @@ describe('terminal module', function()
 
     it('should handle non-terminal buffers correctly', function()
       -- Setup mock with instances table but different current buffer
-      local mock_claude_code = {
-        claude_code = {
+      local mock_rovo_dev = {
+        rovo_dev = {
           instances = {
             ['/test/instance'] = 2,
           },
@@ -553,7 +553,7 @@ describe('terminal module', function()
 
       -- For this test, we'll just verify that the function can be called without error
       local success, _ = pcall(function()
-        terminal.force_insert_mode(mock_claude_code, mock_config)
+        terminal.force_insert_mode(mock_rovo_dev, mock_config)
       end)
 
       assert.is_true(success, 'Force insert mode function should run without error')
@@ -618,7 +618,7 @@ describe('terminal module', function()
     it('should create floating window when position is "float"', function()
       -- Claude Code is not running - update for multi-instance support
       claude_code.claude_code.instances = {}
-      
+
       -- Configure floating window
       config.window.position = 'float'
       config.window.float = {
@@ -647,9 +647,9 @@ describe('terminal module', function()
     end)
 
     it('should calculate float dimensions from percentages', function()
-      -- Claude Code is not running - update for multi-instance support  
+      -- Claude Code is not running - update for multi-instance support
       claude_code.claude_code.instances = {}
-      
+
       -- Configure floating window with percentage dimensions
       config.window.position = 'float'
       config.window.float = {
@@ -662,7 +662,7 @@ describe('terminal module', function()
       -- Call toggle
       terminal.toggle(claude_code, config, git)
 
-      -- Check that dimensions were calculated correctly  
+      -- Check that dimensions were calculated correctly
       assert.is_true(nvim_open_win_called, 'nvim_open_win should be called')
       local editor_height = 40 - 1 - 1 -- lines - cmdheight - status line = 38
       local expected_width = math.floor(120 * 0.8) -- 80% of 120
@@ -679,7 +679,7 @@ describe('terminal module', function()
     it('should center floating window when position is "center"', function()
       -- Claude Code is not running - update for multi-instance support
       claude_code.claude_code.instances = {}
-      
+
       -- Configure floating window to be centered
       config.window.position = 'float'
       config.window.float = {
@@ -705,7 +705,7 @@ describe('terminal module', function()
       local instance_id = "global"  -- Single instance mode
       claude_code.claude_code.instances = { [instance_id] = 42 }
       win_ids = {} -- No windows displaying the buffer
-      
+
       -- Configure floating window
       config.window.position = 'float'
       config.window.float = {
@@ -724,7 +724,7 @@ describe('terminal module', function()
       assert.is_not_nil(nvim_open_win_config, 'Window config should be provided')
       assert.are.equal('editor', nvim_open_win_config.relative)
       assert.are.equal('none', nvim_open_win_config.border)
-      
+
       -- Verify existing buffer is reused (buffer 42 from instances)
       -- The specific buffer reuse logic is tested implicitly through the toggle function
     end)
@@ -732,7 +732,7 @@ describe('terminal module', function()
     it('should handle out-of-bounds dimensions gracefully', function()
       -- Claude Code is not running
       claude_code.claude_code.bufnr = nil
-      
+
       -- Configure floating window with large dimensions
       config.window.position = 'float'
       config.window.float = {

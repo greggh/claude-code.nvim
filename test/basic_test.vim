@@ -1,4 +1,4 @@
-" Basic test script for Claude Code
+" Basic test script for Rovo Dev
 " Doesn't rely on busted, just checks that the plugin loads
 
 echo "Basic test started"
@@ -17,26 +17,26 @@ local function colored(msg, color)
   return (colors[color] or "") .. msg .. colors.reset
 end
 
-print(colored("Attempting to load claude-code module...", "blue"))
+print(colored("Attempting to load rovo-dev module...", "blue"))
 
 -- First try to require all modules directly
 print(colored("Loading core components separately...", "blue"))
 local modules = {
-  "claude-code",
-  "claude-code.version",
-  "claude-code.config",
-  "claude-code.commands",
-  "claude-code.keymaps",
-  "claude-code.terminal",
-  "claude-code.file_refresh",
-  "claude-code.git"
+  "rovo-dev",
+  "rovo-dev.version",
+  "rovo-dev.config",
+  "rovo-dev.commands",
+  "rovo-dev.keymaps",
+  "rovo-dev.terminal",
+  "rovo-dev.file_refresh",
+  "rovo-dev.git"
 }
 
 for _, module_name in ipairs(modules) do
   local ok, mod = pcall(require, module_name)
   if ok then
     print(colored("✓ Successfully loaded " .. module_name, "green"))
-    if module_name == "claude-code.version" then
+    if module_name == "rovo-dev.version" then
       print("  Version info: " .. mod.string())
     end
   else
@@ -47,9 +47,9 @@ end
 
 -- Now load the main module
 print(colored("\nLoading main module...", "blue"))
-local ok, claude_code = pcall(require, 'claude-code')
+local ok, rovo_dev = pcall(require, 'rovo-dev')
 if not ok then
-  print(colored("✗ Failed to load claude-code: " .. tostring(claude_code), "red"))
+  print(colored("✗ Failed to load rovo-dev: " .. tostring(rovo_dev), "red"))
   print("Exiting with error...")
   vim.cmd('cq')  -- Exit with error code
 end
@@ -58,7 +58,7 @@ print(colored("✓ Main module loaded successfully", "green"))
 
 -- Initialize the module
 print(colored("\nInitializing module with setup()...", "blue"))
-claude_code.setup()
+rovo_dev.setup()
 
 -- Check key components
 print(colored("\nChecking key components:", "blue"))
@@ -66,20 +66,20 @@ print(colored("\nChecking key components:", "blue"))
 local checks = {
   { 
     name = "setup function", 
-    expr = type(claude_code.setup) == "function"
+    expr = type(rovo_dev.setup) == "function"
   },
   { 
     name = "version", 
-    expr = type(claude_code.version) == "table" and 
-           type(claude_code.version.string) == "function"
+    expr = type(rovo_dev.version) == "table" and 
+           type(rovo_dev.version.string) == "function"
   },
   { 
     name = "config", 
-    expr = type(claude_code.config) == "table"
+    expr = type(rovo_dev.config) == "table"
   },
   {
     name = "commands",
-    expr = claude_code.commands ~= nil
+    expr = rovo_dev.commands ~= nil
   }
 }
 
@@ -95,7 +95,7 @@ end
 
 -- Print all available functions for reference
 print(colored("\nAvailable API:", "blue"))
-for k, v in pairs(claude_code) do
+for k, v in pairs(rovo_dev) do
   print("  - " .. k .. " (" .. type(v) .. ")")
   -- If it's a nested table, show its contents too
   if type(v) == "table" and k ~= "config" then

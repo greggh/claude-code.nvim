@@ -1,0 +1,204 @@
+*rovo-dev.txt*             Seamless integration between Rovo Dev AI and Neovim
+
+==============================================================================
+CONTENTS                                                   *rovo-dev-contents*
+
+  1. Introduction .......................... |rovo-dev-introduction|
+  2. Installation .......................... |rovo-dev-installation|
+  3. Usage ................................ |rovo-dev-usage|
+  4. Configuration ........................ |rovo-dev-configuration|
+  5. Commands ............................. |rovo-dev-commands|
+  6. Mappings ............................. |rovo-dev-mappings|
+  7. Contributing ......................... |rovo-dev-contributing|
+  8. License .............................. |rovo-dev-license|
+
+==============================================================================
+1. INTRODUCTION                                        *rovo-dev-introduction*
+
+Rovo Dev is a plugin that provides seamless integration between the Rovo
+Code AI assistant (command-line tool) and Neovim. It allows you to:
+
+- Toggle Rovo Dev in a terminal window at the bottom of your Neovim screen
+- Automatically detect and reload files modified by Rovo Dev
+- Keep your Neovim buffers in sync with any changes made by Rovo
+
+NOTE: This plugin requires the official Rovo Dev CLI tool to be installed
+and available in your system's PATH.
+
+==============================================================================
+2. INSTALLATION                                        *rovo-dev-installation*
+
+Install using your favorite plugin manager:
+
+Using lazy.nvim:
+>lua
+  return {
+    "greggh/rovo-dev.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim", -- Required for git operations
+    },
+    config = function()
+      require("rovo-dev").setup()
+    end
+  }
+<
+
+Using vim-plug:
+>vim
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'greggh/rovo-dev.nvim'
+  " After installing, add this to your init.vim:
+  " lua require('rovo-dev').setup()
+<
+
+Using packer.nvim:
+>lua
+  use {
+    'greggh/rovo-dev.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim', -- Required for git operations
+    },
+    config = function()
+      require('rovo-dev').setup()
+    end
+  }
+<
+
+PREREQUISITES:
+- Neovim 0.7.0 or later
+- Rovo Dev CLI tool (https://github.com/anthropics/rovo-dev)
+- plenary.nvim plugin (https://github.com/nvim-lua/plenary.nvim) for git operations
+
+==============================================================================
+3. USAGE                                                    *rovo-dev-usage*
+
+- Use the `:RovoDev` command to toggle the Rovo Dev terminal window
+- Press <leader>ac in normal mode to toggle Rovo Dev terminal window
+- Press <C-o> in the terminal to close the Rovo Dev window
+- When Rovo Dev modifies files that are open in Neovim, they'll be
+  automatically reloaded
+- When in a git repository, Rovo Dev will automatically use the git root
+  directory as its working directory using pushd/popd commands (configurable)
+
+==============================================================================
+4. CONFIGURATION                                    *rovo-dev-configuration*
+
+Configure the plugin by passing a table to the setup function. Below is the
+default configuration:
+
+>lua
+  require("rovo-dev").setup({
+    -- Terminal window settings
+    window = {
+      split_ratio = 0.3,      -- Percentage of screen for the terminal window (height or width)
+      position = "botright",  -- Position of the window: "botright", "topleft", "vertical"/"vsplit", "float", etc.
+      enter_insert = true,    -- Whether to enter insert mode when opening Rovo Dev
+      start_in_normal_mode = false, -- Whether to start in normal mode instead of insert mode
+      hide_numbers = true,    -- Hide line numbers in the terminal window
+      hide_signcolumn = true, -- Hide the sign column in the terminal window
+
+      -- Floating window configuration (only applies when position = "float")
+      float = {
+        width = "80%",        -- Width: number of columns or percentage string
+        height = "80%",       -- Height: number of rows or percentage string
+        row = "center",       -- Row position: number, "center", or percentage string
+        col = "center",       -- Column position: number, "center", or percentage string
+        relative = "editor",  -- Relative to: "editor" or "cursor"
+        border = "rounded",   -- Border style: "none", "single", "double", "rounded", "solid", "shadow"
+      },
+    },
+    -- File refresh settings
+    refresh = {
+      enable = true,           -- Enable file change detection
+      updatetime = 100,        -- updatetime when Rovo Dev is active (milliseconds)
+      timer_interval = 1000,   -- How often to check for file changes (milliseconds)
+      show_notifications = true, -- Show notification when files are reloaded
+    },
+    -- Git project settings
+    git = {
+      use_git_root = true,     -- Set CWD to git root when opening Rovo Dev (if in git project)
+    },
+    -- Command settings
+    command = "rovo",        -- Command used to launch Rovo Dev (do not include --cwd)
+    -- Command variants
+    command_variants = {
+      -- Conversation management
+      continue = "--continue", -- Resume the most recent conversation
+      resume = "--resume",     -- Display an interactive conversation picker
+
+      -- Output options
+      verbose = "--verbose",   -- Enable verbose logging with full turn-by-turn output
+    },
+    -- Keymaps
+    keymaps = {
+      toggle = {
+        normal = "<leader>ac",  -- Normal mode keymap for toggling Rovo Dev
+        terminal = "<C-o>",     -- Terminal mode keymap for toggling Rovo Dev
+        variants = {
+          continue = "<leader>cC", -- Normal mode keymap for Rovo Dev with continue flag
+          verbose = "<leader>cV",  -- Normal mode keymap for Rovo Dev with verbose flag
+        },
+      }
+    }
+  })
+<
+
+==============================================================================
+5. COMMANDS                                                *rovo-dev-commands*
+
+:RovoDev                                                       *:RovoDev*
+    Toggle the Rovo Dev terminal window.
+
+Conversation Management Commands:
+:RovoDevContinue                                           *:RovoDevContinue*
+    Toggle Rovo Dev with the --continue flag to resume the most recent conversation.
+
+:RovoDevResume                                             *:RovoDevResume*
+    Toggle Rovo Dev with the --resume flag to display an interactive conversation picker.
+
+Output Options Commands:
+:RovoDevVerbose                                           *:RovoDevVerbose*
+    Toggle Rovo Dev with the --verbose flag for full turn-by-turn output.
+
+Note: Commands are automatically generated for each entry in your command_variants configuration.
+
+==============================================================================
+6. MAPPINGS                                                *rovo-dev-mappings*
+
+Default key mappings:
+
+  <leader>ac   Toggle Rovo Dev terminal window (normal mode)
+  <C-.>        Toggle Rovo Dev terminal window (both normal and terminal modes)
+
+Variant mode mappings (if configured):
+
+  <leader>cC   Toggle Rovo Dev with --continue flag
+  <leader>cV   Toggle Rovo Dev with --verbose flag
+
+Additionally, when in the Rovo Dev terminal:
+
+  <C-h>        Move to the window on the left
+  <C-j>        Move to the window below
+  <C-k>        Move to the window above
+  <C-l>        Move to the window on the right
+  <C-f>        Scroll full-page down
+  <C-b>        Scroll full-page up
+
+Note: After scrolling with <C-f> or <C-b>, you'll need to press the 'i' key
+to re-enter insert mode so you can continue typing to Rovo Dev.
+
+You can customize these mappings in the configuration.
+
+==============================================================================
+7. CONTRIBUTING                                          *rovo-dev-contributing*
+
+Contributions to Rovo Dev are welcome! If you would like to contribute,
+please check the CONTRIBUTING.md file in the repository for guidelines:
+https://github.com/greggh/rovo-dev.nvim/blob/main/CONTRIBUTING.md
+
+==============================================================================
+8. LICENSE                                                  *rovo-dev-license*
+
+MIT License
+
+ vim:tw=78:ts=8:ft=help:norl:

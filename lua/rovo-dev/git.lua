@@ -1,6 +1,6 @@
----@mod claude-code.git Git integration for claude-code.nvim
+---@mod rovo-dev.git Git integration for rovo-dev.nvim
 ---@brief [[
---- This module provides git integration functionality for claude-code.nvim.
+--- This module provides git integration functionality for rovo-dev.nvim.
 --- It detects git repositories and can set the working directory to the git root.
 ---@brief ]]
 
@@ -10,7 +10,7 @@ local M = {}
 --- @return string|nil git_root The git root directory path or nil if not in a git repo
 function M.get_git_root()
   -- For testing compatibility
-  if vim.env.CLAUDE_CODE_TEST_MODE == 'true' then
+  if vim.env.ROVO_DEV_TEST_MODE == 'true' then
     return '/home/user/project'
   end
 

@@ -3,7 +3,7 @@ local assert = require('luassert')
 local describe = require('plenary.busted').describe
 local it = require('plenary.busted').it
 
-local config = require('claude-code.config')
+local config = require('rovo-dev.config')
 
 describe('config', function()
   describe('parse_config', function()

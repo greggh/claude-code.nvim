@@ -1,6 +1,6 @@
 # Development Guide for Neovim Projects
 
-This document outlines the development workflow, testing setup, and requirements for working with Neovim Lua projects such as this configuration, Laravel Helper plugin, and Claude Code plugin.
+This document outlines the development workflow, testing setup, and requirements for working with Neovim Lua projects such as this configuration, Laravel Helper plugin, and Rovo Dev plugin.
 
 ## Requirements
 
@@ -136,13 +136,13 @@ luarocks install luacheck
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/greggh/claude-code.nvim.git
+   git clone https://github.com/greggh/rovo-dev.nvim.git
    ```
 
 2. Install Git hooks:
 
    ```bash
-   cd claude-code.nvim
+   cd rovo-dev.nvim
    ./scripts/setup-hooks.sh
    ```
 
@@ -183,9 +183,9 @@ make test-basic
 make test-config
 ```
 
-### Running Tests from Within Neovim/Claude Code
+### Running Tests from Within Neovim/Rovo Dev
 
-When running tests from within a Neovim instance (such as when using Claude Code via claude-code.nvim), the test script automatically handles the `$NVIM` environment variable which normally points to a socket file instead of the nvim executable.
+When running tests from within a Neovim instance (such as when using Rovo Dev via rovo-dev.nvim), the test script automatically handles the `$NVIM` environment variable which normally points to a socket file instead of the nvim executable.
 
 The test script will:
 

@@ -1,7 +1,7 @@
----@mod claude-code.file_refresh File refresh functionality for claude-code.nvim
+---@mod rovo-dev.file_refresh File refresh functionality for rovo-dev.nvim
 ---@brief [[
 --- This module provides file refresh functionality to detect and reload files
---- that have been modified by Claude Code or other external processes.
+--- that have been modified by Rovo Dev or other external processes.
 ---@brief ]]
 
 local M = {}
@@ -11,14 +11,14 @@ local M = {}
 local refresh_timer = nil
 
 --- Setup autocommands for file change detection
---- @param claude_code table The main plugin module
+--- @param rovo_dev table The main plugin module
 --- @param config table The plugin configuration
-function M.setup(claude_code, config)
+function M.setup(rovo_dev, config)
   if not config.refresh.enable then
     return
   end
 
-  local augroup = vim.api.nvim_create_augroup('ClaudeCodeFileRefresh', { clear = true })
+  local augroup = vim.api.nvim_create_augroup('RovoDevFileRefresh', { clear = true })
 
   -- Create an autocommand that checks for file changes more frequently
   vim.api.nvim_create_autocmd({
@@ -56,9 +56,9 @@ function M.setup(claude_code, config)
       0,
       config.refresh.timer_interval,
       vim.schedule_wrap(function()
-        -- Only check time if there's an active Claude Code terminal
-        local current_instance = claude_code.claude_code.current_instance
-        local bufnr = current_instance and claude_code.claude_code.instances[current_instance]
+        -- Only check time if there's an active Rovo Dev terminal
+        local current_instance = rovo_dev.rovo_dev.current_instance
+        local bufnr = current_instance and rovo_dev.rovo_dev.instances[current_instance]
         if bufnr and vim.api.nvim_buf_is_valid(bufnr) and #vim.fn.win_findbuf(bufnr) > 0 then
           vim.cmd 'silent! checktime'
         end
@@ -78,35 +78,35 @@ function M.setup(claude_code, config)
     })
   end
 
-  -- Set a shorter updatetime while Claude Code is open
-  claude_code.claude_code.saved_updatetime = vim.o.updatetime
+  -- Set a shorter updatetime while Rovo Dev is open
+  rovo_dev.rovo_dev.saved_updatetime = vim.o.updatetime
 
-  -- When Claude Code opens, set a shorter updatetime
+  -- When Rovo Dev opens, set a shorter updatetime
   vim.api.nvim_create_autocmd('TermOpen', {
     group = augroup,
     pattern = '*',
     callback = function()
       local buf = vim.api.nvim_get_current_buf()
       local buf_name = vim.api.nvim_buf_get_name(buf)
-      if buf_name:match('claude%-code$') then
-        claude_code.claude_code.saved_updatetime = vim.o.updatetime
+      if buf_name:match('rovo%-dev$') then
+        rovo_dev.rovo_dev.saved_updatetime = vim.o.updatetime
         vim.o.updatetime = config.refresh.updatetime
       end
     end,
-    desc = 'Set shorter updatetime when Claude Code is open',
+    desc = 'Set shorter updatetime when Rovo Dev is open',
   })
 
-  -- When Claude Code closes, restore normal updatetime
+  -- When Rovo Dev closes, restore normal updatetime
   vim.api.nvim_create_autocmd('TermClose', {
     group = augroup,
     pattern = '*',
     callback = function()
       local buf_name = vim.api.nvim_buf_get_name(0)
-      if buf_name:match('claude%-code$') then
-        vim.o.updatetime = claude_code.claude_code.saved_updatetime
+      if buf_name:match('rovo%-dev$') then
+        vim.o.updatetime = rovo_dev.rovo_dev.saved_updatetime
       end
     end,
-    desc = 'Restore normal updatetime when Claude Code is closed',
+    desc = 'Restore normal updatetime when Rovo Dev is closed',
   })
 end
 
