@@ -380,7 +380,7 @@ local function validate_command_variants_config(command_variants)
 end
 
 --- Validate configuration options
---- @param config ClaudeCodeConfig
+--- @param config RovoDevConfig
 --- @return boolean valid
 --- @return string? error_message
 local function validate_config(config)

@@ -211,10 +211,10 @@ When Rovo Dev modifies files that are open in Neovim, they'll be automatically r
 
 ### Floating Window Example
 
-To use Claude Code in a floating window:
+To use Rovo Dev in a floating window:
 
 ```lua
-require("claude-code").setup({
+require("rovo-dev").setup({
   window = {
     position = "float",
     float = {
