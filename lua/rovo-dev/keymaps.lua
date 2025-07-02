@@ -38,7 +38,7 @@ function M.register_keymaps(rovo_dev, config)
   if config.keymaps.toggle.variants then
     for variant_name, keymap in pairs(config.keymaps.toggle.variants) do
       if keymap then
-        -- Convert variant name to PascalCase for command name (e.g., "continue" -> "Continue")
+        -- Convert variant name to PascalCase for command name (e.g., "restore" -> "Restore")
         local capitalized_name = variant_name:gsub('^%l', string.upper)
         local cmd_name = 'RovoDev' .. capitalized_name
 

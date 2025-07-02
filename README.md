@@ -26,7 +26,7 @@ This plugin was built entirely with Rovo Dev in a Neovim terminal, and then insi
 ## Features
 
 - 🚀 Toggle Rovo Dev in a terminal window with a single key press
-- 🧠 Support for command-line arguments like `--continue` and custom variants
+- 🧠 Support for command-line arguments like `--restore` and custom variants
 - 🔄 Automatically detect and reload files modified by Rovo Dev
 - ⚡ Real-time buffer updates when files are changed externally
 - 📱 Customizable window position and size (including floating windows)
@@ -126,13 +126,11 @@ require("rovo-dev").setup({
     popd_cmd = 'popd',       -- Command to pop directory from stack (e.g., 'popd' for bash/zsh, 'exit' for nushell)
   },
   -- Command settings
-  command = "rovo",        -- Command used to launch Rovo Dev
+  command = "acli rovodev run",        -- Command used to launch Rovo Dev
   -- Command variants
   command_variants = {
     -- Conversation management
-    continue = "--continue", -- Resume the most recent conversation
-    resume = "--resume",     -- Display an interactive conversation picker
-
+    restore = "--restore", -- Resume the most recent conversation
     -- Output options
     verbose = "--verbose",   -- Enable verbose logging with full turn-by-turn output
   },
@@ -142,7 +140,7 @@ require("rovo-dev").setup({
       normal = "<C-,>",       -- Normal mode keymap for toggling Rovo Dev, false to disable
       terminal = "<C-,>",     -- Terminal mode keymap for toggling Rovo Dev, false to disable
       variants = {
-        continue = "<leader>cC", -- Normal mode keymap for Rovo Dev with continue flag
+        restore = "<leader>cR", -- Normal mode keymap for Rovo Dev with restore flag
         verbose = "<leader>cV",  -- Normal mode keymap for Rovo Dev with verbose flag
       },
     },
@@ -177,7 +175,7 @@ Basic command:
 
 Conversation management commands:
 
-- `:RovoDevContinue` - Resume the most recent conversation
+- `:RovoDevRestore` - Resume the most recent conversation
 - `:RovoDevResume` - Display an interactive conversation picker
 
 Output options command:
@@ -195,7 +193,7 @@ Default key mappings:
 
 Variant mode mappings (if configured):
 
-- `<leader>cC` - Toggle Rovo Dev with --continue flag
+- `<leader>cR` - Toggle Rovo Dev with --restore flag
 - `<leader>cV` - Toggle Rovo Dev with --verbose flag
 
 Additionally, when in the Rovo Dev terminal:

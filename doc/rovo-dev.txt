@@ -123,9 +123,7 @@ default configuration:
     -- Command variants
     command_variants = {
       -- Conversation management
-      continue = "--continue", -- Resume the most recent conversation
-      resume = "--resume",     -- Display an interactive conversation picker
-
+      restore = "--restore", -- Resume the most recent conversation
       -- Output options
       verbose = "--verbose",   -- Enable verbose logging with full turn-by-turn output
     },
@@ -135,7 +133,7 @@ default configuration:
         normal = "<leader>ac",  -- Normal mode keymap for toggling Rovo Dev
         terminal = "<C-o>",     -- Terminal mode keymap for toggling Rovo Dev
         variants = {
-          continue = "<leader>cC", -- Normal mode keymap for Rovo Dev with continue flag
+          restore = "<leader>cR", -- Normal mode keymap for Rovo Dev with restore flag
           verbose = "<leader>cV",  -- Normal mode keymap for Rovo Dev with verbose flag
         },
       }
@@ -150,11 +148,8 @@ default configuration:
     Toggle the Rovo Dev terminal window.
 
 Conversation Management Commands:
-:RovoDevContinue                                           *:RovoDevContinue*
-    Toggle Rovo Dev with the --continue flag to resume the most recent conversation.
-
-:RovoDevResume                                             *:RovoDevResume*
-    Toggle Rovo Dev with the --resume flag to display an interactive conversation picker.
+:RovoDevRestore                                           *:RovoDevRestore*
+    Toggle Rovo Dev with the --restore flag to resume the most recent conversation.
 
 Output Options Commands:
 :RovoDevVerbose                                           *:RovoDevVerbose*
@@ -172,7 +167,7 @@ Default key mappings:
 
 Variant mode mappings (if configured):
 
-  <leader>cC   Toggle Rovo Dev with --continue flag
+  <leader>cR   Toggle Rovo Dev with --restore flag
   <leader>cV   Toggle Rovo Dev with --verbose flag
 
 Additionally, when in the Rovo Dev terminal:

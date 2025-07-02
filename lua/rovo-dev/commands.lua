@@ -20,7 +20,7 @@ function M.register_commands(rovo_dev)
   -- Create commands for each command variant
   for variant_name, variant_args in pairs(rovo_dev.config.command_variants) do
     if variant_args ~= false then
-      -- Convert variant name to PascalCase for command name (e.g., "continue" -> "Continue")
+      -- Convert variant name to PascalCase for command name (e.g., "restore" -> "Restore")
       local capitalized_name = variant_name:gsub('^%l', string.upper)
       local cmd_name = 'RovoDev' .. capitalized_name
 

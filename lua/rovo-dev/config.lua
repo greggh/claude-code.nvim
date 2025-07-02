@@ -48,8 +48,7 @@ local M = {}
 --- RovoDevCommandVariants class for command variant configuration
 -- @table RovoDevCommandVariants
 -- Conversation management:
--- @field continue string|boolean Resume the most recent conversation
--- @field resume string|boolean Display an interactive conversation picker
+-- @field restore string|boolean Resume the most recent conversation
 -- Output options:
 -- @field verbose string|boolean Enable verbose logging with full turn-by-turn output
 -- Additional options can be added as needed
@@ -115,8 +114,7 @@ M.default_config = {
   -- Command variants
   command_variants = {
     -- Conversation management
-    continue = '--continue', -- Resume the most recent conversation
-    resume = '--resume', -- Display an interactive conversation picker
+    restore = '--restore', -- Resume the most recent conversation
 
     -- Output options
     verbose = '--verbose', -- Enable verbose logging with full turn-by-turn output
@@ -127,7 +125,7 @@ M.default_config = {
       normal = '<C-,>', -- Normal mode keymap for toggling Rovo Dev
       terminal = '<C-,>', -- Terminal mode keymap for toggling Rovo Dev
       variants = {
-        continue = '<leader>cC', -- Normal mode keymap for Rovo Dev with continue flag
+        restore = '<leader>cR', -- Normal mode keymap for Rovo Dev with restore flag
         verbose = '<leader>cV', -- Normal mode keymap for Rovo Dev with verbose flag
       },
     },
