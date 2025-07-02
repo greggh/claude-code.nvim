@@ -19,8 +19,6 @@
 [Contributing](#contributing) •
 [Discussions](https://github.com/hjetmundsen/rovo-dev.nvim/discussions)
 
-![Rovo Dev in Neovim](https://github.com/hjetmundsen/rovo-dev.nvim/blob/main/assets/rovo-dev.png?raw=true)
-
 This plugin was built entirely with Rovo Dev in a Neovim terminal, and then inside itself using Rovo Dev for everything!
 
 ## Features
