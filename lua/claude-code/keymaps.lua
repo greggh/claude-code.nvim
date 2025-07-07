@@ -108,6 +108,42 @@ function M.setup_terminal_navigation(claude_code, config)
       }
     )
 
+    -- Add escape keymaps for floating windows
+    if config.window.position == 'float' then
+      local success, error_msg = pcall(function()
+        -- Escape key to close floating window in normal mode
+        vim.api.nvim_buf_set_keymap(
+          buf,
+          'n',
+          '<Esc>',
+          [[<cmd>ClaudeCode<CR>]],
+          { noremap = true, silent = true, desc = 'Close Claude Code floating window' }
+        )
+        
+        -- Also add common close keymaps
+        vim.api.nvim_buf_set_keymap(
+          buf,
+          'n',
+          'q',
+          [[<cmd>ClaudeCode<CR>]],
+          { noremap = true, silent = true, desc = 'Close Claude Code floating window' }
+        )
+        
+        -- Terminal mode escape sequence to close window
+        vim.api.nvim_buf_set_keymap(
+          buf,
+          't',
+          '<C-q>',
+          [[<C-\><C-n>:ClaudeCode<CR>]],
+          { noremap = true, silent = true, desc = 'Close Claude Code floating window from terminal mode' }
+        )
+      end)
+      
+      if not success then
+        vim.notify('Claude Code: Error setting up floating window keymaps: ' .. tostring(error_msg), vim.log.levels.WARN)
+      end
+    end
+
     -- Window navigation keymaps
     if config.keymaps.window_navigation then
       -- Window navigation keymaps with special handling to force insert mode in the target window

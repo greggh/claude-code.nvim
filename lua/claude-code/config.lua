@@ -133,6 +133,10 @@ M.default_config = {
     },
     window_navigation = true, -- Enable window navigation keymaps (<C-h/j/k/l>)
     scrolling = true, -- Enable scrolling keymaps (<C-f/b>) for page up/down
+    -- Note: For floating windows, additional keymaps are automatically added:
+    -- - <Esc> in normal mode: Close the floating window
+    -- - q in normal mode: Close the floating window
+    -- - <C-q> in terminal mode: Close the floating window
   },
 }
 

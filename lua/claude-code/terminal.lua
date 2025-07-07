@@ -68,9 +68,12 @@ end
 --- Create a floating window for Claude Code
 --- @param config table Plugin configuration containing window settings
 --- @param existing_bufnr number|nil Buffer number of existing buffer to show in the float (optional)
+--- @param claude_code table|nil Main plugin module for terminal job management (optional)
+--- @param git table|nil Git module for building commands (optional)
+--- @param instance_id string|nil Instance identifier for cleanup tracking (optional)
 --- @return number Window ID of the created floating window
 --- @private
-local function create_float(config, existing_bufnr)
+local function create_float(config, existing_bufnr, claude_code, git, instance_id)
   local float_config = config.window.float or {}
 
   -- Get editor dimensions (accounting for command line, status line, etc.)
@@ -113,8 +116,120 @@ local function create_float(config, existing_bufnr)
     end
   end
 
-  -- Create and return the floating window
-  return vim.api.nvim_open_win(bufnr, true, win_config)
+  -- Create the floating window
+  local win_id = vim.api.nvim_open_win(bufnr, true, win_config)
+  
+  -- If we're reusing an existing buffer and have full context, check if terminal job is still running
+  if existing_bufnr and claude_code and git and instance_id then
+    local job_id = vim.b[bufnr].terminal_job_id
+    if not job_id or vim.fn.jobwait({job_id}, 0)[1] ~= -1 then
+      -- Terminal job is not running, start a new one with on_exit callback
+      local cmd = build_command_with_git_root(config, git, config.command)
+      
+      -- Ensure we got a valid command
+      if type(cmd) ~= "string" or cmd == "" then
+        vim.notify(
+          "Claude Code: Failed to build terminal command; aborting restart. cmd=" .. vim.inspect(cmd),
+          vim.log.levels.ERROR
+        )
+        return win_id
+      end
+
+      local new_job_id = vim.fn.termopen(cmd, {
+        on_exit = create_terminal_exit_handler(claude_code, instance_id, bufnr, win_id)
+      })
+    end
+  end
+  
+  return win_id
+end
+
+--- Handle buffer name collision by safely managing existing buffers
+--- @param buffer_name string The intended buffer name
+--- @param current_bufnr number The current buffer number
+--- @return string The final buffer name to use (may be modified to avoid collision)
+--- @private
+local function handle_buffer_name_collision(buffer_name, current_bufnr)
+  local existing_bufnr = vim.fn.bufnr(buffer_name)
+  if existing_bufnr ~= -1 and existing_bufnr ~= current_bufnr then
+    -- Only delete if the buffer is valid and not currently displayed
+    if vim.api.nvim_buf_is_valid(existing_bufnr) then
+      local buf_windows = vim.fn.win_findbuf(existing_bufnr)
+      if #buf_windows == 0 then
+        -- Buffer exists but isn't displayed, safe to delete
+        vim.api.nvim_buf_delete(existing_bufnr, {force = true})
+      else
+        -- Buffer is being displayed, use a different name with timestamp
+        -- Handle multiple levels of collision by trying different suffixes
+        local base_name = buffer_name
+        -- Use more granular timestamp to avoid collisions
+        local timestamp = tostring(os.time()) .. '-' .. tostring(math.random(1000, 9999))
+        local attempt = 0
+        repeat
+          if attempt == 0 then
+            buffer_name = base_name .. '-' .. timestamp
+          else
+            buffer_name = base_name .. '-' .. timestamp .. '-' .. attempt
+          end
+          existing_bufnr = vim.fn.bufnr(buffer_name)
+          attempt = attempt + 1
+        until existing_bufnr == -1 or attempt > 10  -- Safety limit to prevent infinite loop
+      end
+    end
+  end
+  return buffer_name
+end
+
+--- Create terminal exit handler for floating windows
+--- @param claude_code table The main plugin module
+--- @param instance_id string The instance identifier
+--- @param bufnr number The buffer number
+--- @param win_id number The window ID
+--- @return function The exit handler function
+--- @private
+local function create_terminal_exit_handler(claude_code, instance_id, bufnr, win_id)
+  return function(job_id_exit, exit_code, event_type)
+    vim.schedule(function()
+      -- Robust cleanup with error handling
+      local success, error_msg = pcall(function()
+        -- Clean up instance tracking first
+        if claude_code.claude_code.instances[instance_id] == bufnr then
+          claude_code.claude_code.instances[instance_id] = nil
+        end
+        
+        -- Check if window is still valid before attempting to close
+        if vim.api.nvim_win_is_valid(win_id) then
+          -- Get the config to confirm it's still a floating window
+          local win_config = vim.api.nvim_win_get_config(win_id)
+          if win_config.relative ~= '' then
+            -- This is indeed a floating window, close it
+            vim.api.nvim_win_close(win_id, true)
+            
+            -- Check if we need to create a fallback window
+            local remaining_wins = vim.api.nvim_list_wins()
+            local has_normal_window = false
+            for _, w in ipairs(remaining_wins) do
+              local cfg = vim.api.nvim_win_get_config(w)
+              if cfg.relative == '' then
+                has_normal_window = true
+                break
+              end
+            end
+            
+            -- If no normal windows remain, create one
+            if not has_normal_window then
+              vim.cmd('new')
+            end
+          end
+        end
+      end)
+      
+      -- Log any errors for debugging
+      if not success then
+        vim.notify('Claude Code: Error in terminal exit handler: ' .. tostring(error_msg), vim.log.levels.WARN)
+      end
+    end)
+  end
 end
 
 --- Build command with git root directory if configured
@@ -184,7 +299,7 @@ end
 local function create_split(position, config, existing_bufnr)
   -- Handle floating window
   if position == 'float' then
-    return create_float(config, existing_bufnr)
+    return create_float(config, existing_bufnr, nil, nil, nil)
   end
 
   local is_vertical = position:match('vsplit') or position:match('vertical')
@@ -290,17 +405,37 @@ end
 --- @param bufnr number Buffer number
 --- @param config table Plugin configuration
 --- @private
-local function handle_existing_instance(bufnr, config)
+local function handle_existing_instance(bufnr, config, claude_code, git, instance_id)
   local win_ids = vim.fn.win_findbuf(bufnr)
   if #win_ids > 0 then
     -- Claude Code is visible, close the window
     for _, win_id in ipairs(win_ids) do
-      vim.api.nvim_win_close(win_id, true)
+      -- For floating windows, ensure we have a valid window to return to
+      local win_config = vim.api.nvim_win_get_config(win_id)
+      if win_config.relative ~= '' then
+        -- This is a floating window
+        -- Store the current window that will be focused after closing
+        local current_win = vim.api.nvim_get_current_win()
+        
+        -- Close the floating window
+        vim.api.nvim_win_close(win_id, true)
+        
+        -- Ensure we have a valid window after closing
+        -- This handles the case where the underlying window might have been closed
+        local remaining_wins = vim.api.nvim_list_wins()
+        if #remaining_wins == 0 then
+          -- No windows left, create a new one
+          vim.cmd('enew')
+        end
+      else
+        -- Regular window, just close it
+        vim.api.nvim_win_close(win_id, true)
+      end
     end
   else
     -- Claude Code buffer exists but is not visible, open it in a split or float
     if config.window.position == 'float' then
-      create_float(config, bufnr)
+      create_float(config, bufnr, claude_code, git, instance_id)
     else
       create_split(config.window.position, config, bufnr)
     end
@@ -326,7 +461,7 @@ local function create_new_instance(claude_code, config, git, instance_id)
     vim.api.nvim_set_option_value('bufhidden', 'hide', {buf = new_bufnr})
 
     -- Create the floating window
-    local win_id = create_float(config, new_bufnr)
+    local win_id = create_float(config, new_bufnr, claude_code, git, instance_id)
 
     -- Set current buffer to run terminal command
     vim.api.nvim_win_set_buf(win_id, new_bufnr)
@@ -335,10 +470,13 @@ local function create_new_instance(claude_code, config, git, instance_id)
     local cmd = build_command_with_git_root(config, git, config.command)
 
     -- Run terminal in the buffer
-    vim.fn.termopen(cmd)
+    local job_id = vim.fn.termopen(cmd, {
+      on_exit = create_terminal_exit_handler(claude_code, instance_id, new_bufnr, win_id)
+    })
 
     -- Create a unique buffer name
     local buffer_name = generate_buffer_name(instance_id, config)
+    buffer_name = handle_buffer_name_collision(buffer_name, new_bufnr)
     vim.api.nvim_buf_set_name(new_bufnr, buffer_name)
 
     -- Configure window options
@@ -364,6 +502,8 @@ local function create_new_instance(claude_code, config, git, instance_id)
 
     -- Create a unique buffer name
     local buffer_name = generate_buffer_name(instance_id, config)
+    local current_bufnr = vim.api.nvim_get_current_buf()
+    buffer_name = handle_buffer_name_collision(buffer_name, current_bufnr)
     vim.cmd('file ' .. buffer_name)
 
     -- Configure window options using helper function
@@ -401,7 +541,7 @@ function M.toggle(claude_code, config, git)
 
   if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
     -- Handle existing instance (toggle visibility)
-    handle_existing_instance(bufnr, config)
+    handle_existing_instance(bufnr, config, claude_code, git, instance_id)
   else
     -- Prune invalid buffer entries
     if bufnr and not vim.api.nvim_buf_is_valid(bufnr) then
