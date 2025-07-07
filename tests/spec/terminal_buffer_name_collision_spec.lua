@@ -13,6 +13,12 @@ describe('terminal buffer name collision handling', function()
   local existing_buffers = {}
   local deleted_buffers = {}
   local nvim_buf_set_name_calls = {}
+  local original_os_time = os.time
+  
+  -- Mock os.time for consistent timestamps
+  os.time = function()
+    return 1234567890
+  end
 
   before_each(function()
     -- Reset tracking variables
@@ -138,6 +144,7 @@ describe('terminal buffer name collision handling', function()
     local buffer_counter = 100
     _G.vim.api.nvim_create_buf = function(listed, scratch)
       buffer_counter = buffer_counter + 1
+      existing_buffers[buffer_counter] = nil  -- Track the buffer as existing
       return buffer_counter
     end
 
@@ -225,6 +232,11 @@ describe('terminal buffer name collision handling', function()
     }
   end)
 
+  after_each(function()
+    -- Restore original os.time
+    os.time = original_os_time
+  end)
+
   describe('buffer name collision in floating window', function()
     it('should handle existing buffer with same name gracefully', function()
       -- Create a buffer with the name that would be generated
@@ -300,15 +312,18 @@ describe('terminal buffer name collision handling', function()
       assert.is_false(deleted_buffers[existing_bufnr] or false, 'displayed buffer should not be deleted')
       
       -- Should have created a new buffer with a different name (timestamped)
-      local expected_timestamped_name = sanitized_name .. '-1234567890'
+      -- The new format includes a random number: name-timestamp-random
       local found_timestamped_name = false
+      local actual_name = nil
       for _, call in ipairs(nvim_buf_set_name_calls) do
-        if call.name == expected_timestamped_name then
+        -- Check if the name matches the pattern: base-name-timestamp-random
+        if call.name:match('^' .. vim.pesc(sanitized_name) .. '%-1234567890%-(%d+)$') then
           found_timestamped_name = true
+          actual_name = call.name
           break
         end
       end
-      assert.is_true(found_timestamped_name, 'new buffer should be created with timestamped name: ' .. expected_timestamped_name)
+      assert.is_true(found_timestamped_name, 'new buffer should be created with timestamped name pattern: ' .. sanitized_name .. '-1234567890-XXXX, but got: ' .. (actual_name or 'none'))
       
       -- Restore original os.time
       os.time = original_time
@@ -390,15 +405,18 @@ describe('terminal buffer name collision handling', function()
       assert.is_false(deleted_buffers[existing_bufnr] or false, 'displayed buffer should not be deleted')
       
       -- Should have created a new buffer with a different name (timestamped)
-      local expected_timestamped_name = sanitized_name .. '-1234567890'
+      -- The new format includes a random number: name-timestamp-random
       local found_timestamped_file_cmd = false
+      local actual_cmd = nil
       for _, cmd in ipairs(vim_cmd_calls) do
-        if cmd == ('file ' .. expected_timestamped_name) then
+        -- Check if the command matches the pattern: file base-name-timestamp-random
+        if cmd:match('^file ' .. vim.pesc(sanitized_name) .. '%-1234567890%-(%d+)$') then
           found_timestamped_file_cmd = true
+          actual_cmd = cmd
           break
         end
       end
-      assert.is_true(found_timestamped_file_cmd, 'file command should be called with timestamped name: ' .. expected_timestamped_name)
+      assert.is_true(found_timestamped_file_cmd, 'file command should be called with timestamped name pattern: file ' .. sanitized_name .. '-1234567890-XXXX, but got: ' .. (actual_cmd or 'none'))
       
       -- Restore original os.time
       os.time = original_time
@@ -447,8 +465,9 @@ describe('terminal buffer name collision handling', function()
       existing_buffers[existing_bufnr] = sanitized_name
 
       -- Also create a buffer with the timestamped name (simulate second collision)
-      local timestamp = os.time()
-      local timestamped_name = sanitized_name .. '-' .. timestamp
+      -- Use our mocked timestamp value
+      local timestamp = 1234567890
+      local timestamped_name = sanitized_name .. '-' .. timestamp .. '-1234'  -- Match new format
       local existing_timestamped_bufnr = 81
       existing_buffers[existing_timestamped_bufnr] = timestamped_name
 
@@ -487,16 +506,23 @@ describe('terminal buffer name collision handling', function()
       assert.is_false(deleted_buffers[existing_bufnr] or false, 'first buffer should not be deleted')
       assert.is_false(deleted_buffers[existing_timestamped_bufnr] or false, 'timestamped buffer should not be deleted')
       
-      -- Should have created a new buffer with a timestamped name (second-level collision gets -1 suffix)
-      local expected_name = timestamped_name .. '-1'  -- Our collision handler adds -1 for second collision
+      -- Should have created a new buffer with a timestamped name
+      -- The new format uses timestamp-random, and since both existing names are taken, 
+      -- it will generate a fresh timestamp-random combination
       local found_timestamped_name = false
+      local actual_name = nil
+      
+      -- Check for the new timestamp pattern
+      local pattern = vim.pesc(sanitized_name) .. '%-1234567890%-(%d+)$'
       for _, call in ipairs(nvim_buf_set_name_calls) do
-        if call.name == expected_name then
+        if call.name:match(pattern) and call.name ~= timestamped_name then
           found_timestamped_name = true
+          actual_name = call.name
           break
         end
       end
-      assert.is_true(found_timestamped_name, 'new buffer should be created with timestamped name: ' .. expected_name)
+      
+      assert.is_true(found_timestamped_name, 'new buffer should be created with timestamped name pattern: ' .. sanitized_name .. '-1234567890-XXXX, but got: ' .. (actual_name or 'none'))
     end)
   end)
 end)

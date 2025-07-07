@@ -68,6 +68,9 @@ end
 --- Create a floating window for Claude Code
 --- @param config table Plugin configuration containing window settings
 --- @param existing_bufnr number|nil Buffer number of existing buffer to show in the float (optional)
+--- @param claude_code table|nil Main plugin module for terminal job management (optional)
+--- @param git table|nil Git module for building commands (optional)
+--- @param instance_id string|nil Instance identifier for cleanup tracking (optional)
 --- @return number Window ID of the created floating window
 --- @private
 local function create_float(config, existing_bufnr, claude_code, git, instance_id)
@@ -123,6 +126,15 @@ local function create_float(config, existing_bufnr, claude_code, git, instance_i
       -- Terminal job is not running, start a new one with on_exit callback
       local cmd = build_command_with_git_root(config, git, config.command)
       
+      -- Ensure we got a valid command
+      if type(cmd) ~= "string" or cmd == "" then
+        vim.notify(
+          "Claude Code: Failed to build terminal command; aborting restart. cmd=" .. vim.inspect(cmd),
+          vim.log.levels.ERROR
+        )
+        return win_id
+      end
+
       local new_job_id = vim.fn.termopen(cmd, {
         on_exit = create_terminal_exit_handler(claude_code, instance_id, bufnr, win_id)
       })
@@ -150,7 +162,8 @@ local function handle_buffer_name_collision(buffer_name, current_bufnr)
         -- Buffer is being displayed, use a different name with timestamp
         -- Handle multiple levels of collision by trying different suffixes
         local base_name = buffer_name
-        local timestamp = os.time()
+        -- Use more granular timestamp to avoid collisions
+        local timestamp = tostring(os.time()) .. '-' .. tostring(math.random(1000, 9999))
         local attempt = 0
         repeat
           if attempt == 0 then
