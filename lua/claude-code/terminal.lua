@@ -30,6 +30,33 @@ local function get_instance_identifier(git)
   end
 end
 
+--- Get process state for a Claude Code instance
+--- @param claude_code table The main plugin module
+--- @param instance_id string The instance identifier
+--- @return table|nil Process state information
+local function get_process_state(claude_code, instance_id)
+  if not claude_code.claude_code.process_states then
+    return nil
+  end
+  return claude_code.claude_code.process_states[instance_id]
+end
+
+--- Clean up invalid buffers and update process states
+--- @param claude_code table The main plugin module
+local function cleanup_invalid_instances(claude_code)
+  -- Iterate through all tracked Claude instances
+  for instance_id, bufnr in pairs(claude_code.claude_code.instances) do
+    -- Remove stale buffer references (deleted buffers or invalid handles)
+    if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then
+      claude_code.claude_code.instances[instance_id] = nil
+      -- Also clean up process state tracking for this instance
+      if claude_code.claude_code.process_states then
+        claude_code.claude_code.process_states[instance_id] = nil
+      end
+    end
+  end
+end
+
 --- Calculate floating window dimensions from percentage strings
 --- @param value number|string Dimension value (number or percentage string)
 --- @param max_value number Maximum value (columns or lines)
@@ -105,7 +132,7 @@ local function create_float(config, existing_bufnr)
     if not vim.api.nvim_buf_is_valid(bufnr) then
       bufnr = vim.api.nvim_create_buf(false, true) -- unlisted, scratch
     else
-      local buftype = vim.api.nvim_get_option_value('buftype', {buf = bufnr})
+      local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
       if buftype ~= 'terminal' then
         -- Buffer exists but is no longer a terminal, create a new one
         bufnr = vim.api.nvim_create_buf(false, true) -- unlisted, scratch
@@ -154,12 +181,12 @@ end
 --- @private
 local function configure_window_options(win_id, config)
   if config.window.hide_numbers then
-    vim.api.nvim_set_option_value('number', false, {win = win_id})
-    vim.api.nvim_set_option_value('relativenumber', false, {win = win_id})
+    vim.api.nvim_set_option_value('number', false, { win = win_id })
+    vim.api.nvim_set_option_value('relativenumber', false, { win = win_id })
   end
 
   if config.window.hide_signcolumn then
-    vim.api.nvim_set_option_value('signcolumn', 'no', {win = win_id})
+    vim.api.nvim_set_option_value('signcolumn', 'no', { win = win_id })
   end
 end
 
@@ -273,9 +300,9 @@ local function is_valid_terminal_buffer(bufnr)
 
   local buftype = nil
   pcall(function()
-    buftype = vim.api.nvim_get_option_value('buftype', {buf = bufnr})
+    buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
   end)
-  
+
   local terminal_job_id = nil
   pcall(function()
     terminal_job_id = vim.b[bufnr].terminal_job_id
@@ -323,7 +350,7 @@ local function create_new_instance(claude_code, config, git, instance_id)
   if config.window.position == 'float' then
     -- For floating window, create buffer first with terminal
     local new_bufnr = vim.api.nvim_create_buf(false, true) -- unlisted, scratch
-    vim.api.nvim_set_option_value('bufhidden', 'hide', {buf = new_bufnr})
+    vim.api.nvim_set_option_value('bufhidden', 'hide', { buf = new_bufnr })
 
     -- Create the floating window
     local win_id = create_float(config, new_bufnr)
@@ -410,6 +437,71 @@ function M.toggle(claude_code, config, git)
     -- Create new instance
     create_new_instance(claude_code, config, git, instance_id)
   end
+end
+
+--- Get process status for current or specified Claude Code instance
+--- @param claude_code table The main plugin module
+--- @param instance_id string|nil The instance identifier (uses current if nil)
+--- @return table Process status information
+function M.get_process_status(claude_code, instance_id)
+  instance_id = instance_id or claude_code.claude_code.current_instance
+
+  if not instance_id then
+    return { status = 'none', message = 'No active Claude Code instance' }
+  end
+
+  local bufnr = claude_code.claude_code.instances[instance_id]
+  if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then
+    return { status = 'none', message = 'No Claude Code instance found' }
+  end
+
+  local process_state = get_process_state(claude_code, instance_id)
+  if not process_state then
+    return { status = 'unknown', message = 'Process state unknown' }
+  end
+
+  local win_ids = vim.fn.win_findbuf(bufnr)
+  local is_visible = #win_ids > 0
+
+  return {
+    status = process_state.status,
+    hidden = process_state.hidden,
+    visible = is_visible,
+    instance_id = instance_id,
+    buffer_number = bufnr,
+    message = string.format(
+      'Claude Code %s (%s)',
+      process_state.status,
+      is_visible and 'visible' or 'hidden'
+    ),
+  }
+end
+
+--- List all Claude Code instances and their states
+--- @param claude_code table The main plugin module
+--- @return table List of all instance states
+function M.list_instances(claude_code)
+  local instances = {}
+
+  cleanup_invalid_instances(claude_code)
+
+  for instance_id, bufnr in pairs(claude_code.claude_code.instances) do
+    if vim.api.nvim_buf_is_valid(bufnr) then
+      local process_state = get_process_state(claude_code, instance_id)
+      local win_ids = vim.fn.win_findbuf(bufnr)
+
+      table.insert(instances, {
+        instance_id = instance_id,
+        buffer_number = bufnr,
+        status = process_state and process_state.status or 'unknown',
+        hidden = process_state and process_state.hidden or false,
+        visible = #win_ids > 0,
+        last_updated = process_state and process_state.last_updated or 0,
+      })
+    end
+  end
+
+  return instances
 end
 
 return M

@@ -69,9 +69,16 @@ local checks = {
     expr = type(claude_code.setup) == "function"
   },
   { 
-    name = "version", 
-    expr = type(claude_code.version) == "table" and 
-           type(claude_code.version.string) == "function"
+    name = "version function (callable)",
+    expr = type(claude_code.version) == "function" and pcall(claude_code.version)
+  },
+  { 
+    name = "get_version function (callable)",
+    expr = type(claude_code.get_version) == "function" and pcall(claude_code.get_version)
+  },
+  { 
+    name = "version module", 
+    expr = type(claude_code.version) == "table" or type(claude_code.version) == "function"
   },
   { 
     name = "config", 
@@ -91,6 +98,17 @@ for _, check in ipairs(checks) do
     print(colored("✗ " .. check.name, "red"))
     all_pass = false
   end
+end
+
+-- Print debug info for version functions
+print(colored("\nDebug: version() and get_version() results:", "yellow"))
+if type(claude_code.version) == "function" then
+  local ok, res = pcall(claude_code.version)
+  print("  version() ->", ok, res)
+end
+if type(claude_code.get_version) == "function" then
+  local ok, res = pcall(claude_code.get_version)
+  print("  get_version() ->", ok, res)
 end
 
 -- Print all available functions for reference

@@ -1,0 +1,770 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Claude Code Documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Claude Code</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Features">Features </a></li>
+<li><a href="#Planned_Features_for_IDE_Integration_Parity">Planned Features for IDE Integration Parity </a></li>
+<li><a href="#Requirements">Requirements </a></li>
+<li><a href="#Installation">Installation </a></li>
+<li><a href="#MCP_Server">MCP Server </a></li>
+<li><a href="#Configuration">Configuration </a></li>
+<li><a href="#Claude_Code_Integration">Claude Code Integration </a></li>
+<li><a href="#Usage">Usage </a></li>
+<li><a href="#How_it_Works">How it Works </a></li>
+<li><a href="#Contributing">Contributing </a></li>
+<li><a href="#License">License </a></li>
+<li><a href="#Development">Development </a></li>
+<li><a href="#Community">Community </a></li>
+<li><a href="#Acknowledgements">Acknowledgements </a></li>
+</ul>
+
+
+<h2>Topics</h2>
+<ul class="">
+  <li><strong>README.md</strong></li>
+</ul>
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/claude-code.html">claude-code</a></li>
+  <li><a href="../modules/claude-code.commands.html">claude-code.commands</a></li>
+  <li><a href="../modules/claude-code.config.html">claude-code.config</a></li>
+  <li><a href="../modules/claude-code.context.html">claude-code.context</a></li>
+  <li><a href="../modules/claude-code.file_refresh.html">claude-code.file_refresh</a></li>
+  <li><a href="../modules/claude-code.git.html">claude-code.git</a></li>
+  <li><a href="../modules/claude-code.keymaps.html">claude-code.keymaps</a></li>
+  <li><a href="../modules/claude-code.terminal.html">claude-code.terminal</a></li>
+  <li><a href="../modules/claude-code.tree_helper.html">claude-code.tree_helper</a></li>
+  <li><a href="../modules/claude-code.version.html">claude-code.version</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+
+<h1>Claude Code Neovim Plugin</h1>
+
+<p><a href="https://github.com/greggh/claude-code.nvim/blob/main/LICENSE"><img src="https://img.shields.io/github/license/greggh/claude-code.nvim?style=flat-square" alt="GitHub License"/></a>
+<a href="https://github.com/greggh/claude-code.nvim/stargazers"><img src="https://img.shields.io/github/stars/greggh/claude-code.nvim?style=flat-square" alt="GitHub Stars"/></a>
+<a href="https://github.com/greggh/claude-code.nvim/issues"><img src="https://img.shields.io/github/issues/greggh/claude-code.nvim?style=flat-square" alt="GitHub Issues"/></a>
+<a href="https://github.com/greggh/claude-code.nvim/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/greggh/claude-code.nvim/ci.yml?branch=main&amp;style=flat-square&amp;logo=github" alt="CI"/></a>
+<a href="https://github.com/neovim/neovim"><img src="https://img.shields.io/badge/Neovim-0.7%2B-blueviolet?style=flat-square&amp;logo=neovim" alt="Neovim Version"/></a>
+<a href="https://github.com/greggh/claude-code.nvim/actions/workflows/ci.yml"><img src="https://img.shields.io/badge/Tests-44%20passing-success?style=flat-square&amp;logo=github-actions" alt="Tests"/></a>
+<a href="https://github.com/greggh/claude-code.nvim/releases/tag/v0.4.2"><img src="https://img.shields.io/badge/Version-0.4.2-blue?style=flat-square" alt="Version"/></a>
+<a href="https://github.com/greggh/claude-code.nvim/discussions"><img src="https://img.shields.io/github/discussions/greggh/claude-code.nvim?style=flat-square&amp;logo=github" alt="Discussions"/></a></p>
+
+<p><em>A seamless integration between <a href="https://github.com/anthropics/claude-code">Claude Code</a> AI assistant and Neovim with context-aware commands and pure Lua MCP server</em></p>
+
+<p><a href="#features">Features</a> •
+<a href="#requirements">Requirements</a> •
+<a href="#installation">Installation</a> •
+<a href="#mcp-server">MCP Server</a> •
+<a href="#configuration">Configuration</a> •
+<a href="#usage">Usage</a> •
+<a href="#contributing">Contributing</a> •
+<a href="https://github.com/greggh/claude-code.nvim/discussions">Discussions</a></p>
+
+<p><img src="https://github.com/greggh/claude-code.nvim/blob/main/assets/claude-code.png?raw=true" alt="Claude Code in Neovim"/></p>
+
+<p>This plugin provides:</p>
+
+<ul>
+    <li><strong>Context-aware commands</strong> that automatically pass file content, selections, and workspace context to Claude Code</li>
+    <li><strong>Traditional terminal interface</strong> for interactive conversations</li>
+    <li><strong>Native MCP (Model Context Protocol) server</strong> that allows Claude Code to directly read and edit your Neovim buffers, execute commands, and access project context</li>
+</ul>
+
+<p><a name="Features"></a></p>
+<h2>Features</h2>
+
+<h3>Terminal Interface</h3>
+
+<ul>
+    <li>🚀 Toggle Claude Code in a terminal window with a single key press</li>
+    <li>🔒 <strong>Safe window toggle</strong> - Hide/show window without interrupting Claude Code execution</li>
+    <li>🧠 Support for command-line arguments like <code>--continue</code> and custom variants</li>
+    <li>🔄 Automatically detect and reload files modified by Claude Code</li>
+    <li>⚡ Real-time buffer updates when files are changed externally</li>
+    <li>📊 Process status monitoring and instance management</li>
+    <li>📱 Customizable window position and size</li>
+    <li>🤖 Integration with which-key (if available)</li>
+    <li>📂 Automatically uses git project root as working directory (when available)</li>
+</ul>
+
+<h3>Context-Aware Integration ✨</h3>
+
+<ul>
+    <li>📄 <strong>File Context</strong> - Automatically pass current file with cursor position</li>
+    <li>✂️ <strong>Selection Context</strong> - Send visual selections directly to Claude</li>
+    <li>🔍 <strong>Smart Context</strong> - Auto-detect whether to send file or selection</li>
+    <li>🌐 <strong>Workspace Context</strong> - Enhanced context with related files through imports/requires</li>
+    <li>📚 <strong>Recent Files</strong> - Access to recently edited files in project</li>
+    <li>🔗 <strong>Related Files</strong> - Automatic discovery of imported/required files</li>
+    <li>🌳 <strong>Project Tree</strong> - Generate comprehensive file tree structures with intelligent filtering</li>
+</ul>
+
+<h3>MCP Server (NEW!)</h3>
+
+<ul>
+    <li>🔌 <strong>Pure Lua MCP server</strong> - No Node.js dependencies required</li>
+    <li>📝 <strong>Direct buffer editing</strong> - Claude Code can read and modify your Neovim buffers directly</li>
+    <li>⚡ <strong>Real-time context</strong> - Access to cursor position, buffer content, and editor state</li>
+    <li>🛠️ <strong>Vim command execution</strong> - Run any Vim command through Claude Code</li>
+    <li>📊 <strong>Project awareness</strong> - Access to git status, LSP diagnostics, and project structure</li>
+    <li>🎯 <strong>Enhanced resource providers</strong> - Buffer list, current file, related files, recent files, workspace context</li>
+    <li>🔍 <strong>Smart analysis tools</strong> - Analyze related files, search workspace symbols, find project files</li>
+    <li>🔒 <strong>Secure by design</strong> - All operations go through Neovim's API</li>
+</ul>
+
+<h3>Development</h3>
+
+<ul>
+    <li>🧩 Modular and maintainable code structure</li>
+    <li>📋 Type annotations with LuaCATS for better IDE support</li>
+    <li>✅ Configuration validation to prevent errors</li>
+    <li>🧪 Testing framework for reliability (44 comprehensive tests)</li>
+</ul>
+
+<p><a name="Planned_Features_for_IDE_Integration_Parity"></a></p>
+<h2>Planned Features for IDE Integration Parity</h2>
+
+<p>To match the full feature set of GUI IDE integrations (VSCode, JetBrains, etc.), the following features are planned:</p>
+
+<ul>
+    <li><strong>File Reference Shortcut:</strong> Keyboard mapping to insert <code>@File#L1-99</code> style references into Claude prompts.</li>
+    <li>**External <code>/ide</code> Command Support:** Ability to attach an external Claude Code CLI session to a running Neovim MCP server, similar to the <code>/ide</code> command in GUI IDEs.</li>
+    <li><strong>User-Friendly Config UI:</strong> A terminal-based UI for configuring plugin options, making setup more accessible for all users.</li>
+</ul>
+
+<p>These features are tracked in the <a href="ROADMAP.md">ROADMAP.md</a> and will ensure full parity with Anthropic's official IDE integrations.</p>
+
+<p><a name="Requirements"></a></p>
+<h2>Requirements</h2>
+
+<ul>
+    <li>Neovim 0.7.0 or later</li>
+    <li><a href="https://github.com/anthropics/claude-code">Claude Code CLI</a> installed</li>
+    <li>The plugin automatically detects Claude Code in the following order:
+
+<pre>
+<span class="number">1.</span> Custom path specified <span class="keyword">in</span> <span class="backtick"><code>config.cli_path</code></span> (<span class="keyword">if</span> provided)
+<span class="number">2.</span> Local installation at <span class="backtick"><code>~/.claude/local/claude</code></span> (preferred)
+<span class="number">3.</span> Falls back to <span class="backtick"><code>claude</code></span> <span class="keyword">in</span> PATH
+</pre>
+</li>
+    <li><a href="https://github.com/nvim-lua/plenary.nvim">plenary.nvim</a> (dependency for git operations)</li>
+</ul>
+
+<p>See <a href="CHANGELOG.md">CHANGELOG.md</a> for version history and updates.</p>
+
+<p><a name="Installation"></a></p>
+<h2>Installation</h2>
+
+<h3>Using <a href="https://github.com/folke/lazy.nvim">lazy.nvim</a></h3>
+
+
+<pre>
+<span class="keyword">return</span> {
+  <span class="string">"greggh/claude-code.nvim"</span>,
+  dependencies = {
+    <span class="string">"nvim-lua/plenary.nvim"</span>, <span class="comment">-- Required for git operations
+</span>  },
+  config = <span class="keyword">function</span>()
+    <span class="global">require</span>(<span class="string">"claude-code"</span>).<span class="function-name">setup</span>()
+  <span class="keyword">end</span>
+}
+</pre>
+
+
+<h3>Using <a href="https://github.com/wbthomason/packer.nvim">packer.nvim</a></h3>
+
+
+<pre>
+<span class="function-name">use</span> {
+  <span class="string">'greggh/claude-code.nvim'</span>,
+  requires = {
+    <span class="string">'nvim-lua/plenary.nvim'</span>, <span class="comment">-- Required for git operations
+</span>  },
+  config = <span class="keyword">function</span>()
+    <span class="global">require</span>(<span class="string">'claude-code'</span>).<span class="function-name">setup</span>()
+  <span class="keyword">end</span>
+}
+</pre>
+
+
+<h3>Using <a href="https://github.com/junegunn/vim-plug">vim-plug</a></h3>
+
+
+<pre>
+<span class="function-name">Plug</span> <span class="string">'nvim-lua/plenary.nvim'</span>
+<span class="function-name">Plug</span> <span class="string">'greggh/claude-code.nvim'</span>
+<span class="string">" After installing, add this to your init.vim:
+"</span> lua <span class="global">require</span>(<span class="string">'claude-code'</span>).<span class="function-name">setup</span>()
+</pre>
+
+
+<p><a name="MCP_Server"></a></p>
+<h2>MCP Server</h2>
+
+<p>The plugin includes a pure Lua implementation of an MCP (Model Context Protocol) server that allows Claude Code to directly interact with your Neovim instance.</p>
+
+<h3>Quick Start</h3>
+
+<ol>
+    <li><strong>Add to Claude Code MCP configuration:</strong></li>
+</ol>
+
+<p>   ```bash
+   # Add the MCP server to Claude Code
+   claude mcp add neovim-server /path/to/claude-code.nvim/bin/claude-code-mcp-server
+   ```</p>
+
+<ol>
+    <li><strong>Start Neovim and the plugin will automatically set up the MCP server:</strong></li>
+</ol>
+
+<p>   ```lua
+   require('claude-code').setup({</p>
+
+<pre>
+mcp = {
+  enabled = <span class="keyword">true</span>,
+  auto_start = <span class="keyword">false</span>  <span class="comment">-- Set to true to auto-start with Neovim
+</span>}
+</pre>
+
+<p>   })
+   ```</p>
+
+<ol>
+    <li><strong>Use Claude Code with full Neovim integration:</strong></li>
+</ol>
+
+<p>   ```bash
+   claude "refactor this function to use async/await"
+   # Claude can now see your current buffer, edit it directly, and run Vim commands
+   ```</p>
+
+<h3>Available Tools</h3>
+
+<p>The MCP server provides these tools to Claude Code:</p>
+
+<ul>
+    <li>**<code>vim_buffer</code>** - View buffer content with optional filename filtering</li>
+    <li>**<code>vim_command</code>** - Execute any Vim command (<code>:w</code>, <code>:bd</code>, custom commands, etc.)</li>
+    <li>**<code>vim_status</code>** - Get current editor status (cursor position, mode, buffer info)</li>
+    <li>**<code>vim_edit</code>** - Edit buffer content with insert/replace/replaceAll modes</li>
+    <li>**<code>vim_window</code>** - Manage windows (split, close, navigate)</li>
+    <li>**<code>vim_mark</code>** - Set marks in buffers</li>
+    <li>**<code>vim_register</code>** - Set register content</li>
+    <li>**<code>vim_visual</code>** - Make visual selections</li>
+    <li>**<code>analyze_related</code>** - Analyze files related through imports/requires (NEW!)</li>
+    <li>**<code>find_symbols</code>** - Search workspace symbols using LSP (NEW!)</li>
+    <li>**<code>search_files</code>** - Find files by pattern with optional content preview (NEW!)</li>
+</ul>
+
+<h3>Available Resources</h3>
+
+<p>The MCP server exposes these resources:</p>
+
+<ul>
+    <li>**<code>neovim://current-buffer</code>** - Content of the currently active buffer</li>
+    <li>**<code>neovim://buffers</code>** - List of all open buffers with metadata</li>
+    <li>**<code>neovim://project</code>** - Project file structure</li>
+    <li>**<code>neovim://git-status</code>** - Current git repository status</li>
+    <li>**<code>neovim://lsp-diagnostics</code>** - LSP diagnostics for current buffer</li>
+    <li>**<code>neovim://options</code>** - Current Neovim configuration and options</li>
+    <li>**<code>neovim://related-files</code>** - Files related through imports/requires (NEW!)</li>
+    <li>**<code>neovim://recent-files</code>** - Recently accessed project files (NEW!)</li>
+    <li>**<code>neovim://workspace-context</code>** - Enhanced context with all related information (NEW!)</li>
+    <li>**<code>neovim://search-results</code>** - Current search results and quickfix list (NEW!)</li>
+</ul>
+
+<h3>Commands</h3>
+
+<ul>
+    <li><code>:ClaudeCodeMCPStart</code> - Start the MCP server</li>
+    <li><code>:ClaudeCodeMCPStop</code> - Stop the MCP server</li>
+    <li><code>:ClaudeCodeMCPStatus</code> - Show server status and information</li>
+</ul>
+
+<h3>Standalone Usage</h3>
+
+<p>You can also run the MCP server standalone:</p>
+
+
+<pre>
+# Start standalone MCP server
+./bin/claude-code-mcp-server
+
+# Test the server
+<span class="function-name">echo</span> <span class="string">'{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}'</span> | ./bin/claude-code-mcp-server
+</pre>
+
+
+<p><a name="Configuration"></a></p>
+<h2>Configuration</h2>
+
+<p>The plugin can be configured by passing a table to the <code>setup</code> function. Here's the default configuration:</p>
+
+
+<pre>
+<span class="global">require</span>(<span class="string">"claude-code"</span>).<span class="function-name">setup</span>({
+  <span class="comment">-- MCP server settings
+</span>  mcp = {
+    enabled = <span class="keyword">true</span>,          <span class="comment">-- Enable MCP server functionality
+</span>    auto_start = <span class="keyword">false</span>,      <span class="comment">-- Automatically start MCP server with Neovim
+</span>    tools = {
+      buffer = <span class="keyword">true</span>,         <span class="comment">-- Enable buffer viewing tool
+</span>      command = <span class="keyword">true</span>,        <span class="comment">-- Enable Vim command execution tool
+</span>      status = <span class="keyword">true</span>,         <span class="comment">-- Enable status information tool
+</span>      edit = <span class="keyword">true</span>,           <span class="comment">-- Enable buffer editing tool
+</span>      window = <span class="keyword">true</span>,         <span class="comment">-- Enable window management tool
+</span>      mark = <span class="keyword">true</span>,           <span class="comment">-- Enable mark setting tool
+</span>      register = <span class="keyword">true</span>,       <span class="comment">-- Enable register operations tool
+</span>      visual = <span class="keyword">true</span>,         <span class="comment">-- Enable visual selection tool
+</span>      analyze_related = <span class="keyword">true</span>,<span class="comment">-- Enable related files analysis tool
+</span>      find_symbols = <span class="keyword">true</span>,   <span class="comment">-- Enable workspace symbol search tool
+</span>      search_files = <span class="keyword">true</span>    <span class="comment">-- Enable project file search tool
+</span>    },
+    resources = {
+      current_buffer = <span class="keyword">true</span>,    <span class="comment">-- Expose current buffer content
+</span>      buffer_list = <span class="keyword">true</span>,       <span class="comment">-- Expose list of all buffers
+</span>      project_structure = <span class="keyword">true</span>, <span class="comment">-- Expose project file structure
+</span>      git_status = <span class="keyword">true</span>,        <span class="comment">-- Expose git repository status
+</span>      lsp_diagnostics = <span class="keyword">true</span>,   <span class="comment">-- Expose LSP diagnostics
+</span>      vim_options = <span class="keyword">true</span>,       <span class="comment">-- Expose Neovim configuration
+</span>      related_files = <span class="keyword">true</span>,     <span class="comment">-- Expose files related through imports
+</span>      recent_files = <span class="keyword">true</span>,      <span class="comment">-- Expose recently accessed files
+</span>      workspace_context = <span class="keyword">true</span>, <span class="comment">-- Expose enhanced workspace context
+</span>      search_results = <span class="keyword">true</span>     <span class="comment">-- Expose search results and quickfix
+</span>    }
+  },
+  <span class="comment">-- Terminal window settings
+</span>  window = {
+    split_ratio = <span class="number">0.3</span>,      <span class="comment">-- Percentage of screen for the terminal window (height for horizontal, width for vertical splits)
+</span>    position = <span class="string">"botright"</span>,  <span class="comment">-- Position of the window: "botright", "topleft", "vertical", "rightbelow vsplit", etc.
+</span>    enter_insert = <span class="keyword">true</span>,    <span class="comment">-- Whether to enter insert mode when opening Claude Code
+</span>    hide_numbers = <span class="keyword">true</span>,    <span class="comment">-- Hide line numbers in the terminal window
+</span>    hide_signcolumn = <span class="keyword">true</span>, <span class="comment">-- Hide the sign column in the terminal window
+</span>  },
+  <span class="comment">-- File refresh settings
+</span>  refresh = {
+    enable = <span class="keyword">true</span>,           <span class="comment">-- Enable file change detection
+</span>    updatetime = <span class="number">100</span>,        <span class="comment">-- updatetime when Claude Code is active (milliseconds)
+</span>    timer_interval = <span class="number">1000</span>,   <span class="comment">-- How often to check for file changes (milliseconds)
+</span>    show_notifications = <span class="keyword">true</span>, <span class="comment">-- Show notification when files are reloaded
+</span>  },
+  <span class="comment">-- Git project settings
+</span>  git = {
+    use_git_root = <span class="keyword">true</span>,     <span class="comment">-- Set CWD to git root when opening Claude Code (if in git project)
+</span>  },
+  <span class="comment">-- Command settings
+</span>  command = <span class="string">"claude"</span>,        <span class="comment">-- Command used to launch Claude Code
+</span>  cli_path = <span class="keyword">nil</span>,            <span class="comment">-- Optional custom path to Claude CLI executable (e.g., "/custom/path/to/claude")
+</span>  <span class="comment">-- Command variants
+</span>  command_variants = {
+    <span class="comment">-- Conversation management
+</span>    continue = <span class="string">"--continue"</span>, <span class="comment">-- Resume the most recent conversation
+</span>    resume = <span class="string">"--resume"</span>,     <span class="comment">-- Display an interactive conversation picker
+</span>
+    <span class="comment">-- Output options
+</span>    verbose = <span class="string">"--verbose"</span>,   <span class="comment">-- Enable verbose logging with full turn-by-turn output
+</span>  },
+  <span class="comment">-- Keymaps
+</span>  keymaps = {
+    toggle = {
+      normal = <span class="string">"&lt;C-,&gt;"</span>,       <span class="comment">-- Normal mode keymap for toggling Claude Code, false to disable
+</span>      terminal = <span class="string">"&lt;C-,&gt;"</span>,     <span class="comment">-- Terminal mode keymap for toggling Claude Code, false to disable
+</span>      variants = {
+        continue = <span class="string">"&lt;leader&gt;cC"</span>, <span class="comment">-- Normal mode keymap for Claude Code with continue flag
+</span>        verbose = <span class="string">"&lt;leader&gt;cV"</span>,  <span class="comment">-- Normal mode keymap for Claude Code with verbose flag
+</span>      },
+    },
+    window_navigation = <span class="keyword">true</span>, <span class="comment">-- Enable window navigation keymaps (&lt;C-h/j/k/l&gt;)
+</span>    scrolling = <span class="keyword">true</span>,         <span class="comment">-- Enable scrolling keymaps (&lt;C-f/b&gt;) for page up/down
+</span>  }
+})
+</pre>
+
+
+<p><a name="Claude_Code_Integration"></a></p>
+<h2>Claude Code Integration</h2>
+
+<p>The plugin provides seamless integration with the Claude Code CLI through MCP (Model Context Protocol):</p>
+
+<h3>Quick Setup</h3>
+
+<ol>
+    <li><strong>Generate MCP Configuration:</strong></li>
+</ol>
+
+<p>   ```vim
+   :ClaudeCodeSetup
+   ```</p>
+
+<p>   This creates <code>claude-code-mcp-config.json</code> in your current directory with usage instructions.</p>
+
+<ol>
+    <li><strong>Use with Claude Code CLI:</strong></li>
+</ol>
+
+<p>   ```bash
+   claude --mcp-config claude-code-mcp-config.json --allowedTools "mcp<strong>neovim</strong>*" "Your prompt here"
+   ```</p>
+
+<h3>Available Commands</h3>
+
+<ul>
+    <li><code>:ClaudeCodeSetup [type]</code> - Generate MCP config with instructions (claude-code|workspace)</li>
+    <li><code>:ClaudeCodeMCPConfig [type] [path]</code> - Generate MCP config file (claude-code|workspace|custom)</li>
+    <li><code>:ClaudeCodeMCPStart</code> - Start the MCP server</li>
+    <li><code>:ClaudeCodeMCPStop</code> - Stop the MCP server</li>
+    <li><code>:ClaudeCodeMCPStatus</code> - Show server status</li>
+</ul>
+
+<h3>Configuration Types</h3>
+
+<ul>
+    <li>**<a href="../modules/claude-code.html#">claude-code</a>** - Creates <code>.claude.json</code> for Claude Code CLI</li>
+    <li>**<code>workspace</code>** - Creates <code>.vscode/mcp.json</code> for VS Code MCP extension</li>
+    <li>**<code>custom</code>** - Creates <code>mcp-config.json</code> for other MCP clients</li>
+</ul>
+
+<h3>MCP Tools &amp; Resources</h3>
+
+<p><strong>Tools</strong> (Actions Claude Code can perform):</p>
+
+<ul>
+    <li><code>mcp__neovim__vim_buffer</code> - Read/write buffer contents</li>
+    <li><code>mcp__neovim__vim_command</code> - Execute Vim commands</li>
+    <li><code>mcp__neovim__vim_edit</code> - Edit text in buffers</li>
+    <li><code>mcp__neovim__vim_status</code> - Get editor status</li>
+    <li><code>mcp__neovim__vim_window</code> - Manage windows</li>
+    <li><code>mcp__neovim__vim_mark</code> - Manage marks</li>
+    <li><code>mcp__neovim__vim_register</code> - Access registers</li>
+    <li><code>mcp__neovim__vim_visual</code> - Visual selections</li>
+    <li><code>mcp__neovim__analyze_related</code> - Analyze related files through imports</li>
+    <li><code>mcp__neovim__find_symbols</code> - Search workspace symbols</li>
+    <li><code>mcp__neovim__search_files</code> - Find project files by pattern</li>
+</ul>
+
+<p><strong>Resources</strong> (Information Claude Code can access):</p>
+
+<ul>
+    <li><code>mcp__neovim__current_buffer</code> - Current buffer content</li>
+    <li><code>mcp__neovim__buffer_list</code> - List of open buffers</li>
+    <li><code>mcp__neovim__project_structure</code> - Project file tree</li>
+    <li><code>mcp__neovim__git_status</code> - Git repository status</li>
+    <li><code>mcp__neovim__lsp_diagnostics</code> - LSP diagnostics</li>
+    <li><code>mcp__neovim__vim_options</code> - Vim configuration options</li>
+    <li><code>mcp__neovim__related_files</code> - Files related through imports/requires</li>
+    <li><code>mcp__neovim__recent_files</code> - Recently accessed project files</li>
+    <li><code>mcp__neovim__workspace_context</code> - Enhanced workspace context</li>
+    <li><code>mcp__neovim__search_results</code> - Current search results and quickfix</li>
+</ul>
+
+<p><a name="Usage"></a></p>
+<h2>Usage</h2>
+
+<h3>Quick Start</h3>
+
+
+<pre>
+" In your Vim/Neovim commands <span class="keyword">or</span> init file:
+:ClaudeCode
+</pre>
+
+
+
+<pre>
+<span class="comment">-- Or from Lua:
+</span>vim.<span class="function-name">cmd</span><span class="string">[[ClaudeCode]]</span>
+
+<span class="comment">-- Or map to a key:
+</span>vim.keymap.<span class="function-name">set</span>(<span class="string">'n'</span>, <span class="string">'&lt;leader&gt;cc'</span>, <span class="string">'&lt;cmd&gt;ClaudeCode&lt;CR&gt;'</span>, { desc = <span class="string">'Toggle Claude Code'</span> })
+</pre>
+
+
+<h3>Context-Aware Usage Examples</h3>
+
+
+<pre>
+<span class="string">" Pass current file with cursor position
+:ClaudeCodeWithFile
+
+"</span> Send visual selection to <span class="function-name">Claude</span> (<span class="global">select</span> text first)
+:<span class="string">'&lt;,'</span>&gt;<span class="function-name">ClaudeCodeWithSelection</span>
+
+<span class="string">" Smart detection - uses selection if available, otherwise current file
+:ClaudeCodeWithContext
+
+"</span> Enhanced workspace context with related files
+:<span class="function-name">ClaudeCodeWithWorkspace</span>
+
+" Project file tree structure <span class="keyword">for</span> codebase overview
+:ClaudeCodeWithProjectTree
+</pre>
+
+
+<p>The context-aware commands automatically include relevant information:</p>
+
+<ul>
+    <li><strong>File context</strong>: Passes file path with line number (<code>file.lua#42</code>)</li>
+    <li><strong>Selection context</strong>: Creates a temporary markdown file with selected text</li>
+    <li><strong>Workspace context</strong>: Includes related files through imports, recent files, and current file content</li>
+    <li><strong>Project tree context</strong>: Provides a comprehensive file tree structure with configurable depth and filtering</li>
+</ul>
+
+<h3>Commands</h3>
+
+<h4>Basic Commands</h4>
+
+<ul>
+    <li><code>:ClaudeCode</code> - Toggle the Claude Code terminal window</li>
+    <li><code>:ClaudeCodeVersion</code> - Display the plugin version</li>
+</ul>
+
+<h4>Context-Aware Commands ✨</h4>
+
+<ul>
+    <li><code>:ClaudeCodeWithFile</code> - Toggle with current file and cursor position</li>
+    <li><code>:ClaudeCodeWithSelection</code> - Toggle with visual selection</li>
+    <li><code>:ClaudeCodeWithContext</code> - Smart context detection (file or selection)</li>
+    <li><code>:ClaudeCodeWithWorkspace</code> - Enhanced workspace context with related files</li>
+    <li><code>:ClaudeCodeWithProjectTree</code> - Toggle with project file tree structure</li>
+</ul>
+
+<h4>Conversation Management Commands</h4>
+
+<ul>
+    <li><code>:ClaudeCodeContinue</code> - Resume the most recent conversation</li>
+    <li><code>:ClaudeCodeResume</code> - Display an interactive conversation picker</li>
+</ul>
+
+<h4>Output Options Command</h4>
+
+<ul>
+    <li><code>:ClaudeCodeVerbose</code> - Enable verbose logging with full turn-by-turn output</li>
+</ul>
+
+<h4>Window Management Commands</h4>
+
+<ul>
+    <li><code>:ClaudeCodeHide</code> - Hide Claude Code window without stopping the process</li>
+    <li><code>:ClaudeCodeShow</code> - Show Claude Code window if hidden</li>
+    <li><code>:ClaudeCodeSafeToggle</code> - Safely toggle window without interrupting execution</li>
+    <li><code>:ClaudeCodeStatus</code> - Show current Claude Code process status</li>
+    <li><code>:ClaudeCodeInstances</code> - List all Claude Code instances and their states</li>
+</ul>
+
+<h4>MCP Integration Commands</h4>
+
+<ul>
+    <li><code>:ClaudeCodeMCPStart</code> - Start MCP server</li>
+    <li><code>:ClaudeCodeMCPStop</code> - Stop MCP server  </li>
+    <li><code>:ClaudeCodeMCPStatus</code> - Show MCP server status</li>
+    <li><code>:ClaudeCodeMCPConfig</code> - Generate MCP configuration</li>
+    <li><code>:ClaudeCodeSetup</code> - Setup MCP integration</li>
+</ul>
+
+<p>Note: Commands are automatically generated for each entry in your <code>command_variants</code> configuration.</p>
+
+<h3>Key Mappings</h3>
+
+<p>Default key mappings:</p>
+
+<ul>
+    <li><code>&lt;leader&gt;ac</code> - Toggle Claude Code terminal window (normal mode)</li>
+    <li><code>&lt;C-,&gt;</code> - Toggle Claude Code terminal window (both normal and terminal modes)</li>
+</ul>
+
+<p>Variant mode mappings (if configured):</p>
+
+<ul>
+    <li><code>&lt;leader&gt;cC</code> - Toggle Claude Code with --continue flag</li>
+    <li><code>&lt;leader&gt;cV</code> - Toggle Claude Code with --verbose flag</li>
+</ul>
+
+<p>Additionally, when in the Claude Code terminal:</p>
+
+<ul>
+    <li><code>&lt;C-h&gt;</code> - Move to the window on the left</li>
+    <li><code>&lt;C-j&gt;</code> - Move to the window below</li>
+    <li><code>&lt;C-k&gt;</code> - Move to the window above</li>
+    <li><code>&lt;C-l&gt;</code> - Move to the window on the right</li>
+    <li><code>&lt;C-f&gt;</code> - Scroll full-page down</li>
+    <li><code>&lt;C-b&gt;</code> - Scroll full-page up</li>
+</ul>
+
+<p>Note: After scrolling with <code>&lt;C-f&gt;</code> or <code>&lt;C-b&gt;</code>, you'll need to press the <code>i</code> key to re-enter insert mode so you can continue typing to Claude Code.</p>
+
+<p>When Claude Code modifies files that are open in Neovim, they'll be automatically reloaded.</p>
+
+<p><a name="How_it_Works"></a></p>
+<h2>How it Works</h2>
+
+<p>This plugin provides two complementary ways to interact with Claude Code:</p>
+
+<h3>Terminal Interface</h3>
+
+<ol>
+    <li>Creates a terminal buffer running the Claude Code CLI</li>
+    <li>Sets up autocommands to detect file changes on disk</li>
+    <li>Automatically reloads files when they're modified by Claude Code</li>
+    <li>Provides convenient keymaps and commands for toggling the terminal</li>
+    <li>Automatically detects git repositories and sets working directory to the git root</li>
+</ol>
+
+<h3>Context-Aware Integration</h3>
+
+<ol>
+    <li>Analyzes your codebase to discover related files through imports/requires</li>
+    <li>Tracks recently accessed files within your project</li>
+    <li>Provides multiple context modes (file, selection, workspace)</li>
+    <li>Automatically passes relevant context to Claude Code CLI</li>
+    <li>Supports multiple programming languages (Lua, JavaScript, TypeScript, Python, Go)</li>
+</ol>
+
+<h3>MCP Server</h3>
+
+<ol>
+    <li>Runs a pure Lua MCP server exposing Neovim functionality</li>
+    <li>Provides tools for Claude Code to directly edit buffers and run commands</li>
+    <li>Exposes enhanced resources including related files and workspace context</li>
+    <li>Enables programmatic access to your development environment</li>
+</ol>
+
+<p><a name="Contributing"></a></p>
+<h2>Contributing</h2>
+
+<p>Contributions are welcome! Please check out our <a href="CONTRIBUTING.md">contribution guidelines</a> for details on how to get started.</p>
+
+<p><a name="License"></a></p>
+<h2>License</h2>
+
+<p>MIT License - See <a href="LICENSE">LICENSE</a> for more information.</p>
+
+<p><a name="Development"></a></p>
+<h2>Development</h2>
+
+<p>For a complete guide on setting up a development environment, installing all required tools, and understanding the project structure, please refer to <a href="DEVELOPMENT.md">DEVELOPMENT.md</a>.</p>
+
+<h3>Development Setup</h3>
+
+<p>The project includes comprehensive setup for development:</p>
+
+<ul>
+    <li>Complete installation instructions for all platforms in <a href="DEVELOPMENT.md">DEVELOPMENT.md</a></li>
+    <li>Pre-commit hooks for code quality</li>
+    <li>Testing framework with 44 comprehensive tests</li>
+    <li>Linting and formatting tools</li>
+    <li>Weekly dependency updates workflow for Claude CLI and actions</li>
+</ul>
+
+
+<pre>
+# Run tests
+make test
+
+# Check code quality
+make lint
+
+# Set up pre-commit hooks
+scripts/setup-hooks.sh
+
+# Format code
+make format
+</pre>
+
+
+<p><a name="Community"></a></p>
+<h2>Community</h2>
+
+<ul>
+    <li><a href="https://github.com/greggh/claude-code.nvim/discussions">GitHub Discussions</a> - Get help, share ideas, and connect with other users</li>
+    <li><a href="https://github.com/greggh/claude-code.nvim/issues">GitHub Issues</a> - Report bugs or suggest features</li>
+    <li><a href="https://github.com/greggh/claude-code.nvim/pulls">GitHub Pull Requests</a> - Contribute to the project</li>
+</ul>
+
+<p><a name="Acknowledgements"></a></p>
+<h2>Acknowledgements</h2>
+
+<ul>
+    <li><a href="https://github.com/anthropics/claude-code">Claude Code</a> by Anthropic - This plugin was entirely built using Claude Code. Development cost: $5.42 with 17m 12.9s of API time</li>
+    <li><a href="https://github.com/nvim-lua/plenary.nvim">Plenary.nvim</a> - Core dependency for testing framework and Git operations</li>
+    <li><a href="https://semver.org/">Semantic Versioning</a> - Versioning standard used in this project</li>
+    <li><a href="https://www.contributor-covenant.org/">Contributor Covenant</a> - Code of Conduct standard</li>
+    <li><a href="https://keepachangelog.com/">Keep a Changelog</a> - Changelog format</li>
+    <li><a href="https://luals.github.io/wiki/annotations/">LuaCATS</a> - Type annotations for better IDE support</li>
+    <li><a href="https://github.com/JohnnyMorganz/StyLua">StyLua</a> - Lua code formatter</li>
+    <li><a href="https://github.com/lunarmodules/luacheck">Luacheck</a> - Lua static analyzer and linter</li>
+</ul>
+
+<hr/>
+
+<p>Made with ❤️ by <a href="https://github.com/greggh">Gregg Housh</a></p>
+
+<hr/>
+
+<h3>File Reference Shortcut ✨</h3>
+
+<ul>
+    <li>Quickly insert a file reference in the form <code>@File#L1-99</code> into the Claude prompt input.</li>
+    <li><strong>How to use:</strong></li>
+    <li>Press <code>&lt;leader&gt;cf</code> in normal mode to insert the current file and line (e.g., <code>@myfile.lua#L10</code>).</li>
+    <li>In visual mode, <code>&lt;leader&gt;cf</code> inserts the current file and selected line range (e.g., <code>@myfile.lua#L5-7</code>).</li>
+    <li><strong>Where it works:</strong></li>
+    <li>Inserts into the Claude prompt input buffer (or falls back to the command line if not available).</li>
+    <li><strong>Why:</strong></li>
+    <li>Useful for referencing code locations in your Claude conversations, just like in VSCode/JetBrains integrations.</li>
+</ul>
+
+<p><strong>Examples:</strong></p>
+
+<ul>
+    <li>Normal mode, cursor on line 10: <code>@myfile.lua#L10</code></li>
+    <li>Visual mode, lines 5-7 selected: <code>@myfile.lua#L5-7</code></li>
+</ul>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/LDoc">LDoc 1.5.0</a></i>
+<i style="float:right;">Last updated 2025-05-30 21:14:20 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

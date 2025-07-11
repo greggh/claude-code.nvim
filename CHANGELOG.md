@@ -1,6 +1,7 @@
+
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -12,10 +13,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New `split_ratio` config option to replace `height_ratio` for better handling of both horizontal and vertical splits
 - Support for floating windows with `position = "float"` configuration
 - Comprehensive floating window configuration options including dimensions, position, and border styles
+- Docker-based CI workflows using lua-docker images for faster builds
+
+### Changed
+
+- Migrated CI workflows from APT package installation to pre-built Docker containers
+- Optimized CI performance by using nickblah/lua Docker images with LuaRocks pre-installed
+- Simplified CI workflow by removing gating logic - all jobs now run in parallel
 
 ### Fixed
 
 - Fixed vertical split behavior when the window position is set to a vertical split command
+- Fixed slow CI builds caused by compiling Lua from source
 
 ## [0.4.2] - 2025-03-03
 
@@ -71,3 +80,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - References to test initialization files in documentation
 
 ## [0.3.0] - 2025-03-01
+

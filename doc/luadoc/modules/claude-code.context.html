@@ -1,0 +1,384 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Claude Code Documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Claude Code</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Local_Functions">Local Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/claude-code.html">claude-code</a></li>
+  <li><a href="../modules/claude-code.commands.html">claude-code.commands</a></li>
+  <li><a href="../modules/claude-code.config.html">claude-code.config</a></li>
+  <li><strong>claude-code.context</strong></li>
+  <li><a href="../modules/claude-code.file_refresh.html">claude-code.file_refresh</a></li>
+  <li><a href="../modules/claude-code.git.html">claude-code.git</a></li>
+  <li><a href="../modules/claude-code.keymaps.html">claude-code.keymaps</a></li>
+  <li><a href="../modules/claude-code.terminal.html">claude-code.terminal</a></li>
+  <li><a href="../modules/claude-code.tree_helper.html">claude-code.tree_helper</a></li>
+  <li><a href="../modules/claude-code.version.html">claude-code.version</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/README.md.html">README.md</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>claude-code.context</code></h1>
+<p>
+
+</p>
+<p>
+
+</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#get_enhanced_context">get_enhanced_context(include_related, include_recent, include_symbols)</a></td>
+	<td class="summary">Get enhanced context for the current file</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_recent_files">get_recent_files(limit)</a></td>
+	<td class="summary">Get recent files from Neovim's oldfiles</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_related_files">get_related_files(filepath, max_depth)</a></td>
+	<td class="summary">Get all files related to the current file through imports</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_workspace_symbols">get_workspace_symbols()</a></td>
+	<td class="summary">Get workspace symbols and their locations</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#import_patterns">import_patterns</a></td>
+	<td class="summary">Language-specific import/require patterns</td>
+	</tr>
+</table>
+<h2><a href="#Local_Functions">Local Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#extract_imports">extract_imports(content, language)</a></td>
+	<td class="summary">Extract imports/requires from file content</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_file_language">get_file_language(filepath)</a></td>
+	<td class="summary">Get file type from extension or vim filetype</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#resolve_import_paths">resolve_import_paths(import_name, current_file, language)</a></td>
+	<td class="summary">Resolve import/require to actual file paths</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "get_enhanced_context"></a>
+    <strong>get_enhanced_context(include_related, include_recent, include_symbols)</strong>
+    </dt>
+    <dd>
+    Get enhanced context for the current file
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">include_related</span>
+         boolean|nil Whether to include related files (default: true)
+        </li>
+        <li><span class="parameter">include_recent</span>
+         boolean|nil Whether to include recent files (default: true)
+        </li>
+        <li><span class="parameter">include_symbols</span>
+         boolean|nil Whether to include workspace symbols (default: false)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table Enhanced context information
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_recent_files"></a>
+    <strong>get_recent_files(limit)</strong>
+    </dt>
+    <dd>
+    Get recent files from Neovim's oldfiles
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">limit</span>
+         number|nil Maximum number of recent files (default: 10)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table List of recent file paths
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_related_files"></a>
+    <strong>get_related_files(filepath, max_depth)</strong>
+    </dt>
+    <dd>
+    Get all files related to the current file through imports
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">filepath</span>
+         string The file to analyze
+        </li>
+        <li><span class="parameter">max_depth</span>
+         number|nil Maximum dependency depth (default: 2)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table List of related file paths with metadata
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_workspace_symbols"></a>
+    <strong>get_workspace_symbols()</strong>
+    </dt>
+    <dd>
+    Get workspace symbols and their locations
+
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table List of workspace symbols
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "import_patterns"></a>
+    <strong>import_patterns</strong>
+    </dt>
+    <dd>
+    Language-specific import/require patterns
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">lua</span>
+
+
+
+        </li>
+        <li><span class="parameter">dofile%s*%(?[\'"]([^\'"]+)[\'"]%)?</span>
+
+
+
+        </li>
+        <li><span class="parameter">loadfile%s*%(?[\'"]([^\'"]+)[\'"]%)?</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Local_Functions"></a>Local Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "extract_imports"></a>
+    <strong>extract_imports(content, language)</strong>
+    </dt>
+    <dd>
+    Extract imports/requires from file content
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">content</span>
+         string The file content
+        </li>
+        <li><span class="parameter">language</span>
+         string The programming language
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table List of imported modules/files
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_file_language"></a>
+    <strong>get_file_language(filepath)</strong>
+    </dt>
+    <dd>
+    Get file type from extension or vim filetype
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">filepath</span>
+         string The file path
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string|nil The detected language
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "resolve_import_paths"></a>
+    <strong>resolve_import_paths(import_name, current_file, language)</strong>
+    </dt>
+    <dd>
+    Resolve import/require to actual file paths
+
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">import_name</span>
+         string The import/require statement
+        </li>
+        <li><span class="parameter">current_file</span>
+         string The current file path
+        </li>
+        <li><span class="parameter">language</span>
+         string The programming language
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table List of possible file paths
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/LDoc">LDoc 1.5.0</a></i>
+<i style="float:right;">Last updated 2025-05-30 21:14:20 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

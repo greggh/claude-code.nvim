@@ -1,4 +1,5 @@
-# Claude Code Testing
+
+# Claude code testing
 
 This directory contains resources for testing the Claude Code plugin.
 
@@ -9,7 +10,7 @@ There are two main components:
 1. **Automated Tests**: Unit and integration tests using the Plenary test framework.
 2. **Manual Testing**: A minimal configuration for reproducing issues and testing features.
 
-## Test Coverage
+## Test coverage
 
 The automated test suite covers the following components of the Claude Code plugin:
 
@@ -44,7 +45,7 @@ The automated test suite covers the following components of the Claude Code plug
 
 The test suite currently contains 44 tests covering all major components of the plugin.
 
-## Minimal Test Configuration
+## Minimal test configuration
 
 The `minimal-init.lua` file provides a minimal Neovim configuration for testing the Claude Code plugin in isolation. This standardized initialization file (recently renamed from `minimal_init.lua` to match conventions used across related Neovim projects) is useful for:
 
@@ -54,16 +55,19 @@ The `minimal-init.lua` file provides a minimal Neovim configuration for testing 
 
 ## Usage
 
-### Option 1: Run directly from the plugin directory
+### Option 1: run directly from the plugin directory
 
 ```bash
+
 # From the plugin root directory
 nvim --clean -u tests/minimal-init.lua
-```
 
-### Option 2: Copy to a separate directory for testing
+```text
+
+### Option 2: copy to a separate directory for testing
 
 ```bash
+
 # Create a test directory
 mkdir ~/claude-test
 cp tests/minimal-init.lua ~/claude-test/
@@ -71,7 +75,8 @@ cd ~/claude-test
 
 # Run Neovim with the minimal config
 nvim --clean -u minimal-init.lua
-```
+
+```text
 
 ## Automated Tests
 
@@ -97,7 +102,8 @@ Run all automated tests using:
 
 ```bash
 ./scripts/test.sh
-```
+
+```text
 
 You'll see a summary of the test results like:
 
@@ -108,7 +114,8 @@ Successes: 44
 Failures: 0
 Errors: 0
 =====================
-```
+
+```text
 
 ### Writing Tests
 
@@ -127,7 +134,8 @@ describe('module_name', function()
     end)
   end)
 end)
-```
+
+```text
 
 ## Troubleshooting
 
@@ -142,7 +150,8 @@ To see error messages:
 
 ```vim
 :messages
-```
+
+```text
 
 ## Reporting Issues
 
@@ -151,3 +160,31 @@ When reporting issues, please include the following information:
 1. Steps to reproduce the issue using this minimal config
 2. Any error messages from `:messages`
 3. The exact Neovim and Claude Code plugin versions
+
+## Legacy Tests
+
+The `legacy/` subdirectory contains VimL-based tests for backward compatibility:
+
+- **minimal.vim**: A minimal Neovim configuration for automated testing
+- **basic_test.vim**: A simple test script that verifies the plugin loads correctly
+- **config_test.vim**: Tests for the configuration validation and merging functionality
+
+These legacy tests can be run via:
+
+```bash
+make test-legacy  # Run all legacy tests
+make test-basic   # Run only basic functionality tests (legacy)
+make test-config  # Run only configuration tests (legacy)
+
+```text
+
+## Interactive Tests
+
+The `interactive/` subdirectory contains utilities for manual testing and comprehensive integration tests:
+
+- **mcp_comprehensive_test.lua**: Full MCP integration test suite
+- **mcp_live_test.lua**: Interactive MCP testing utilities
+- **test_utils.lua**: Shared testing utilities
+
+These provide commands like `:MCPComprehensiveTest` for interactive testing.
+

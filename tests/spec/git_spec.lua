@@ -30,54 +30,81 @@ describe('git', function()
   local original_env_test_mode = vim.env.CLAUDE_CODE_TEST_MODE
 
   describe('get_git_root', function()
-    it('should handle io.popen errors gracefully', function()
-      -- Save the original io.popen
-      local original_popen = io.popen
+    it('should handle git command errors gracefully', function()
+      -- Save the original vim.fn.system and vim.v
+      local original_system = vim.fn.system
+      local original_v = vim.v
 
       -- Ensure test mode is disabled
       vim.env.CLAUDE_CODE_TEST_MODE = nil
 
-      -- Replace io.popen with a mock that returns nil
-      io.popen = function()
-        return nil
+      -- Mock vim.v to make shell_error writable
+      vim.v = setmetatable({
+        shell_error = 1,
+      }, {
+        __index = original_v,
+        __newindex = function(t, k, v)
+          if k == 'shell_error' then
+            t.shell_error = v
+          else
+            original_v[k] = v
+          end
+        end,
+      })
+
+      -- Replace vim.fn.system with a mock that simulates error
+      vim.fn.system = function()
+        vim.v.shell_error = 1 -- Simulate command failure
+        return ''
       end
 
       -- Call the function and check that it returns nil
       local result = git.get_git_root()
       assert.is_nil(result)
 
-      -- Restore the original io.popen
-      io.popen = original_popen
+      -- Restore the originals
+      vim.fn.system = original_system
+      vim.v = original_v
     end)
 
     it('should handle non-git directories', function()
-      -- Save the original io.popen
-      local original_popen = io.popen
+      -- Save the original vim.fn.system and vim.v
+      local original_system = vim.fn.system
+      local original_v = vim.v
 
       -- Ensure test mode is disabled
       vim.env.CLAUDE_CODE_TEST_MODE = nil
 
-      -- Mock io.popen to simulate a non-git directory
-      local mock_called = 0
-      io.popen = function(cmd)
-        mock_called = mock_called + 1
+      -- Mock vim.v to make shell_error writable
+      vim.v = setmetatable({
+        shell_error = 0,
+      }, {
+        __index = original_v,
+        __newindex = function(t, k, v)
+          if k == 'shell_error' then
+            t.shell_error = v
+          else
+            original_v[k] = v
+          end
+        end,
+      })
 
-        -- Return a file handle that returns "false" for the first call
-        return {
-          read = function()
-            return 'false'
-          end,
-          close = function() end,
-        }
+      -- Mock vim.fn.system to simulate a non-git directory
+      local mock_called = 0
+      vim.fn.system = function(cmd)
+        mock_called = mock_called + 1
+        vim.v.shell_error = 0 -- Command succeeds but returns false
+        return 'false'
       end
 
       -- Call the function and check that it returns nil
       local result = git.get_git_root()
       assert.is_nil(result)
-      assert.are.equal(1, mock_called, 'io.popen should be called exactly once')
+      assert.are.equal(1, mock_called, 'vim.fn.system should be called exactly once')
 
-      -- Restore the original io.popen
-      io.popen = original_popen
+      -- Restore the originals
+      vim.fn.system = original_system
+      vim.v = original_v
     end)
 
     it('should extract git root in a git directory', function()
@@ -87,13 +114,29 @@ describe('git', function()
       -- Set test mode environment variable
       vim.env.CLAUDE_CODE_TEST_MODE = 'true'
 
-      -- We'll still track calls, but the function won't use io.popen in test mode
+      -- We'll still track calls, but the function won't use vim.fn.system in test mode
       local mock_called = 0
-      local orig_io_popen = io.popen
-      io.popen = function(cmd)
+      local orig_system = vim.fn.system
+      local orig_v = vim.v
+
+      -- Mock vim.v to make shell_error writable (just in case)
+      vim.v = setmetatable({
+        shell_error = 0,
+      }, {
+        __index = orig_v,
+        __newindex = function(t, k, v)
+          if k == 'shell_error' then
+            t.shell_error = v
+          else
+            orig_v[k] = v
+          end
+        end,
+      })
+
+      vim.fn.system = function(cmd)
         mock_called = mock_called + 1
         -- In test mode, we shouldn't reach here, but just in case
-        return orig_io_popen(cmd)
+        return orig_system(cmd)
       end
 
       -- Call the function and print debug info
@@ -103,10 +146,11 @@ describe('git', function()
 
       -- Check the result
       assert.are.equal('/home/user/project', result)
-      assert.are.equal(0, mock_called, 'io.popen should not be called in test mode')
+      assert.are.equal(0, mock_called, 'vim.fn.system should not be called in test mode')
 
-      -- Restore the original io.popen and clear test flag
-      io.popen = original_popen
+      -- Restore the originals and clear test flag
+      vim.fn.system = orig_system
+      vim.v = orig_v
       vim.env.CLAUDE_CODE_TEST_MODE = nil
     end)
   end)

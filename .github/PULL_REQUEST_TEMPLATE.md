@@ -1,3 +1,4 @@
+
 # Pull Request
 
 ## Description
@@ -25,7 +26,7 @@ Please check all that apply:
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
 - [ ] My changes generate no new warnings
-- [ ] I have tested with the actual Claude Code CLI tool
+- [ ] I have tested with the actual Claude Code command-line tool
 - [ ] I have tested in different environments (if applicable)
 
 ## Screenshots (if applicable)
@@ -35,3 +36,4 @@ Add screenshots to help explain your changes if they include visual elements.
 ## Additional Notes
 
 Add any other context about the PR here.
+

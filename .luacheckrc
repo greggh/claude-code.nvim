@@ -8,6 +8,7 @@ std = {
     "math",
     "os",
     "io",
+    "_TEST",
   },
   read_globals = {
     "jit",
@@ -20,6 +21,7 @@ std = {
     "tonumber",
     "error",
     "assert",
+    "debug",
     "_VERSION",
   },
 }
@@ -49,7 +51,7 @@ files["tests/**/*.lua"] = {
     -- Test helpers
     "test", "expect",
     -- Global test state (allow modification)
-    "_G", 
+    "_G", "_TEST",
   },
   
   -- Define fields for assert from luassert
@@ -88,5 +90,17 @@ max_cyclomatic_complexity = 20
 
 -- Override settings for specific files
 files["lua/claude-code/config.lua"] = {
-  max_cyclomatic_complexity = 30, -- The validate_config function has high complexity due to many validation checks
+  max_cyclomatic_complexity = 60, -- The validate_config function has high complexity due to many validation checks
+}
+
+files["lua/claude-code/mcp_server.lua"] = {
+  max_cyclomatic_complexity = 30, -- CLI entry function has high complexity due to argument parsing
+}
+
+files["lua/claude-code/terminal.lua"] = {
+  max_cyclomatic_complexity = 30, -- Toggle function has high complexity due to context handling
+}
+
+files["lua/claude-code/tree_helper.lua"] = {
+  max_cyclomatic_complexity = 25, -- Recursive tree generation has moderate complexity
 }

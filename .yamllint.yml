@@ -11,3 +11,8 @@ rules:
   indentation:
     spaces: 2
     indent-sequences: consistent
+
+ignore: |
+  .vale/styles/
+  node_modules/
+  .vscode/

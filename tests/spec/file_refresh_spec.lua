@@ -14,7 +14,7 @@ describe('file refresh', function()
   local timer_callback = nil
   local claude_code
   local config
-  
+
   before_each(function()
     -- Reset tracking variables
     registered_augroups = {}
@@ -23,7 +23,7 @@ describe('file refresh', function()
     timer_closed = false
     timer_interval = nil
     timer_callback = nil
-    
+
     -- Mock vim functions
     _G.vim = _G.vim or {}
     _G.vim.api = _G.vim.api or {}
@@ -32,22 +32,22 @@ describe('file refresh', function()
     _G.vim.log = _G.vim.log or { levels = { INFO = 2, ERROR = 1 } }
     _G.vim.o = _G.vim.o or { updatetime = 4000 }
     _G.vim.cmd = function() end
-    
+
     -- Mock vim.api.nvim_create_augroup
     _G.vim.api.nvim_create_augroup = function(name, opts)
       registered_augroups[name] = opts
       return 1
     end
-    
+
     -- Mock vim.api.nvim_create_autocmd
     _G.vim.api.nvim_create_autocmd = function(events, opts)
       table.insert(registered_autocmds, {
         events = events,
-        opts = opts
+        opts = opts,
       })
       return 2
     end
-    
+
     -- Mock vim.loop.new_timer
     _G.vim.loop.new_timer = function()
       return {
@@ -61,53 +61,67 @@ describe('file refresh', function()
         end,
         close = function(self)
           timer_closed = true
-        end
+        end,
       }
     end
-    
+
     -- Mock schedule_wrap
     _G.vim.schedule_wrap = function(callback)
       return callback
     end
-    
+
     -- Mock vim.notify
     _G.vim.notify = function() end
-    
+
     -- Mock vim.api.nvim_buf_is_valid
-    _G.vim.api.nvim_buf_is_valid = function() return true end
-    
+    _G.vim.api.nvim_buf_is_valid = function()
+      return true
+    end
+
     -- Mock vim.fn.win_findbuf
-    _G.vim.fn.win_findbuf = function() return {1} end
-    
+    _G.vim.fn.win_findbuf = function()
+      return { 1 }
+    end
+
     -- Setup test objects
     claude_code = {
       claude_code = {
         bufnr = 42,
-        saved_updatetime = nil
-      }
+        saved_updatetime = nil,
+        current_instance = 'test_instance',
+        instances = {
+          test_instance = 42,
+        },
+      },
     }
-    
+
     config = {
       refresh = {
         enable = true,
         updatetime = 500,
         timer_interval = 1000,
-        show_notifications = true
-      }
+        show_notifications = true,
+      },
     }
   end)
-  
+
   describe('setup', function()
     it('should create an augroup for file refresh', function()
       file_refresh.setup(claude_code, config)
-      
-      assert.is_not_nil(registered_augroups['ClaudeCodeFileRefresh'], "File refresh augroup should be created")
-      assert.is_true(registered_augroups['ClaudeCodeFileRefresh'].clear, "Augroup should be cleared on creation")
+
+      assert.is_not_nil(
+        registered_augroups['ClaudeCodeFileRefresh'],
+        'File refresh augroup should be created'
+      )
+      assert.is_true(
+        registered_augroups['ClaudeCodeFileRefresh'].clear,
+        'Augroup should be cleared on creation'
+      )
     end)
-    
+
     it('should register autocmds for file change detection', function()
       file_refresh.setup(claude_code, config)
-      
+
       local has_checktime_autocmd = false
       for _, autocmd in ipairs(registered_autocmds) do
         if type(autocmd.events) == 'table' then
@@ -119,7 +133,7 @@ describe('file refresh', function()
               break
             end
           end
-          
+
           -- Check if the callback contains checktime
           if has_trigger_events and autocmd.opts.callback then
             has_checktime_autocmd = true
@@ -127,48 +141,66 @@ describe('file refresh', function()
           end
         end
       end
-      
-      assert.is_true(has_checktime_autocmd, "Should register autocmd for file change detection")
+
+      assert.is_true(has_checktime_autocmd, 'Should register autocmd for file change detection')
     end)
-    
+
     it('should create a timer for periodic file checks', function()
       file_refresh.setup(claude_code, config)
-      
-      assert.is_true(timer_started, "Timer should be started")
-      assert.are.equal(config.refresh.timer_interval, timer_interval, "Timer interval should match config")
-      assert.is_not_nil(timer_callback, "Timer callback should be set")
+
+      assert.is_true(timer_started, 'Timer should be started')
+      assert.are.equal(
+        config.refresh.timer_interval,
+        timer_interval,
+        'Timer interval should match config'
+      )
+      assert.is_not_nil(timer_callback, 'Timer callback should be set')
     end)
-    
+
     it('should save the current updatetime', function()
       -- Initial updatetime
       _G.vim.o.updatetime = 4000
-      
+
       file_refresh.setup(claude_code, config)
-      
-      assert.are.equal(4000, claude_code.claude_code.saved_updatetime, "Should save the current updatetime")
+
+      assert.are.equal(
+        4000,
+        claude_code.claude_code.saved_updatetime,
+        'Should save the current updatetime'
+      )
     end)
-    
+
     it('should not setup refresh when disabled in config', function()
       -- Disable refresh in config
       config.refresh.enable = false
-      
+
       file_refresh.setup(claude_code, config)
-      
-      assert.is_false(timer_started, "Timer should not be started when refresh is disabled")
-      assert.is_nil(registered_augroups['ClaudeCodeFileRefresh'], "Augroup should not be created when refresh is disabled")
+
+      assert.is_false(timer_started, 'Timer should not be started when refresh is disabled')
+      assert.is_nil(
+        registered_augroups['ClaudeCodeFileRefresh'],
+        'Augroup should not be created when refresh is disabled'
+      )
     end)
   end)
-  
+
   describe('cleanup', function()
     it('should stop and close the timer', function()
       -- First setup to create the timer
       file_refresh.setup(claude_code, config)
-      
+
       -- Then clean up
       file_refresh.cleanup()
-      
-      assert.is_false(timer_started, "Timer should be stopped")
-      assert.is_true(timer_closed, "Timer should be closed")
+
+      assert.is_false(timer_started, 'Timer should be stopped')
+      assert.is_true(timer_closed, 'Timer should be closed')
+    end)
+  end)
+
+  after_each(function()
+    -- Clean up any timers to prevent test hanging
+    pcall(function()
+      file_refresh.cleanup()
     end)
   end)
 end)
