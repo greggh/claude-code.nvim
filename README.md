@@ -146,8 +146,18 @@ require("claude-code").setup({
         verbose = "<leader>cV",  -- Normal mode keymap for Claude Code with verbose flag
       },
     },
-    window_navigation = true, -- Enable window navigation keymaps (<C-h/j/k/l>)
-    scrolling = true,         -- Enable scrolling keymaps (<C-f/b>) for page up/down
+    window_navigation = {
+      enabled = true,  -- Enable window navigation keymaps
+      left = '<C-h>',  -- Move to left window
+      down = '<C-j>',  -- Move to down window
+      up = '<C-k>',    -- Move to up window
+      right = '<C-l>', -- Move to right window
+    },
+    scrolling = {
+      enabled = true, -- Enable scrolling keymaps
+      page_down = '<C-f>', -- Scroll down one page
+      page_up = '<C-b>',   -- Scroll up one page
+    },
   }
 })
 ```

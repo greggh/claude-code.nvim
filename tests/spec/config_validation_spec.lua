@@ -83,7 +83,7 @@ describe('config validation', function()
 
       local result = config.parse_config(invalid_config, true) -- silent mode
       assert.are.equal(config.default_config.window.position, result.window.position)
-      -- Ensure invalid border doesn't bleed through  
+      -- Ensure invalid border doesn't bleed through
       assert.are.not_equal('invalid', result.window.float.border)
       assert.are.equal(config.default_config.window.float.border, result.window.float.border)
     end)
@@ -147,17 +147,17 @@ describe('config validation', function()
       assert.are.equal(config.default_config.keymaps.toggle.normal, result3.keymaps.toggle.normal)
     end)
 
-    it('should validate keymaps.window_navigation must be a boolean', function()
+    it('should validate keymaps.window_navigation.enabled must be a boolean', function()
       -- Simplify this test to match others
       local invalid_config = vim.deepcopy(config.default_config)
-      invalid_config.keymaps.window_navigation = 'enabled' -- String instead of boolean
+      invalid_config.keymaps.window_navigation.enabled = 'enabled' -- String instead of boolean
 
       -- Use silent mode to avoid pollution
       local result = config.parse_config(invalid_config, true)
 
       assert.are.equal(
-        config.default_config.keymaps.window_navigation,
-        result.keymaps.window_navigation
+        config.default_config.keymaps.window_navigation.enabled,
+        result.keymaps.window_navigation.enabled
       )
     end)
   end)

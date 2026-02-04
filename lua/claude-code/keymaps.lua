@@ -109,33 +109,33 @@ function M.setup_terminal_navigation(claude_code, config)
     )
 
     -- Window navigation keymaps
-    if config.keymaps.window_navigation then
+    if config.keymaps.window_navigation.enabled then
       -- Window navigation keymaps with special handling to force insert mode in the target window
       vim.api.nvim_buf_set_keymap(
         buf,
         't',
-        '<C-h>',
+        config.keymaps.window_navigation.left,
         [[<C-\><C-n><C-w>h:lua require("claude-code").force_insert_mode()<CR>]],
         { noremap = true, silent = true, desc = 'Window: move left' }
       )
       vim.api.nvim_buf_set_keymap(
         buf,
         't',
-        '<C-j>',
+        config.keymaps.window_navigation.down,
         [[<C-\><C-n><C-w>j:lua require("claude-code").force_insert_mode()<CR>]],
         { noremap = true, silent = true, desc = 'Window: move down' }
       )
       vim.api.nvim_buf_set_keymap(
         buf,
         't',
-        '<C-k>',
+        config.keymaps.window_navigation.up,
         [[<C-\><C-n><C-w>k:lua require("claude-code").force_insert_mode()<CR>]],
         { noremap = true, silent = true, desc = 'Window: move up' }
       )
       vim.api.nvim_buf_set_keymap(
         buf,
         't',
-        '<C-l>',
+        config.keymaps.window_navigation.right,
         [[<C-\><C-n><C-w>l:lua require("claude-code").force_insert_mode()<CR>]],
         { noremap = true, silent = true, desc = 'Window: move right' }
       )
@@ -144,46 +144,46 @@ function M.setup_terminal_navigation(claude_code, config)
       vim.api.nvim_buf_set_keymap(
         buf,
         'n',
-        '<C-h>',
+        config.keymaps.window_navigation.left,
         [[<C-w>h:lua require("claude-code").force_insert_mode()<CR>]],
         { noremap = true, silent = true, desc = 'Window: move left' }
       )
       vim.api.nvim_buf_set_keymap(
         buf,
         'n',
-        '<C-j>',
+        config.keymaps.window_navigation.down,
         [[<C-w>j:lua require("claude-code").force_insert_mode()<CR>]],
         { noremap = true, silent = true, desc = 'Window: move down' }
       )
       vim.api.nvim_buf_set_keymap(
         buf,
         'n',
-        '<C-k>',
+        config.keymaps.window_navigation.up,
         [[<C-w>k:lua require("claude-code").force_insert_mode()<CR>]],
         { noremap = true, silent = true, desc = 'Window: move up' }
       )
       vim.api.nvim_buf_set_keymap(
         buf,
         'n',
-        '<C-l>',
+        config.keymaps.window_navigation.right,
         [[<C-w>l:lua require("claude-code").force_insert_mode()<CR>]],
         { noremap = true, silent = true, desc = 'Window: move right' }
       )
     end
 
     -- Add scrolling keymaps
-    if config.keymaps.scrolling then
+    if config.keymaps.scrolling.enabled then
       vim.api.nvim_buf_set_keymap(
         buf,
         't',
-        '<C-f>',
+        config.keymaps.scrolling.page_down,
         [[<C-\><C-n><C-f>i]],
         { noremap = true, silent = true, desc = 'Scroll full page down' }
       )
       vim.api.nvim_buf_set_keymap(
         buf,
         't',
-        '<C-b>',
+        config.keymaps.scrolling.page_up,
         [[<C-\><C-n><C-b>i]],
         { noremap = true, silent = true, desc = 'Scroll full page up' }
       )

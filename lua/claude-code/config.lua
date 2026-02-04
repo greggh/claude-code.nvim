@@ -42,8 +42,10 @@ local M = {}
 --- ClaudeCodeKeymaps class for keymap configuration
 -- @table ClaudeCodeKeymaps
 -- @field toggle ClaudeCodeKeymapsToggle Keymaps for toggling Claude Code
--- @field window_navigation boolean Enable window navigation keymaps
--- @field scrolling boolean Enable scrolling keymaps
+-- @field window_navigation table|nil Window navigation keymaps
+-- @field window_navigation.enabled boolean Enable window navigation keymaps
+-- @field scrolling table|nil Scrolling keymaps
+-- @field scrolling.enabled boolean Enable scrolling keymaps
 
 --- ClaudeCodeCommandVariants class for command variant configuration
 -- @table ClaudeCodeCommandVariants
@@ -131,8 +133,18 @@ M.default_config = {
         verbose = '<leader>cV', -- Normal mode keymap for Claude Code with verbose flag
       },
     },
-    window_navigation = true, -- Enable window navigation keymaps (<C-h/j/k/l>)
-    scrolling = true, -- Enable scrolling keymaps (<C-f/b>) for page up/down
+    window_navigation = {
+      enabled = true, -- Enable window navigation keymaps
+      left = '<C-h>', -- Move to left window
+      down = '<C-j>', -- Move to down window
+      up = '<C-k>', -- Move to up window
+      right = '<C-l>', -- Move to right window
+    },
+    scrolling = {
+      enabled = true, -- Enable scrolling keymaps
+      page_down = '<C-f>', -- Scroll down one page
+      page_up = '<C-b>', -- Scroll up one page
+    },
   },
 }
 
@@ -351,12 +363,44 @@ local function validate_keymaps_config(keymaps)
     end
   end
 
-  if type(keymaps.window_navigation) ~= 'boolean' then
-    return false, 'keymaps.window_navigation must be a boolean'
+  if type(keymaps.window_navigation) ~= 'table' then
+    return false, 'keymaps.window_navigation must be a table'
   end
 
-  if type(keymaps.scrolling) ~= 'boolean' then
-    return false, 'keymaps.scrolling must be a boolean'
+  if type(keymaps.window_navigation.enabled) ~= 'boolean' then
+    return false, 'keymaps.window_navigation.enabled boolean'
+  end
+
+  if type(keymaps.window_navigation.left) ~= 'string' then
+    return false, 'keymaps.window_navigation.left must be a string'
+  end
+
+  if type(keymaps.window_navigation.down) ~= 'string' then
+    return false, 'keymaps.window_navigation.down must be a string'
+  end
+
+  if type(keymaps.window_navigation.up) ~= 'string' then
+    return false, 'keymaps.window_navigation.up must be a string'
+  end
+
+  if type(keymaps.window_navigation.right) ~= 'string' then
+    return false, 'keymaps.window_navigation.right must be a string'
+  end
+
+  if type(keymaps.scrolling) ~= 'table' then
+    return false, 'keymaps.scrolling must be a table'
+  end
+
+  if type(keymaps.scrolling.enabled) ~= 'boolean' then
+    return false, 'keymaps.scrolling.enabled must be a boolean'
+  end
+
+  if type(keymaps.scrolling.page_down) ~= 'string' then
+    return false, 'keymaps.scrolling.page_down must be a string'
+  end
+
+  if type(keymaps.scrolling.page_up) ~= 'string' then
+    return false, 'keymaps.scrolling.page_up must be a string'
   end
 
   return true, nil
