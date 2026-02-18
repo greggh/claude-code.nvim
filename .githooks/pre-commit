@@ -27,22 +27,22 @@ STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.lua$
 
 if [ -n "$STAGED_FILES" ]; then
   echo "Running StyLua on staged Lua files..."
-  
+
   # Format all staged Lua files
   for FILE in $STAGED_FILES; do
     stylua "$FILE"
     git add "$FILE"
   done
-  
+
   echo "Lua files have been formatted and staged."
-  
+
   # Run luacheck if available
   if [ "$HAS_LUACHECK" -eq 1 ]; then
     echo "Running luacheck on staged Lua files..."
     LINT_ISSUES=0
     FIXABLE_ISSUES=0
     FIXED_FILES=""
-    
+
     # First check for issues that we can automatically fix
     for FILE in $STAGED_FILES; do
       # Auto-fix trailing whitespace
@@ -51,7 +51,7 @@ if [ -n "$STAGED_FILES" ]; then
         FIXABLE_ISSUES=1
         FIXED_FILES="$FIXED_FILES $FILE"
       fi
-      
+
       # Auto-fix line endings (ensure LF)
       if file "$FILE" | grep -q "CRLF"; then
         dos2unix "$FILE" 2>/dev/null
@@ -59,7 +59,7 @@ if [ -n "$STAGED_FILES" ]; then
         FIXED_FILES="$FIXED_FILES $FILE"
       fi
     done
-    
+
     # If we fixed any issues, add them back to staging
     if [ "$FIXABLE_ISSUES" -eq 1 ]; then
       echo "Fixed some linting issues automatically in:$FIXED_FILES"
@@ -67,7 +67,7 @@ if [ -n "$STAGED_FILES" ]; then
         git add "$FILE"
       done
     fi
-    
+
     # Now run the full luacheck to see if there are remaining issues
     for FILE in $STAGED_FILES; do
       luacheck "$FILE"
@@ -75,7 +75,7 @@ if [ -n "$STAGED_FILES" ]; then
         LINT_ISSUES=1
       fi
     done
-    
+
     if [ "$LINT_ISSUES" -eq 1 ]; then
       echo "Error: Lua lint issues found that couldn't be fixed automatically."
       echo "Please fix the remaining issues before committing."
@@ -83,28 +83,28 @@ if [ -n "$STAGED_FILES" ]; then
       exit 1
     fi
   fi
-  
+
   # ======== Run Tests ========
   echo "Running tests to ensure code quality..."
-  
+
   # Find the project root directory (where .git is)
   PROJECT_ROOT=$(git rev-parse --show-toplevel)
-  
+
   # Change to the project root
   cd "$PROJECT_ROOT" || exit 1
-  
+
   # Run the tests directly using a specific path
-  FULL_PATH="/home/gregg/Projects/neovim/plugins/claude-code/scripts/test.sh"
-  echo "Running test script at: $FULL_PATH"
-  bash "$FULL_PATH"
-  
+  RELATIVE_PATH="scripts/test.sh"
+  echo "Running test script at: $RELATIVE_PATH"
+  bash "$RELATIVE_PATH"
+
   # Check if tests passed
   if [ $? -ne 0 ]; then
     echo "❌ Tests failed! Commit aborted."
     echo "Please fix the test failures before committing."
     exit 1
   fi
-  
+
   echo "✅ All tests passed. Proceeding with commit."
 fi
 
