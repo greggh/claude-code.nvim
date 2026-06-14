@@ -101,6 +101,7 @@ function M.setup(claude_code, config)
     group = augroup,
     pattern = '*',
     callback = function(args)
+      if not vim.api.nvim_buf_is_valid(args.buf) then return end
       local buf_name = vim.api.nvim_buf_get_name(args.buf)
       if buf_name:match('claude%-code') then
         vim.o.updatetime = claude_code.claude_code.saved_updatetime
