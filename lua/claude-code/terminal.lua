@@ -187,6 +187,14 @@ local function create_split(position, config, existing_bufnr)
     return create_float(config, existing_bufnr)
   end
 
+  -- Use the current window as-is, without splitting (like plain :terminal)
+  if position == 'current' then
+    if existing_bufnr then
+      vim.cmd('buffer ' .. existing_bufnr)
+    end
+    return
+  end
+
   local is_vertical = position:match('vsplit') or position:match('vertical')
 
   -- Create the window with the user's specified command
