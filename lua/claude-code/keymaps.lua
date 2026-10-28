@@ -172,19 +172,21 @@ function M.setup_terminal_navigation(claude_code, config)
     end
 
     -- Add scrolling keymaps
+    -- These leave terminal mode on purpose: re-entering it (e.g. with a trailing `i`)
+    -- jumps the view back to the terminal cursor and undoes the scroll. Press `i` to resume.
     if config.keymaps.scrolling then
       vim.api.nvim_buf_set_keymap(
         buf,
         't',
         '<C-f>',
-        [[<C-\><C-n><C-f>i]],
+        [[<C-\><C-n><C-f>]],
         { noremap = true, silent = true, desc = 'Scroll full page down' }
       )
       vim.api.nvim_buf_set_keymap(
         buf,
         't',
         '<C-b>',
-        [[<C-\><C-n><C-b>i]],
+        [[<C-\><C-n><C-b>]],
         { noremap = true, silent = true, desc = 'Scroll full page up' }
       )
     end

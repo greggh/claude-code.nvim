@@ -190,5 +190,45 @@ describe('keymaps', function()
       
       assert.is_false(window_navigation_found, "Window navigation keybindings should not be registered when disabled")
     end)
+
+    it('should leave terminal mode after scrolling so the scroll is kept', function()
+      -- Setup claude_code table with an active instance buffer
+      claude_code.claude_code = { current_instance = 'test', instances = { test = 42 } }
+
+      config.keymaps.window_navigation = false
+      config.keymaps.scrolling = true
+
+      -- Reset mapped_keys
+      mapped_keys = {}
+
+      -- Mock buf_set_keymap
+      _G.vim.api.nvim_buf_set_keymap = function(bufnr, mode, lhs, rhs, opts)
+        table.insert(mapped_keys, {
+          bufnr = bufnr,
+          mode = mode,
+          lhs = lhs,
+          rhs = rhs,
+          opts = opts
+        })
+      end
+
+      -- Mock buf_is_valid
+      _G.vim.api.nvim_buf_is_valid = function(bufnr)
+        return bufnr == 42
+      end
+
+      keymaps.setup_terminal_navigation(claude_code, config)
+
+      local scroll_rhs = {}
+      for _, mapping in ipairs(mapped_keys) do
+        if mapping.mode == 't' and (mapping.lhs == '<C-f>' or mapping.lhs == '<C-b>') then
+          scroll_rhs[mapping.lhs] = mapping.rhs
+        end
+      end
+
+      -- Re-entering terminal mode would snap the view back to the cursor
+      assert.are.equal([[<C-\><C-n><C-f>]], scroll_rhs['<C-f>'])
+      assert.are.equal([[<C-\><C-n><C-b>]], scroll_rhs['<C-b>'])
+    end)
   end)
 end)
